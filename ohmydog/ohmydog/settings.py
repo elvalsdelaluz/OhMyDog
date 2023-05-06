@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'donacion',
     'contactoPaseadoresCuidadores',
     'ohmydogapp',
+    'mascotas',
 ]
 
 MIDDLEWARE = [
