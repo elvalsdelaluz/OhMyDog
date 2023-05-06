@@ -1,0 +1,39 @@
+<html>
+<head>
+    <!--aca vanm los estilos importados de html-->
+</head>
+<body>
+    <h1>Servicios</h1>
+    <nav>
+        <div>
+            <!--
+                no se xq esta esto:
+                <a href="{% url 'home'%}">Servicios</a>
+                <button type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                </button>
+            -->
+            <div id="navbarResponsive">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'adopcion' %}">Adopcion</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'perdidaBusqueda' %}">Perdida o busqueda</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'donacion'%}">Donacion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <!--falta hacer footer-->
+
+</html>

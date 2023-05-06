@@ -59,7 +59,7 @@ ROOT_URLCONF = 'ohmydog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['C:/Users/USUARIO/OneDrive/Escritorio/Luciano/Facultad/Django/OhMyDog'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
