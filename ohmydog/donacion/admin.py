@@ -5,6 +5,9 @@ from .models import donacion
 
 class DonacionAdmin(admin.ModelAdmin):
     readonly_fields=('created','updated')
+    list_display=('motivo','finalizacion','created')
+    search_field=('motivo')
+    list_filter=('finalizacion',)
 
 admin.site.register(donacion, DonacionAdmin)
 # Register your models here.

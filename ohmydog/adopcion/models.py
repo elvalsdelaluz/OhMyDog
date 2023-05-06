@@ -26,3 +26,10 @@ class adopcion(models.Model):
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name='adopcion'
+        verbose_name_plural='adopciones'
+
+    def __str__(self):
+        return self.nombre

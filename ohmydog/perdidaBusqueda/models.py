@@ -5,8 +5,14 @@ from mascotas.models import Raza
 class Zona(models.Model):
     zona=models.CharField(max_length=25)
 
+    def __str__(self):
+        return self.zona
+
 class Estado(models.Model):
     estado=models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.estado
 
 class perro_perdido(models.Model):
     Sexo=(

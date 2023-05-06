@@ -8,3 +8,10 @@ class donacion(models.Model):
     finalizacion=models.DateField()
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name='motivo'
+        verbose_name_plural='motivos'
+
+    def __str__(self):
+        return self.motivo
