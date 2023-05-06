@@ -34,19 +34,19 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item active px-lg-4">
+          <li class="nav-item {% if request.path == '/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'home' %}">Inicio</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}">Adopcion</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>
           </li>
-          <li class="nav-item px-lg-4">
+          <li class="nav-item {% if request.path == '/donacion/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'donacion'%}">Donaciones</a>
           </li>
          
@@ -54,6 +54,12 @@
       </div>
     </div>
   </nav>
+
+    <!-- Contenido cambiante-->
+    {% block content %}
+
+
+    {% endblock %}
 
    <!-- Footer -->
    <footer class="footer text-faded text-center py-5">
