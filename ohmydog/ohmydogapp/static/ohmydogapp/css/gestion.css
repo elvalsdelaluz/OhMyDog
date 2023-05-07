@@ -82,19 +82,21 @@ p {
 #mainNav {
   background-color: rgb(12, 159, 159);
   font-family: 'Raleway';
+  line-height: 1.15;
+  font-family: Nunito,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
 }
 
 #mainNav .navbar-brand {
-  color: #ffffff;
+  color: rgb(255, 94, 0);
 }
 
 #mainNav .navbar-nav .nav-item .nav-link {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255, 94, 0);
   font-weight: 800;
 }
 
 #mainNav .navbar-nav .nav-item.active .nav-link {
-  color: #ffffff;
+  color: rgb(255, 94, 0);
   text-decoration: underline;
 }
 
@@ -276,4 +278,68 @@ ul.errorlist{
   padding-top: .75rem;
   font-style: italic;
   color: red;
+}
+
+.nav-grande {
+  display: flex;
+  align-items: center;
+  height: 90px;
+  background-color: rgb(12, 159, 159);
+}
+
+.barra-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+}
+
+.boton-iniciar-sesion,
+.boton-veterinaria-turnos {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: rgb(255, 94, 0);
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  text-decoration: none;
+  font-family: 'Raleway';
+}
+
+.boton-iniciar-sesion {
+  margin-left: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-family: 'Raleway';
+  font-family: Nunito,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
+}
+
+@media screen and (max-width: 600px) {
+  .barra-superior {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+    
+  }
+ 
+}
+
+
+
+.logo {
+  height: 70px;
+  margin-right: 20px;
+}
+
+.texto-encabezado {
+  display: flex;
+  align-items: center;
+}
+
+.texto-encabezado h1 {
+  margin-left: -400px;
 }

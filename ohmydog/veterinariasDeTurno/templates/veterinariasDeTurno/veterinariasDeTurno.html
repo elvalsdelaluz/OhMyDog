@@ -1,0 +1,9 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+    {% for veterinariaDeTurno in veterinariasDeTurno %}
+        <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{{ veterinariaDeTurno.imagen.url }}" alt="" style="max-width: 80%; width: 70%; display: block; margin: 0 auto;">
+    {% endfor %}
+{% endblock %}
