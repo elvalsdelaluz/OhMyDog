@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'ohmydogapp',
     'mascotas',
     'veterinariasDeTurno',
+    'autenticacion',
 ]
 
 MIDDLEWARE = [

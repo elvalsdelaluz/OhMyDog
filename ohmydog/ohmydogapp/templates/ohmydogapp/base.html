@@ -30,6 +30,16 @@
       </div>
     </div>
   </div>
+
+  <!-- INICIO Y CIERRE DE SESIÓN -->
+  <div style="text-align: right; margin-right:  100px; color: white;">
+    {% if user.is_authenticated %}
+    ¡Hola {{user.username}}! &nbsp; &nbsp; <a href="{% url 'cerrar_sesion' %}" style="color: white"> Cerrar sesión</a>
+    {% else %}
+    <a href="{% url 'loguear' %}" style="color: white">Login</a> &nbsp; &nbsp; <a href="#" style="color: white">¿Cómo registrarse?</a>
+    {%  endif %}
+    </div>
+
   
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">

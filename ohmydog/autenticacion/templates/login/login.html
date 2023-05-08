@@ -1,0 +1,27 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+<form method="post" action="" style="color: white">
+    
+    {% csrf_token %}
+
+    <div style="width: 75%; margin:auto;">
+    
+    {% if messages %}
+        {% for mensaje in messages %}
+            <span style="color: red">{{mensaje}}</span>
+        {% endfor %}
+    {% endif %}
+
+    {{form}}
+    <button type="submit" class="btn btn-success">Iniciar sesión</button>
+    
+    </div>
+
+</form>
+
+{% endblock %}
