@@ -5,7 +5,8 @@
 {% block content %}
 <p></p>
 <button class="btn success">Publicar perro en adopción</button>
-
+{% if adopciones %}
+<ul>
     {% for adopcion in adopciones %}
       <section class="page-section cta">
         <div class="container">
@@ -19,7 +20,6 @@
                     Nombre: {{adopcion.nombre}} <br>
                     Edad: {{adopcion.edad}}   <br>
                     Tamaño: {{adopcion.tamaño}} <br>
-                    Raza: {{adopcion.raza}} <br>
                     Sexo: {{adopcion.sexo}} <br>
                     Descripcion: {{adopcion.comentarios}} <br>
                 </p>
@@ -31,6 +31,23 @@
         </div>
       </section>
     {% endfor %}
+</ul>
+{% else %}
+  <section class="page-section cta">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-9 mx-auto">
+              <div class="cta-inner text-center rounded">
+                <h2 class="section-heading mb-4">
+                  <p></p>
+                  <span class="section-heading-upper">No hay perros en adopción :D</span>
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+{% endif %}
 
 
 {% endblock %}
