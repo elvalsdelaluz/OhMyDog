@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import adopcion
+from .models import Adopcion
 
 # Register your models here.
 
@@ -9,5 +9,5 @@ class AdopcionAdmin(admin.ModelAdmin):
     search_field=('nombre')
     list_filter=('edad','sexo','tamaño','estado')
 
-admin.site.register(adopcion, AdopcionAdmin)
+admin.site.register(Adopcion, AdopcionAdmin)
 

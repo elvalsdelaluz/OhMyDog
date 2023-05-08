@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class adopcion(models.Model):
+class Adopcion(models.Model):
     Sexo=(
         ('0','Hembra'),
         ('1','Macho'),
