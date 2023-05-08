@@ -297,19 +297,32 @@ ul.errorlist{
 }
 
 .boton-iniciar-sesion,
-.boton-veterinaria-turnos {
+.boton-veterinaria-turnos,
+.boton-cerrar-sesion {
   display: inline-block;
   padding: 10px 20px;
-  background-color: rgb(255, 94, 0);
+
   color: rgb(0, 0, 0);
   border-radius: 5px;
   text-decoration: none;
   font-family: 'Raleway';
+  font-family: Nunito,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
 }
 
+
+.boton-veterinaria-turnos{
+  background-color: rgb(255, 94, 0);  
+}
 .boton-iniciar-sesion {
   margin-left: 10px;
+  background-color: rgb(4, 255, 0);
 }
+#cerrar-sesion.boton-cerrar-sesion {
+  background-color: red;
+  margin-left: 10px;
+}
+
+
 
 h1 {
   margin: 0;

@@ -26,19 +26,21 @@
       </div>
       <div class="botones-barra-superior">
         <a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>
-        <a href="#" class="boton-iniciar-sesion">Iniciar sesión</a>
+       
+        <!-- INICIO Y CIERRE DE SESIÓN -->
+        {% if user.is_authenticated %}
+          ¡Hola {{user.username}}!  
+          <a href="{% url 'cerrar_sesion' %}" class="boton-cerrar-sesion" id="cerrar-sesion"> Cerrar sesión</a>
+
+        {% else %}
+          <a href="{% url 'loguear' %}" class="boton-iniciar-sesion">Iniciar sesión</a> 
+        {%  endif %}
       </div>
     </div>
   </div>
 
-  <!-- INICIO Y CIERRE DE SESIÓN -->
-  <div style="text-align: right; margin-right:  100px; color: white;">
-    {% if user.is_authenticated %}
-    ¡Hola {{user.username}}! &nbsp; &nbsp; <a href="{% url 'cerrar_sesion' %}" style="color: white"> Cerrar sesión</a>
-    {% else %}
-    <a href="{% url 'loguear' %}" style="color: white">Login</a> &nbsp; &nbsp; <a href="#" style="color: white">¿Cómo registrarse?</a>
-    {%  endif %}
-    </div>
+  
+
 
   
  <!-- Navbar -->
