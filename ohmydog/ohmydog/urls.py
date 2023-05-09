@@ -24,6 +24,6 @@ urlpatterns = [
     path('contactoPaseadoresCuidadores/', include("contactoPaseadoresCuidadores.urls")),
     path('adopcion/', include("adopcion.urls")),
     path('veterinariasDeTurno/', include("veterinariasDeTurno.urls")),
-      path('autenticacion/', include('autenticacion.urls')),
+    path('autenticacion/', include('autenticacion.urls')),
 
 ]

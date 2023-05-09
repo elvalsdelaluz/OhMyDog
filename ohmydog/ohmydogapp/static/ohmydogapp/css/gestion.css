@@ -348,11 +348,19 @@ h1 {
   margin-right: 20px;
 }
 
+
+.tarjeta-carac {
+    position: relative;
+    margin: auto;
+    color: rgb(0, 0, 0);
+    padding: 5px;
+    border: 0.2rem solid rgba(255, 255, 255, 0.85);
+    border-radius: 115px; /* puedes ajustar este valor para cambiar el grado de redondez */
+    width: 50%;
+    margin-top: 1%;
+
+}
 .texto-encabezado {
   display: flex;
   align-items: center;
-}
-
-.texto-encabezado h1 {
-  margin-left: -400px;
 }

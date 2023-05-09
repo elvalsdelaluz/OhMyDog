@@ -1,53 +1,58 @@
-{% extends "ohmydogapp/base.html" %}
-
-{% load static %}
-
-{% block content %}
-<p></p>
-<button class="btn success">Publicar perro en adopción</button>
-{% if adopciones %}
-<ul>
+<html>
+  {% extends "ohmydogapp/base.html" %}
+  
+  {% load static %}
+  
+  
+  {% block content %}
+  <div style="margin-left: auto; text-align: right; margin-top: 1%; margin-right: 10%; ">
+    <a href="{% if user.is_authenticated %} {% url 'loguear' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
+  </div>
+  {% if adopciones %}
+  <ul>
     {% for adopcion in adopciones %}
-      <section class="page-section cta">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-9 mx-auto">
-              <div class="cta-inner text-center rounded">
-                <h2 class="section-heading mb-4">
-                  <span class="section-heading-upper">{{adopcion.nombre}}</span>
-                </h2>
-                <p class="mb-0">
-                    Nombre: {{adopcion.nombre}} <br>
-                    Edad: {{adopcion.edad}}   <br>
-                    Tamaño: {{adopcion.tamaño}} <br>
-                    Sexo: {{adopcion.sexo}} <br>
-                    Descripcion: {{adopcion.comentarios}} <br>
-                </p>
-                <p></p>
-                <button class="btn success">Contactar</button>
+    <div class="tarjeta-carac">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <div class="card" style="background-color: rgba(12, 159, 159);">
+                <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                  <p class="card-title"style="color: white; ">Nombre: {{adopcion.nombre}}</p>
+                  <p class="card-text" style="color: white;">Edad: {{adopcion.edad}}</p>
+                  <p class="card-text"style="color: white;">Tamaño: {{adopcion.tamaño}}</p>
+                  <p class="card-text"style="color: white;">Sexo: {{adopcion.sexo}}</p>
+                  <p class="card-text"style="color: white;">Comentarios: {{adopcion.comentarios}}</p>
+                </div>
+                <div >
+                  <a href="{% url 'loguear' %}" class="btn btn-success">Contactar</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
     {% endfor %}
-</ul>
-{% else %}
-  <section class="page-section cta">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-9 mx-auto">
-              <div class="cta-inner text-center rounded">
-                <h2 class="section-heading mb-4">
-                  <p></p>
-                  <span class="section-heading-upper">No hay perros en adopción :D</span>
-                </h2>
-              </div>
+    </ul>
+    {% else %}
+    <section class="page-section cta">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <p></p>
+                <span class="section-heading-upper">No hay perros en adopción :D</span>
+              </h2>
             </div>
           </div>
         </div>
-      </section>
-{% endif %}
-
-
-{% endblock %}
+      </div>
+    </section>
+    {% endif %}
+    
+    
+    {% endblock %}
+</html>
