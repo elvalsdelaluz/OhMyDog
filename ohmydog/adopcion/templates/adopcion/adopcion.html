@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-{% extends "ohmydogapp/base.html" %}
-
-{% load static %}
-
-{% block content %}
-<p></p>
-<a href="{% url 'solicitud' %}" class="btn success">Publicar perro en adopción</a>
-{% if adopciones %}
-<ul>
-    {% for adopcion in adopciones %}
-      <section class="page-section cta">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-9 mx-auto">
-              <div class="cta-inner text-center rounded">
-                <h2 class="section-heading mb-4">
-                  <span class="section-heading-upper">{{adopcion.nombre}}</span>
-                </h2>
-                <p class="mb-0">
-                    Nombre: {{adopcion.nombre}} <br>
-                    Edad: {{adopcion.edad}}   <br>
-                    Tamaño: {{adopcion.get_tamaño_display}} <br>
-                    Sexo: {{adopcion.get_sexo_display}} <br>
-                    Descripcion: {{adopcion.comentarios}} <br>
-                </p>
-                <p></p>
-                <button class="btn success">Contactar</button>
-=======
 <html>
   {% extends "ohmydogapp/base.html" %}
   
@@ -35,7 +6,7 @@
   
   {% block content %}
   <div style="margin-left: auto; text-align: right; margin-top: 1%; margin-right: 10%; ">
-    <a href="{% if user.is_authenticated %} {% url 'loguear' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
+    <a href="{% if user.is_authenticated %} {% url 'solicitud' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
   </div>
   {% if adopciones %}
   <ul>
@@ -49,14 +20,13 @@
                 <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
                   <p class="card-title"style="color: white; ">Nombre: {{adopcion.nombre}}</p>
                   <p class="card-text" style="color: white;">Edad: {{adopcion.edad}}</p>
-                  <p class="card-text"style="color: white;">Tamaño: {{adopcion.tamaño}}</p>
-                  <p class="card-text"style="color: white;">Sexo: {{adopcion.sexo}}</p>
+                  <p class="card-text"style="color: white;">Tamaño: {{adopcion.get_tamaño_display}}</p>
+                  <p class="card-text"style="color: white;">Sexo: {{adopcion.get_sexo_display}}</p>
                   <p class="card-text"style="color: white;">Comentarios: {{adopcion.comentarios}}</p>
                 </div>
                 <div >
                   <a href="{% url 'loguear' %}" class="btn btn-success">Contactar</a>
                 </div>
->>>>>>> 9d77b806f55f012d7ce0c05625e68c9e8bf2c2c6
               </div>
             </div>
           </div>
