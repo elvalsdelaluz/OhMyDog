@@ -1,5 +1,7 @@
 from django import forms
 from .models import Adopcion
+from django.contrib.auth.models import User
+
 
 class formulario_Adopcion(forms.Form):
     nombre=forms.CharField(label='Nombre', required=True)

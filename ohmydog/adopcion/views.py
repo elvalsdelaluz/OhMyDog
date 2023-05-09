@@ -24,6 +24,8 @@ def publicacion(request):
 
             nueva_adopcion.save()
 
-            #return redirect ('adopcion/solicitud/?valido')
+            formulario_adopcion=formulario_Adopcion()
+
+            return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje":"ok"})
         
     return render(request, 'adopcion/adopcion/solicitud.html', {'formulario':formulario_adopcion})
