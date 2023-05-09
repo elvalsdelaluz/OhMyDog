@@ -4,7 +4,7 @@
 
 {% block content %}
 <p></p>
-<button class="btn success">Publicar perro en adopción</button>
+<a href="{% url 'solicitud' %}" class="btn success">Publicar perro en adopción</a>
 {% if adopciones %}
 <ul>
     {% for adopcion in adopciones %}
@@ -19,8 +19,8 @@
                 <p class="mb-0">
                     Nombre: {{adopcion.nombre}} <br>
                     Edad: {{adopcion.edad}}   <br>
-                    Tamaño: {{adopcion.tamaño}} <br>
-                    Sexo: {{adopcion.sexo}} <br>
+                    Tamaño: {{adopcion.get_tamaño_display}} <br>
+                    Sexo: {{adopcion.get_sexo_display}} <br>
                     Descripcion: {{adopcion.comentarios}} <br>
                 </p>
                 <p></p>
