@@ -5,4 +5,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.adopcion, name="adopcion"),
+    path('solicitud', views.publicacion, name="solicitud"),
 ]

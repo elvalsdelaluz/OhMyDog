@@ -1,0 +1,31 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+<div class="contenedorFormulario">
+
+    <form action="" method="POST" style="text-align: center;">
+        {% csrf_token %}
+
+        {% if mensaje %}
+        
+            <div class="alert alert-success" role="alert">
+                Solicitud enviada correctamente
+          </div>
+
+        {% endif %}
+
+
+        <!--{{ formulario|crispy }}-->
+        <table style="color:white; margin: 20px auto;">{{formulario.as_table}}<table>
+        <input type="submit" value="Enviar" style="width: 150px;"></input>
+
+    </form>   
+</div>
+{% endblock %}

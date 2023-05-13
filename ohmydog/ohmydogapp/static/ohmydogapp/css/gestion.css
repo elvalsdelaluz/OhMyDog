@@ -344,7 +344,8 @@ h1 {
 
 
 .logo {
-  height: 70px;
+  height: 90px;
+  margin-top: 10px;
   margin-right: 20px;
 }
 
@@ -363,4 +364,16 @@ h1 {
 .texto-encabezado {
   display: flex;
   align-items: center;
+}
+
+.texto-encabezado h1 {
+  margin-left: -400px;
+}
+
+.contenedorFormulario{
+  background-color: rgb(12, 159, 159);
+  width: 50%;
+  margin: 10px auto;
+  border-radius: 5px;
+  padding: 1px 0px;
 }

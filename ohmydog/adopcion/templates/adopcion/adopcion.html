@@ -5,8 +5,8 @@
   
   
   {% block content %}
-  <div style="margin-left: auto; text-align: right; margin-top: 1%; margin-right: 10%; ">
-    <a href="{% if user.is_authenticated %} {% url 'loguear' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
+  <div style="margin-left: 15px; text-align: left; margin-top: 15px; margin-right: 10%; ">
+    <a href="{% if user.is_authenticated %} {% url 'solicitud' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
   </div>
   {% if adopciones %}
   <ul>
@@ -18,11 +18,11 @@
             <div class="cta-inner text-center rounded">
               <div class="card" style="background-color: rgba(12, 159, 159);">
                 <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
-                  <p class="card-title"style="color: white; ">Nombre: {{adopcion.nombre}}</p>
-                  <p class="card-text" style="color: white;">Edad: {{adopcion.edad}}</p>
-                  <p class="card-text"style="color: white;">Tamaño: {{adopcion.tamaño}}</p>
-                  <p class="card-text"style="color: white;">Sexo: {{adopcion.sexo}}</p>
-                  <p class="card-text"style="color: white;">Comentarios: {{adopcion.comentarios}}</p>
+                  <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{adopcion.nombre}}</p>
+                  <p class="card-text" style="color: white;"><strong> Edad:</strong> {{adopcion.edad}}</p>
+                  <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{adopcion.get_tamaño_display}}</p>
+                  <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{adopcion.get_sexo_display}}</p>
+                  <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
                 <div >
                   <a href="{% url 'loguear' %}" class="btn btn-success">Contactar</a>
@@ -32,6 +32,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      &nbsp;
     </div>
   </div>
     {% endfor %}
