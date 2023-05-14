@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap4',
     'turnos',
+    'crispy_bootstrap4',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

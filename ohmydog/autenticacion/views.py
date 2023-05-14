@@ -50,14 +50,14 @@ def vista_registro(request, *args, **kwargs):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email').lower()
-            edad = form.cleaned_data.get('edad')#mepa q no se usa
+            nombre = form.cleaned_data.get('nombre')#mepa q no se usa
             password = generate_random_password()
             user = form.save(commit=False)
             user.set_password(password)
             user.save()
             destination = kwargs.get("next")
-            send_mail("La contraseña para acceder al sitio ¡OhMyDog!", f"Hola {email}, gracias por registrarse en nuestro sitio. Su contraseña es: {password}", "OhMyDog@gmail.com", [email], fail_silently=False)
-            if destination:
+            send_mail("La contraseña para acceder al sitio ¡OhMyDog!", f"Hola {nombre}, gracias por registrarse en nuestro sitio. Su contraseña es: {password}", "ohmydog.veterinariacanina@gmail.com", [email], fail_silently=False)
+            if destination: #ver q mierda es esto
                 return redirect(destination)
             return redirect("home")#cambiar redirect al formulario de registrar de un perro
         else:

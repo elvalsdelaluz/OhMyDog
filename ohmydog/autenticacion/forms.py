@@ -10,7 +10,7 @@ class RegistrationForm(UserChangeForm):
     
     class Meta:
         model = Cuenta 
-        fields = ('email', 'dni', 'numero', 'edad', 'password')
+        fields = ('email','nombre', 'dni', 'numero', 'edad', 'password')
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()

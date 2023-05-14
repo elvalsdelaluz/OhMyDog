@@ -8,6 +8,8 @@
                 <div class="card-body">
                     <form class="form-signin" method="POST">{% csrf_token %}
                         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Dirección de email" required autofocus>
+                        
+                        <input type="text" name="nombre" id="inputNombre" class="form-control" placeholder="Nombre y apellido" required autofocus>
 
                         <input type="text" name="edad" id="inputEdad" class="form-control" placeholder="Edad" required>
 

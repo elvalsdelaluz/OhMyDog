@@ -29,12 +29,13 @@
       <div class="botones-barra-superior">
         <a href="#" class="boton-veterinaria-turnos">Veterinarias de turno</a>
         <!--<a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>-->
+        
         {% if request.user.is_staff %}
           <a href="{% url 'register'%}" style="color: red;">Registrar</a>
         {%  endif %}
         <!-- INICIO Y CIERRE DE SESIÓN -->
         {% if request.user.is_authenticated %}
-          ¡Hola {{request.user.email}}!  
+          ¡Hola {{request.user.nombre}}!  
           <a href="{% url 'cerrar_sesion' %}" class="boton-cerrar-sesion" id="cerrar-sesion"> Cerrar sesión</a>
 
         {% else %}
@@ -51,10 +52,8 @@
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
   <div style="float: left; margin-top: 10px; margin-left: 10px;">
-    {% if request.user.is_authenticated %} <!--Aca habria que agregar un and if is not staff. No se como se hace-->
-
+    {% if request.user.is_authenticated and not user.is_staff %} <!--Aca habria que agregar un and if is not staff. No se como se hace-->
       <a href="{% url 'mis_turnos' %}" class="btn btn-sm btn-success" style="height: 50px;width: 150px; font-size: large; padding: 12px;">Mis Turnos</a>
-
     {% endif %}
   </div>
     <div class="container">

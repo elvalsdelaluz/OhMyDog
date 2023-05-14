@@ -28,6 +28,7 @@ class Cuenta(AbstractBaseUser):
     email = models.EmailField(verbose_name="email",max_length=60,unique=True)
     dni = models.CharField(verbose_name="DNI",max_length=10)
     numero = models.CharField(verbose_name="numero",max_length=10)
+    nombre = models.CharField(verbose_name="nombre",max_length=40)
     edad = models.IntegerField(verbose_name="edad", null=True)
     date_joined = models.DateTimeField(verbose_name="date_joined",auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last_login",auto_now_add=True)
