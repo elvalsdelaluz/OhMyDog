@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 # Create your models here.
@@ -20,6 +21,7 @@ class Adopcion(models.Model):
         ('0','En adopción'),
         ('1','Adoptado'),
     )
+    dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
     nombre=models.CharField(max_length=20)
     edad=models.IntegerField()
     comentarios=models.CharField(max_length=100)
@@ -28,6 +30,7 @@ class Adopcion(models.Model):
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
+    id = models.AutoField(primary_key=True)
 
     class Meta:
         verbose_name='adopcion'

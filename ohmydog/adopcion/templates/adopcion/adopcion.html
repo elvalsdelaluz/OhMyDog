@@ -25,7 +25,11 @@
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
                 <div >
-                  <a href="{% url 'loguear' %}" class="btn btn-success">Contactar</a>
+                  {% if request.user.is_authenticated %}
+                    <a href="#" class="btn btn-success">Contactar</a>
+                  {% else %}
+                    <a href="#" class="btn btn-success">Contactar</a>
+                  {% endif %}
                 </div>
               </div>
             </div>

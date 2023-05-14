@@ -20,13 +20,15 @@
 <body>
   <div class="nav-grande">
     <div class="barra-superior">
-      <img src="{% static 'ohmydogapp/img/logo.jpeg' %}" alt="" class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'ohmydogapp/img/logo.jpeg' %}" alt="" class="logo" >
+      </a>
       <div>
         <h1>¡OHMYDOG!</h1>
       </div>
       <div class="botones-barra-superior">
-        <a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>
-        <!-- PREGUNTAR ACA SI EL USUARIO ES ADMIN Y QUE APAREZCA "REGISTRAR USUARIO" -->
+        <a href="#" class="boton-veterinaria-turnos">Veterinarias de turno</a>
+        <!--<a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>-->
         {% if request.user.is_staff %}
           <a href="{% url 'register'%}" style="color: red;">Registrar</a>
         {%  endif %}
@@ -62,13 +64,16 @@
             <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}">Adopcion</a>
           </li>
           <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>-->
+            <a class="nav-link text-uppercase text-expanded" href="#">Busqueda de perros</a>
           </li>
           <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>
           </li>
           <li class="nav-item {% if request.path == '/donacion/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'donacion'%}">Donaciones</a>
+            <a class="nav-link text-uppercase text-expanded" href="#">Donaciones</a>
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'donacion'%}">Donaciones</a>-->
+
           </li>
           
          

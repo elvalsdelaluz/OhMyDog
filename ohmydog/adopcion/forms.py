@@ -10,3 +10,13 @@ class formulario_Adopcion(forms.Form):
     tamaño=forms.ChoiceField(label='Tamaño', choices=Adopcion.Tamaño)
     estado=forms.ChoiceField(label='Estado', choices=Adopcion.Estado, initial='0')
     comentarios=forms.CharField(label='Comentarios', widget=forms.Textarea)
+
+
+
+class FormularioDatosAdopcionLogueado(forms.Form):  
+    motivo=forms.CharField(label='motivo', widget=forms.Textarea, required=True)
+
+class FormularioDatosAdopcionNoUsuario(FormularioDatosAdopcionLogueado):  
+    nombre=forms.CharField(label='nombre', required=True)
+    email = forms.EmailField(max_length=60, help_text="Ingresa una dirección de correo válida", required=True)
+    numero=forms.CharField(label='numero', required=True)
