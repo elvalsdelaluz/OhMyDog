@@ -26,10 +26,13 @@
       </div>
       <div class="botones-barra-superior">
         <a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>
-       
+        <!-- PREGUNTAR ACA SI EL USUARIO ES ADMIN Y QUE APAREZCA "REGISTRAR USUARIO" -->
+        {% if request.user.is_staff %}
+          <a href="{% url 'register'%}" style="color: red;">Registrar</a>
+        {%  endif %}
         <!-- INICIO Y CIERRE DE SESIÓN -->
-        {% if user.is_authenticated %}
-          ¡Hola {{user.username}}!  
+        {% if request.user.is_authenticated %}
+          ¡Hola {{request.user.email}}!  
           <a href="{% url 'cerrar_sesion' %}" class="boton-cerrar-sesion" id="cerrar-sesion"> Cerrar sesión</a>
 
         {% else %}

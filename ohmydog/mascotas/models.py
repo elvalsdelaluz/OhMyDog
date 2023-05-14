@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 class Raza(models.Model):
@@ -8,14 +9,14 @@ class Raza(models.Model):
     def __str__(self):
         return self.raza
 
-class mascota(models.Model):
+class mascota(models.Model): #va con mayus. Mascota. xD
     Sexo=(
         ('0','Hembra'),
         ('1','Macho'),
         ('2','Ns/Nc'),
     )
     nombre=models.CharField(max_length=15, unique=True)
-    dueño=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True) #tuve que sacar el User xq es el modelo predeterminado de python. Nosotros usamos el custom.
     raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
     nacimiento=models.DateField()
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)

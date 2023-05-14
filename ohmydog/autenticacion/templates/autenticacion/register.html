@@ -1,0 +1,47 @@
+<html>
+{% extends "ohmydogapp/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="card card-signin">
+                <div class="card-body">
+                    <form class="form-signin" method="POST">{% csrf_token %}
+                        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Dirección de email" required autofocus>
+
+                        <input type="text" name="edad" id="inputEdad" class="form-control" placeholder="Edad" required>
+
+                        <input type="text" name="dni" id="inputDni" class="form-control" placeholder="DNI" required>
+
+                        <input type="text" name="numero" id="inputnumero" class="form-control" placeholder="Número de teléfono" required>
+                      
+                        {% for field in registration_form %}
+                            <p>
+                              {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                              {% endfor %}
+                            </p>
+                        {% endfor %}
+                        {% if registration_form.non_field_errors %}
+                          <div style="color: red">
+                            <p>{{registration_form.non_field_errors}}</p>
+                          </div>
+                            
+                        {% endif %}
+                      
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+                    
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+</html>
