@@ -13,7 +13,7 @@ def publicacion(request):
 
     formulario=formulario_turno()
 
-    turnos=Turno.objects.filter()
+    turnos=Turno.objects.filter(dueño=request.user)
 
     if request.method=='POST':
         formulario=formulario_turno(data=request.POST)
