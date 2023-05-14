@@ -50,6 +50,13 @@
   
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+  <div style="float: left; margin-top: 10px; margin-left: 10px;">
+    {% if request.user.is_authenticated %} <!--Aca habria que agregar un and if is not staff. No se como se hace-->
+
+      <a href="{% url 'mis_turnos' %}" class="btn btn-sm btn-success" style="height: 50px;width: 150px; font-size: large; padding: 12px;">Mis Turnos</a>
+
+    {% endif %}
+  </div>
     <div class="container">
       <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="{% url 'home' %}">Oh My Dog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +88,7 @@
       </div>
     </div>
   </nav>
+
 
     <!-- Contenido cambiante-->
     {% block content %}

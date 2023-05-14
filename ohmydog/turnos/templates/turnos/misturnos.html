@@ -1,0 +1,88 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+
+        <h1 style="color: white; text-align: center;">Solicitud de turno</h1>
+
+        <div class="contenedorFormulario" style="width: 60%; padding-left: 0%; padding-right: 0%;">
+
+            <form action="" method="POST" style="text-align: center;">
+                {% csrf_token %}
+
+                {% if mensaje %}
+                
+                    <div class="alert alert-success" role="alert">
+                        Solicitud enviada correctamente
+                </div>
+
+                {% endif %}
+
+                <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>
+                <!--<table style="color:white; margin: 20px auto;">{{formulario.as_table}}<table>-->
+                <input type="submit" value="Enviar" style="width: 150px;"></input>
+
+            </form>   
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h1 style="color: white; margin: auto; text-align: center;">Mis turnos</h1>
+
+    {% if turnos %}
+    <ul>
+        {% for turno in turnos %}
+        <div class="tarjeta-carac" style="width: 100%;">
+        <div class="container">
+            <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <div class="cta-inner text-center rounded">
+                <div class="card" style="background-color: rgba(12, 159, 159);">
+                    <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                    <p class="card-title"style="color: white; "><strong> Mascota:</strong> {{turno.mascota}}</p>
+                    <p class="card-text" style="color: white;"><strong> Motivo:</strong> {{turno.motivo}}</p>
+                    <p class="card-text"style="color: white;"><strong> Fecha:</strong> {{turno.fecha}}</p>
+                    <p class="card-text"style="color: white;"><strong> Estado:</strong> {{turno.get_estado_display}}</p>
+                    </div>
+                    <div >
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div>
+        &nbsp;
+        </div>
+    
+        {% endfor %}
+        </ul>
+        {% else %}
+        <section class="page-section cta">
+        <div class="container">
+            <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <div class="cta-inner text-center rounded">
+                <h2 class="section-heading mb-4">
+                    <p></p>
+                    <span class="section-heading-upper">Aun no has solicitado ningun turno</span>
+                </h2>
+                </div>
+            </div>
+            </div>
+        </div>
+        </section>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
