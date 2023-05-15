@@ -18,5 +18,5 @@ class FormularioDatosAdopcionLogueado(forms.Form):
 
 class FormularioDatosAdopcionNoUsuario(FormularioDatosAdopcionLogueado):  
     nombre=forms.CharField(label='nombre', required=True)
-    email = forms.EmailField(max_length=60, help_text="Ingresa una dirección de correo válida", required=True)
+    email = forms.EmailField(max_length=60, required=True)
     numero=forms.CharField(label='numero', required=True)

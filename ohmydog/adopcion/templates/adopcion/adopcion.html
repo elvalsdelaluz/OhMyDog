@@ -24,12 +24,8 @@
                   <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{adopcion.get_sexo_display}}</p>
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
-                <div >
-                  {% if request.user.is_authenticated %}
-                    <a href="#" class="btn btn-success">Contactar</a>
-                  {% else %}
-                    <a href="#" class="btn btn-success">Contactar</a>
-                  {% endif %}
+                <div>
+                  <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
                 </div>
               </div>
             </div>

@@ -4,7 +4,8 @@ from .forms import formulario_Adopcion, FormularioDatosAdopcionLogueado, Formula
 from django.core.mail import send_mail
 
 def adopcion (request):
-    return render(request, "adopcion/adopcion.html", {"adopciones":Adopcion.objects.all()})
+    adopciones = Adopcion.objects.all()
+    return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
 
 
 def publicacion(request):
@@ -33,16 +34,41 @@ def publicacion(request):
     return render(request, 'adopcion/adopcion/solicitud.html', {'formulario':formulario_adopcion})
 
 
-'''
-#no terminado. EN PROCESOOOO
+
 def datos_adopcion(request, adopcion_id):
     user = request.user
     if user.is_authenticated:
-        if request.method =='POST':
+        if request.method == 'POST':
             form = FormularioDatosAdopcionLogueado(request.POST)
-            motivo = form.cleaned_data('motivo')
-            adopcion = Adopcion.objects.filter(id=adopcion_id)
-            send_mail("Solicitud de adopción", f"{request.user.email} se quiere contactar para adoptar el perro que publicaste.\n{motivo}", "OhMyDog@gmail.com", ["matolu.enterprise@gmail.com", request.user.email, adopcion.dueño.email])
-            return redirect("/home/?valido")
-'''
-    
+            if form.is_valid():
+                motivo = form.cleaned_data['motivo']
+                adopcion = Adopcion.objects.get(id=adopcion_id)
+                send_mail(
+                    "Solicitud de adopción",
+                    f"{request.user.nombre} se quiere contactar para adoptar el perro que publicaste.\n Esta es su información de contacto:\n *Numero: {request.user.numero}\n *Email: {request.user.email} \n Motivo: {motivo}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", request.user.email, adopcion.dueño.email]
+                )
+                return redirect("home")
+
+        form = FormularioDatosAdopcionLogueado()
+        return render(request, "adopcion/contactar.html", {'formulario': form})
+    else:
+        if request.method == 'POST':
+            form = FormularioDatosAdopcionNoUsuario(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                nombre = form.cleaned_data['nombre']
+                numero = form.cleaned_data['numero']
+                motivo = form.cleaned_data['motivo']
+                adopcion = Adopcion.objects.get(id=adopcion_id)
+                send_mail(
+                    "Solicitud de adopción",
+                    f"{nombre} se quiere contactar para adoptar el perro que publicaste.\n Esta es su información de contacto:\n *Numero: {numero}\n *Email: {email} \n Motivo: {motivo}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", email, adopcion.dueño.email]
+                )
+                return redirect("home")
+
+        form = FormularioDatosAdopcionNoUsuario()
+        return render(request, "adopcion/contactar.html",{'formulario':form})

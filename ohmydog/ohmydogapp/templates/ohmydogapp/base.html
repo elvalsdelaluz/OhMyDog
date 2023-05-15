@@ -1,9 +1,12 @@
 <html>
-
-<head>
-
+  
+  <head>
+    
     {% load static %}
-
+    
+    <!-- Incluir los archivos estáticos de Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <!-- Bootstrap -->
     <link href="{% static 'ohmydogapp/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -26,19 +29,34 @@
       <div>
         <h1>¡OHMYDOG!</h1>
       </div>
-      <div class="botones-barra-superior">
-        <a href="#" class="boton-veterinaria-turnos">Veterinarias de turno</a>
-        <!--<a href="{% url 'veterinariasDeTurno'%}" class="boton-veterinaria-turnos">Veterinarias de turno</a>-->
+
+
+      {% load static %}
+
+      {% if request.user.is_authenticated %} 
+          ¡Hola {{request.user.nombre}}!  
+
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Mi cuenta
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
+              <a class="dropdown-item" href="#">Cambiar contraseña</a>
+            </div>
+          </div>
+      {%endif%}
+        
+        
+        <div class="botones-barra-superior">
+        
         
         {% if request.user.is_staff %}
-          <a href="{% url 'register'%}" style="color: red;">Registrar</a>
+          <a href="{% url 'register'%}" class="boton-iniciar-sesion">Registrar nuevo usuario</a>
         {%  endif %}
         <!-- INICIO Y CIERRE DE SESIÓN -->
-        {% if request.user.is_authenticated %}
-          ¡Hola {{request.user.nombre}}!  
-          <a href="{% url 'cerrar_sesion' %}" class="boton-cerrar-sesion" id="cerrar-sesion"> Cerrar sesión</a>
+        {% if not request.user.is_authenticated %}
 
-        {% else %}
           <a href="{% url 'loguear' %}" class="boton-iniciar-sesion">Iniciar sesión</a> 
         {%  endif %}
       </div>
@@ -74,14 +92,22 @@
             <a class="nav-link text-uppercase text-expanded" href="#">Busqueda de perros</a>
           </li>
           <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>
+            <a class="nav-link text-uppercase text-expanded" href="#">Paseadores y cuidadores</a>
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>-->
           </li>
-          <li class="nav-item {% if request.path == '/donacion/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="#">Donaciones</a>
-            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'donacion'%}">Donaciones</a>-->
-
+          <li class="nav-item dropdown px-lg-4">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              MÁS SERVICIOS
+            </a>
+            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color:rgb(255, 94, 0);">Donaciones</a>
+              <!--{% url 'donacion'%}" poner eso en href cuando sea necesario-->
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(255, 94, 0);">Veterinarias de turno</a>
+              <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
+            </div>
           </li>
-          
+         
+        
          
         </ul>
       </div>
@@ -119,9 +145,9 @@
           </a>
       </p>
       <p class="m-0 mbt">
-          <a href="sample.html" class="link">Política de privacidad</a> ·
-          <a href="sample.html" class="link">Aviso legal</a> ·
-          <a href="sample.html" class="link">Cookies</a>
+          <a href="#" class="link">Política de privacidad<a> 
+          <a href="#" class="link">Aviso legal</a> 
+          <a href="#" class="link">Cookies</a>
       </p>
       <p class="m-0 mbt1">&copy; Oh My Dog 2023</p>
     </div>
