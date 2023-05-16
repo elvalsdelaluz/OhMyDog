@@ -9,6 +9,12 @@ class Raza(models.Model):
     def __str__(self):
         return self.raza
 
+def convertir_queryset(query):
+    list_query =[]
+    for obj in query:
+        list_query.append(obj.raza)
+    return list(enumerate(list_query))
+
 class Mascota(models.Model): #va con mayus. Mascota. xD
     Sexo=(
         ('0','Hembra'),
@@ -18,7 +24,8 @@ class Mascota(models.Model): #va con mayus. Mascota. xD
 
     nombre=models.CharField(max_length=50)
     dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True) #tuve que sacar el User xq es el modelo predeterminado de python. Nosotros usamos el custom.
-    raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
+
+    raza=models.ForeignKey(Raza, on_delete=models.CASCADE, choices=convertir_queryset(Raza.objects.all()))
     fecha_nacimiento=models.DateField()
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
     observaciones=models.TextField(blank=True, null=True)
