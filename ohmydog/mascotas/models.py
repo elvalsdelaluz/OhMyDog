@@ -15,11 +15,14 @@ class Mascota(models.Model): #va con mayus. Mascota. xD
         ('1','Macho'),
         ('2','Ns/Nc'),
     )
-    nombre=models.CharField(max_length=15, unique=True)
+
+    nombre=models.CharField(max_length=50)
     dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True) #tuve que sacar el User xq es el modelo predeterminado de python. Nosotros usamos el custom.
     raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
-    nacimiento=models.DateField()
+    fecha_nacimiento=models.DateField()
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
+    observaciones=models.TextField(blank=True, null=True)
+    #foto=models.ImageField()
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 

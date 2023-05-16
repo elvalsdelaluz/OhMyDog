@@ -1,0 +1,43 @@
+{% extends "ohmydogapp/base.html" %}
+
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+
+
+{% block content %}
+<div class="contenedorFormulario">
+  <div class="col-md-12">
+
+  <form action="" method="POST">
+      {% csrf_token %}
+
+      {% if mensaje %}
+      
+          <div class="alert alert-success" role="alert">
+              ¡Registro exitoso!
+        </div>
+
+      {% endif %}
+
+
+      {{ form|crispy }}
+      <input class="btn btn-primary" type="submit" value="Registrar" {% if 'ok' in request.GET %}disabled{% endif %}{% if 'error' in request.GET %}disabled{% endif %}>
+
+  </form>   
+
+  </div>
+  </div>
+
+
+{% if 'ok' in request.GET %}
+  <div class="col-md-6 mb-5" role="alert">
+      <strong>¡Se ha dado de alta una nueva mascota!</strong>
+  </div>
+{% endif %}
+
+
+
+{% endblock %}
