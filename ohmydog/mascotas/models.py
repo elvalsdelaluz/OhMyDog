@@ -9,7 +9,7 @@ class Raza(models.Model):
     def __str__(self):
         return self.raza
 
-class mascota(models.Model): #va con mayus. Mascota. xD
+class Mascota(models.Model): #va con mayus. Mascota. xD
     Sexo=(
         ('0','Hembra'),
         ('1','Macho'),
@@ -30,8 +30,8 @@ class mascota(models.Model): #va con mayus. Mascota. xD
     def __str__(self):
         return self.nombre
 
-class libreta_sanitaria(models.Model):
-    perro=models.OneToOneField(mascota, on_delete=models.CASCADE, primary_key=True)
+class LibretaSanitaria(models.Model):
+    perro=models.OneToOneField(Mascota, on_delete=models.CASCADE, primary_key=True)
 
     class Meta:
         verbose_name='libreta'
@@ -39,7 +39,7 @@ class libreta_sanitaria(models.Model):
     def __str__(self):
         return 'Libreta de %{}' %self.perro
     
-class entrada_libreta_sanitaria(models.Model):
+class EntradaLibretaSanitaria(models.Model):
     Motivo=(
         ('0','Vacuna A'),
         ('1','Vacuna B'),
@@ -48,4 +48,4 @@ class entrada_libreta_sanitaria(models.Model):
     motivo=models.CharField('Motivo', max_length=1,choices=Motivo)
     peso=models.DecimalField(decimal_places=2, max_digits=5)
     fecha=models.DateTimeField(auto_now_add=True)
-    libreta=models.ForeignKey(libreta_sanitaria, on_delete=models.CASCADE)
+    libreta=models.ForeignKey(LibretaSanitaria, on_delete=models.CASCADE)
