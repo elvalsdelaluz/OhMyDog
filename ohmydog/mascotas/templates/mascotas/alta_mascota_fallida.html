@@ -1,0 +1,23 @@
+{% extends "ohmydogapp/base.html" %}
+
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+
+
+{% block content %}
+    
+    <div class="contenedorFormulario">
+    <div class="col-md-12">
+    <h2>  </h2>
+    <h2 class="text-center">{{mensaje}}</h2>
+    <h2 class="text-center">D:</h2>
+    <a class="btn btn-primary" type="submit" href={% url 'alta_mascota' %}>Volver al formulario</a> 
+
+    </div>
+    </div>
+
+
+{% endblock %}

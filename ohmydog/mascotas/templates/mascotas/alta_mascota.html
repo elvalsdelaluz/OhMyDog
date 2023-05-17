@@ -10,8 +10,7 @@
 {% block content %}
 <div class="contenedorFormulario">
   <div class="col-md-12">
-  <span class="section-heading-upper">Alta Mascota</span>
-
+  <h3 class="text-center">Alta Mascota</h3>
   <form action="" method="POST">
       {% csrf_token %}
       {% if request.user.is_staff %}
