@@ -14,7 +14,12 @@
 
   <form action="" method="POST">
       {% csrf_token %}
-
+      {% if request.user.is_staff %}
+      <div id="div_id_dueño" class="form-group"> 
+      <label for="id_dueño" class=" requiredField">
+      Email del dueño<span class="asteriskField">*</span> 
+      </label> <div> <input type="email" name="dueño" class="emailinput form-control" required="" id="id_dueño"> </div> </div>
+      {% endif %}
       {{ form|crispy }}
       <input class="btn btn-primary" type="submit" value="Confirmar">
 

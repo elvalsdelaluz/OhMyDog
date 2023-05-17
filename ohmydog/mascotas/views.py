@@ -24,6 +24,7 @@ def alta_mascota(request):
             #nueva_mascota.dueño=request.user
             if request.user.is_staff:
                 #Tengo que recuperar al usuario que acaba de registrar el veterinario
+                
                 nueva_mascota.dueño=None
             else:
                 nueva_mascota.dueño=request.user
