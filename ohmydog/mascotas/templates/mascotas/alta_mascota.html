@@ -10,34 +10,17 @@
 {% block content %}
 <div class="contenedorFormulario">
   <div class="col-md-12">
+  <span class="section-heading-upper">Alta Mascota</span>
 
   <form action="" method="POST">
       {% csrf_token %}
 
-      {% if mensaje %}
-      
-          <div class="alert alert-success" role="alert">
-              ¡Registro exitoso!
-        </div>
-
-      {% endif %}
-
-
       {{ form|crispy }}
-      <input class="btn btn-primary" type="submit" value="Registrar" {% if 'ok' in request.GET %}disabled{% endif %}{% if 'error' in request.GET %}disabled{% endif %}>
+      <input class="btn btn-primary" type="submit" value="Confirmar">
+
 
   </form>   
-
-  </div>
-  </div>
-
-
-{% if 'ok' in request.GET %}
-  <div class="col-md-6 mb-5" role="alert">
-      <strong>¡Se ha dado de alta una nueva mascota!</strong>
-  </div>
-{% endif %}
-
-
-
+  <a class="btn btn-primary" type="submit" href={% url 'home' %}>Volver</a> </a>
+</div>
+</div>
 {% endblock %}

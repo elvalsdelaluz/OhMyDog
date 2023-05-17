@@ -13,21 +13,28 @@ def convertir_queryset(query):
     list_query =[]
     for obj in query:
         list_query.append(obj.raza)
-    return list(enumerate(list_query))
+    list_query=enumerate(list_query)
+    #Tengo que convertir los int en str porque sino el formulario se queja
+    list_query_casteada=[]
+    for num, raza in list_query:
+        casteada=(str(num), raza)
+        list_query_casteada.append(casteada)
+    return list_query_casteada
 
 class Mascota(models.Model): #va con mayus. Mascota. xD
-    Sexo=(
+    sexo_choices=[
         ('0','Hembra'),
         ('1','Macho'),
         ('2','Ns/Nc'),
-    )
+    ]
+    razas_choices = convertir_queryset(Raza.objects.all())
 
     nombre=models.CharField(max_length=50)
     dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True) #tuve que sacar el User xq es el modelo predeterminado de python. Nosotros usamos el custom.
 
-    raza=models.ForeignKey(Raza, on_delete=models.CASCADE, choices=convertir_queryset(Raza.objects.all()))
+    raza=models.CharField('Raza', max_length=1, choices=razas_choices)
     fecha_nacimiento=models.DateField()
-    sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
+    sexo=models.CharField('Sexo', max_length=1, choices=sexo_choices)
     observaciones=models.TextField(blank=True, null=True)
     #foto=models.ImageField()
     created=models.DateTimeField(auto_now_add=True)
