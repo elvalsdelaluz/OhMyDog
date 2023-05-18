@@ -35,7 +35,7 @@ def publicacion(request):
             ##despues hacer un switch para que en vez de que "diga motivo de turno: 1" diga "motivo de turno: Vacuna A"
             send_mail(
                 "Turno solicitado", 
-                f"Se ha registrado la solicitud de turno con la siguiente informacion:\n Motivo del turno: {nuevo_turno.motivo}\n Nombre del perro:  {nuevo_turno.mascota}\n Franja horaria: {nuevo_turno.franja}\n Fecha: {nuevo_turno.fecha}\n Estado del turno: {nuevo_turno.estado}", 
+                f"Se ha registrado la solicitud de turno con la siguiente informacion:\n Motivo del turno: {nuevo_turno.motivo}\n Nombre del perro:  {nuevo_turno.mascota}\n Franja horaria: {nuevo_turno.franja}\n Fecha: {nuevo_turno.fecha}\n Estado del turno: Pendiente", 
                 "ohmydog.veterinariacanina@gmail.com", 
                 [request.user.email, "ohmydog.veterinariacanina@gmail.com"], 
                 fail_silently=False
@@ -71,7 +71,13 @@ def aceptar_turno(request, pk):
     turno.estado=Turno.estados[1][1]
     turno.save()
 
-
+    send_mail(
+                "Turno aceptado", 
+                f"El turno ha sido aceptado.\n Motivo del turno: {turno.motivo}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.franja}\n Fecha: {turno.fecha}", 
+                "ohmydog.veterinariacanina@gmail.com", 
+                [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
+                fail_silently=False
+            )
     turnos_pendientes=Turno.objects.filter(estado='Pendiente')
 
     return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
