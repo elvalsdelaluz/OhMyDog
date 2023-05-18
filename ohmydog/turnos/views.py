@@ -3,6 +3,7 @@ from .forms import formulario_turno
 from .models import Turno
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -45,3 +46,33 @@ def publicacion(request):
             return render (request, 'turnos/misturnos.html',{'formulario':formulario, "mensaje":"ok",'turnos':turnos})
         
     return render(request, 'turnos/misturnos.html', {'formulario':formulario,'turnos':turnos})
+
+def ver_turnos_pendientes(request):
+
+    turnos_pendientes=Turno.objects.filter(estado='Pendiente')
+
+    return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+
+def ver_turnos_activos(request):
+
+    turnos_activos=Turno.objects.filter(estado=Turno.estados[1][1])
+
+    return render(request, 'turnos/turnosactivos.html', {'turnos':turnos_activos})
+
+def ver_turnos_pasados(request):
+
+    turnos_pasados=Turno.objects.filter(estado='2')|Turno.objects.filter(estado='3')|Turno.objects.filter(estado='4')
+
+    return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados})
+
+def aceptar_turno(request, pk):
+    turno = get_object_or_404(Turno, pk=pk)
+
+    turno.estado=Turno.estados[1][1]
+    turno.save()
+
+
+    turnos_pendientes=Turno.objects.filter(estado='Pendiente')
+
+    return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+

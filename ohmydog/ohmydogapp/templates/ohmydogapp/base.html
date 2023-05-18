@@ -73,8 +73,24 @@
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
   <div style="float: left; margin-top: 10px; margin-left: 10px;">
-    {% if request.user.is_authenticated and not user.is_staff %} <!--Aca habria que agregar un and if is not staff. No se como se hace-->
+    {% if request.user.is_authenticated and not user.is_staff %}
       <a href="{% url 'mis_turnos' %}" class="btn btn-sm btn-success" style="height: 50px;width: 150px; font-size: large; padding: 12px;">Mis Turnos</a>
+    {% endif %}
+    {% if request.user.is_staff %}
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle"
+                data-toggle="dropdown">
+          Turnos <span class="caret"></span>
+        </button>
+      
+        <ul class="dropdown-menu" role="menu">
+          <li><a class="dropdown-item" href="{% url 'turnos_pendientes' %}">Ver turnos pendientes</a></li>
+          <li><a class="dropdown-item" href="{% url 'turnos_activos' %}">Ver turnos activos</a></li>
+          <li><a class="dropdown-item" href="{% url 'turnos_pasados' %}">Ver turnos finalizados</a></li>
+        </ul>
+      </div>
+
+
     {% endif %}
   </div>
     <div class="container">
