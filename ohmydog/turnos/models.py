@@ -28,11 +28,11 @@ class Turno(models.Model):
 
     dueño=models.ForeignKey(User, on_delete=models.CASCADE)
     mascota=models.ForeignKey(Mascota, on_delete=models.CASCADE)#no deberia ser una mascota de las q tiene registrada?
-    motivo=models.CharField('Motivo',max_length=1,choices=motivos)
+    motivo=models.CharField('Motivo',max_length=15,choices=motivos)
     motivo_rechazo = models.CharField(max_length=100, null=True, blank=True, default=None)
     franjaHoraria=models.CharField('Franja horaria',max_length=1,choices=franja)
     fecha=models.DateField()
-    estado=models.CharField('Estado',max_length=1,choices=estados)
+    estado=models.CharField('Estado',max_length=15,choices=estados)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
     id = models.AutoField(primary_key=True)
