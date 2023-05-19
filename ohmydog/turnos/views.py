@@ -103,7 +103,7 @@ def aceptar_turno(request, pk):
 
     send_mail(
                 "Turno aceptado", 
-                f"El turno ha sido aceptado.\n Motivo del turno: {turno.motivo}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.franja}\n Fecha: {turno.fecha}", 
+                f"El turno ha sido aceptado.\n Motivo del turno: {turno.get_motivo_display}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.get_franjaHoraria_display}\n Fecha: {turno.fecha}", 
                 "ohmydog.veterinariacanina@gmail.com", 
                 [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
                 fail_silently=False
