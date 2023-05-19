@@ -14,12 +14,12 @@ from datetime import date, timedelta
 
 def publicacion(request):
 
-    formulario=formulario_turno()
+    formulario=formulario_turno(user=request.user)
 
     turnos=Turno.objects.filter(dueño=request.user)
 
     if request.method=='POST':
-        formulario=formulario_turno(data=request.POST)
+        formulario=formulario_turno(data=request.POST, user=request.user)
         if formulario.is_valid():
             #Aca hay que hacerlo andar
             
@@ -71,7 +71,11 @@ def publicacion(request):
                     fail_silently=False
                 )
 
+<<<<<<< HEAD
                 formulario=formulario_turno()
+=======
+            
+>>>>>>> ac63f2a995400f2b2d102dffbd8f83a26806fde2
 
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "mensaje":"ok",'turnos':turnos})
         
