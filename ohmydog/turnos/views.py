@@ -4,6 +4,7 @@ from .models import Turno
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from datetime import date, timedelta
 
 
 # Create your views here.
@@ -21,13 +22,20 @@ def publicacion(request):
         formulario=formulario_turno(data=request.POST)
         if formulario.is_valid():
             #Aca hay que hacerlo andar
-            nuevo_turno=Turno()
-            nuevo_turno.dueño=request.user
-            nuevo_turno.motivo=formulario.cleaned_data['motivo']
-            nuevo_turno.mascota=formulario.cleaned_data['mascota']
-            nuevo_turno.franja=formulario.cleaned_data['franja']
-            nuevo_turno.fecha=formulario.cleaned_data['fecha']
-            nuevo_turno.estado=Turno.estados[0][1]
+            if formulario.cleaned_data['fecha'] < date.today():
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error1":"error1",'turnos':turnos})
+            elif (formulario.cleaned_data['fecha'] - date.today()).days < 1:
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error2":"error2",'turnos':turnos})
+            elif formulario.cleaned_data['fecha'].weekday() == 6:
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error3":"error3",'turnos':turnos})
+            else:
+                nuevo_turno=Turno()
+                nuevo_turno.dueño=request.user
+                nuevo_turno.motivo=formulario.cleaned_data['motivo']
+                nuevo_turno.mascota=formulario.cleaned_data['mascota']
+                nuevo_turno.franja=formulario.cleaned_data['franja']
+                nuevo_turno.fecha=formulario.cleaned_data['fecha']
+                nuevo_turno.estado=Turno.estados[0][1]
 
             nuevo_turno.save()
 

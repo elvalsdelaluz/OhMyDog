@@ -10,12 +10,10 @@ class formulario_turno(forms.Form):
     mascota=forms.CharField(label='Mascota', required=True)
     motivo=forms.ChoiceField(label='Motivo', choices=Turno.motivos)
     franja=forms.ChoiceField(label='Franja Horaria', choices=Turno.franja)
-    fecha=forms.DateField(label='Fecha',widget=SelectDateWidget)
+    fecha=forms.DateField(label='Fecha', widget=forms.TextInput(     
+        attrs={'type': 'date'} ))
     
 
     class Meta:
         model=Turno
 
-    def __init__(self, *args, **kwargs):
-        super(formulario_turno, self).__init__(*args, **kwargs)
-        self.fields['fecha'].widget = SelectDateWidget()
