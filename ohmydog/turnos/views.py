@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import formulario_turno, Formulario_rechazado
 from .models import Turno
 from django.contrib.auth import get_user_model
@@ -18,6 +18,7 @@ def publicacion(request):
 
     turnos=Turno.objects.filter(dueño=request.user)
 
+
     if request.method=='POST':
         formulario=formulario_turno(data=request.POST, user=request.user)
         if formulario.is_valid():
@@ -27,7 +28,7 @@ def publicacion(request):
             nuevo_turno.dueño=request.user
             nuevo_turno.motivo=formulario.cleaned_data['motivo']
             nuevo_turno.mascota=formulario.cleaned_data['mascota']
-            nuevo_turno.franja=formulario.cleaned_data['franja']
+            nuevo_turno.franjaHoraria=formulario.cleaned_data['franja']
             nuevo_turno.fecha=formulario.cleaned_data['fecha']
             nuevo_turno.estado=Turno.estados[0][1]
 
@@ -103,7 +104,7 @@ def aceptar_turno(request, pk):
 
     send_mail(
                 "Turno aceptado", 
-                f"El turno ha sido aceptado.\n Motivo del turno: {turno.get_motivo_display}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.get_franjaHoraria_display}\n Fecha: {turno.fecha}", 
+                f"El turno ha sido aceptado.\n Motivo del turno: {turno.motivo}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.franjaHoraria}\n Fecha: {turno.fecha}", 
                 "ohmydog.veterinariacanina@gmail.com", 
                 [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
                 fail_silently=False
@@ -111,6 +112,26 @@ def aceptar_turno(request, pk):
     turnos_pendientes=Turno.objects.filter(estado='Pendiente')
 
     return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+
+def cancelar_turno(request, pk):
+    turno = get_object_or_404(Turno, pk=pk)
+
+    if (turno.fecha - date.today()).days <=1:
+        
+        return redirect('/mis_turnos/?novalido')
+
+    turno.estado=Turno.estados[3][1]
+    turno.save()
+
+    send_mail(
+                "Turno cancelado", 
+                f"El turno ha sido cancelado.\n Motivo del turno: {turno.motivo}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.franjaHoraria}\n Fecha: {turno.fecha}", 
+                "ohmydog.veterinariacanina@gmail.com", 
+                [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
+                fail_silently=False
+            )
+
+    return publicacion(request)
 
 
 

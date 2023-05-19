@@ -42,6 +42,11 @@
 
     {% if turnos %}
     <ul>
+            {% if 'novalido' in request.GET %}
+                    <div class="alert alert-danger" role="alert">
+                        Lo sentimos. Un turno debe cancelarse con al menos un dia de anticipacion
+                  </div>
+                {% endif %}
         {% for turno in turnos %}
         <div class="tarjeta-carac" style="width: 100%;">
         <div class="container">
@@ -56,6 +61,9 @@
                     <p class="card-text"style="color: white;"><strong> Estado:</strong> {{turno.get_estado_display}}</p>
                     {% if turno.get_estado_display == 'Rechazado' %}
                         <a href="{% url 'motivo_rechazo' turno.motivo_rechazo %}" class="btn btn-primary" style="color: white; ">Informacion adicional</a>
+                    {% endif %}
+                    {% if turno.get_estado_display == 'Pendiente' or turno.get_estado_display == 'Aceptado' %}
+                        <a href="{% url 'cancelar_turno' pk=turno.id %}" class="btn btn-danger" style="color: white; ">Cancelar</a>
                     {% endif %}
                     </div>
                     <div >
