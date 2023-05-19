@@ -9,22 +9,24 @@
 
 
 <div class="contenedorFormulario">
-
-    <form action="" method="POST" style="text-align: center;">
+    <div class="col-md-12">
+      <h3 class="text-center" style="margin-top: 5px;"><strong>Subir adopcion</strong></h3>
+      <form action="" method="POST">
         {% csrf_token %}
-
-        {% if mensaje %}
-        
-            <div class="alert alert-success" role="alert">
-                Solicitud enviada correctamente
-          </div>
-
+        {% if error %}
+          <div class="alert alert-danger" role="alert">
+           {{error}}
+        </div>
+        {% elif mensaje %}
+          <div class="alert alert-success" role="alert">
+            Tu publiicacion fue añadida correctamente
+        </div>
         {% endif %}
 
-
-        <table style="color:white; margin: 20px auto;">{{formulario.as_table}}<table>
-        <input type="submit" value="Enviar" style="width: 150px;"></input>
-
-    </form>   
-</div>
+        {{ formulario|crispy }}
+        <input class="btn btn-primary" type="submit" value="Confirmar">
+      </form>   
+    <a class="btn btn-primary" type="submit" href="{% url 'home' %}">Volver</a> </a>
+    </div>
+  </div>
 {% endblock %}

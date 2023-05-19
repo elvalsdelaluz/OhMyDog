@@ -20,9 +20,9 @@ def publicacion(request):
             nueva_adopcion.dueño=request.user
             nueva_adopcion.nombre=formulario_adopcion.cleaned_data['nombre']
             nueva_adopcion.sexo=formulario_adopcion.cleaned_data['sexo']
-            nueva_adopcion.edad=formulario_adopcion.cleaned_data['edad']
+            nueva_adopcion.edad=formulario_adopcion.cleaned_data['fecha_nacimiento']
             nueva_adopcion.tamaño=formulario_adopcion.cleaned_data['tamaño']
-            nueva_adopcion.estado=formulario_adopcion.cleaned_data['estado']
+            nueva_adopcion.estado=Adopcion.Estado[0][1]
             nueva_adopcion.comentarios=formulario_adopcion.cleaned_data['comentarios']
 
             nueva_adopcion.save()

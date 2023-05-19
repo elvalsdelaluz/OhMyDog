@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from datetime import date
 
 
 # Create your models here.
@@ -23,7 +24,7 @@ class Adopcion(models.Model):
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
     nombre=models.CharField(max_length=20)
-    edad=models.IntegerField()
+    fecha_nacimiento=models.DateField(default=date.today)
     comentarios=models.CharField(max_length=100)
     sexo=models.CharField('Sexo',max_length=1, choices=Sexo)
     tamaño=models.CharField('Tamaño',max_length=1, choices=Tamaño)
