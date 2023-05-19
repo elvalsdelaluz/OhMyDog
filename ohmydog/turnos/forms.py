@@ -7,34 +7,27 @@ from mascotas.models import Mascota
 from django import forms
 from .models import Turno
 from mascotas.models import Mascota
+from datetime import date
+
+def present_or_future_date(value):
+    if value < date.today():
+        raise forms.ValidationError("Por favor solicita un turno en una fecha valida")
+    elif value == date.today():
+        raise forms.ValidationError("Lo sentimos, los turnos son, cuanto menos, de un dia para el otro")
+    elif value.weekday() == 6:
+        raise forms.ValidationError("Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana")
+    return value
 
 class formulario_turno(forms.Form):
     mascota = forms.ModelChoiceField(queryset=None)
     motivo = forms.ChoiceField(label='Motivo', choices=Turno.motivos)
     franja = forms.ChoiceField(label='Franja Horaria', choices=Turno.franja)
-    fecha = forms.DateField(label='Fecha', widget=forms.TextInput(attrs={'type': 'date'}))
+    fecha = forms.DateField(label='Fecha', widget=forms.TextInput(attrs={'type': 'date'}),
+                            validators=[present_or_future_date])
 
-<<<<<<< HEAD
-
-
-
-class formulario_turno(forms.Form,):
-
-    
-    current = get_current_user
-
-  
-    mascota=forms.ModelChoiceField(queryset=(Mascota.objects.all()))
-    motivo=forms.ChoiceField(label='Motivo', choices=Turno.motivos)
-    franja=forms.ChoiceField(label='Franja Horaria', choices=Turno.franja)
-    fecha=forms.DateField(label='Fecha', widget=forms.TextInput(     
-        attrs={'type': 'date'} ))
-    
-=======
     def __init__(self, user, *args, **kwargs):
         super(formulario_turno, self).__init__(*args, **kwargs)
         self.fields['mascota'].queryset = Mascota.objects.filter(dueño=user)
->>>>>>> ac63f2a995400f2b2d102dffbd8f83a26806fde2
 
     class Meta:
         model = Turno

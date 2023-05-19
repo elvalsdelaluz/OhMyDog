@@ -31,7 +31,7 @@ def publicacion(request):
             nuevo_turno.fecha=formulario.cleaned_data['fecha']
             nuevo_turno.estado=Turno.estados[0][1]
 
-            if nuevo_turno.fecha < date.today():
+            """if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
@@ -41,9 +41,9 @@ def publicacion(request):
             
             elif nuevo_turno.fecha.weekday() == 6:
                 error= "Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana"
-                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})"""
             
-            elif (nuevo_turno.motivo== '1' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
+            if (nuevo_turno.motivo== '1' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
                                     + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)< 2)):
                 error= "Lo sentimos, la Vacuna A solo puede aplicarse a perros mayores a dos meses"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
@@ -71,11 +71,7 @@ def publicacion(request):
                     fail_silently=False
                 )
 
-<<<<<<< HEAD
-                formulario=formulario_turno()
-=======
             
->>>>>>> ac63f2a995400f2b2d102dffbd8f83a26806fde2
 
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "mensaje":"ok",'turnos':turnos})
         

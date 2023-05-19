@@ -10,4 +10,4 @@ class MascotaForm(forms.Form):
     sexo=forms.ChoiceField(label='Sexo', choices=Mascota.sexo_choices)
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', widget=forms.TextInput(     
         attrs={'type': 'date'} ))
-    observaciones=forms.CharField(label='Observaciones', widget=forms.Textarea, required=False)
+    observaciones=forms.CharField(label='Observaciones', widget=forms.Textarea, required=False) 
