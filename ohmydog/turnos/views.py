@@ -22,39 +22,58 @@ def publicacion(request):
         formulario=formulario_turno(data=request.POST)
         if formulario.is_valid():
             #Aca hay que hacerlo andar
-            if formulario.cleaned_data['fecha'] < date.today():
+            
+            nuevo_turno=Turno()
+            nuevo_turno.dueño=request.user
+            nuevo_turno.motivo=formulario.cleaned_data['motivo']
+            nuevo_turno.mascota=formulario.cleaned_data['mascota']
+            nuevo_turno.franja=formulario.cleaned_data['franja']
+            nuevo_turno.fecha=formulario.cleaned_data['fecha']
+            nuevo_turno.estado=Turno.estados[0][1]
+
+            if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif (formulario.cleaned_data['fecha'] - date.today()).days < 1:
+            
+            elif (nuevo_turno.fecha - date.today()).days < 1:
                 error = "Por favor, solicita tu turno con al menos 24hs de antelacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif formulario.cleaned_data['fecha'].weekday() == 6:
+            
+            elif nuevo_turno.fecha.weekday() == 6:
                 error= "Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            
+            elif (nuevo_turno.motivo== '1' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
+                                    + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)< 2)):
+                error= "Lo sentimos, la Vacuna A solo puede aplicarse a perros mayores a dos meses"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            
+            elif (nuevo_turno.motivo== '2' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
+                                    + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)< 4)):
+                error= "Lo sentimos, la Vacuna B solo puede aplicarse a perros mayores a cuatro meses"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            
+            elif (Turno.objects.filter(mascota=nuevo_turno.mascota).filter(estado='Pendiente') or 
+                  (Turno.objects.filter(mascota=nuevo_turno.mascota).filter(estado='Activo'))):
+                error= "Lo sentimos, tu mascota ya tiene un turno activo"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             else:
-                nuevo_turno=Turno()
-                nuevo_turno.dueño=request.user
-                nuevo_turno.motivo=formulario.cleaned_data['motivo']
-                nuevo_turno.mascota=formulario.cleaned_data['mascota']
-                nuevo_turno.franja=formulario.cleaned_data['franja']
-                nuevo_turno.fecha=formulario.cleaned_data['fecha']
-                nuevo_turno.estado=Turno.estados[0][1]
 
-            nuevo_turno.save()
+                nuevo_turno.save()
 
 
-            ##despues hacer un switch para que en vez de que "diga motivo de turno: 1" diga "motivo de turno: Vacuna A"
-            send_mail(
-                "Turno solicitado", 
-                f"Se ha registrado la solicitud de turno con la siguiente informacion:\n Motivo del turno: {nuevo_turno.motivo}\n Nombre del perro:  {nuevo_turno.mascota}\n Franja horaria: {nuevo_turno.franja}\n Fecha: {nuevo_turno.fecha}\n Estado del turno: Pendiente", 
-                "ohmydog.veterinariacanina@gmail.com", 
-                [request.user.email, "ohmydog.veterinariacanina@gmail.com"], 
-                fail_silently=False
-            )
+                ##despues hacer un switch para que en vez de que "diga motivo de turno: 1" diga "motivo de turno: Vacuna A"
+                send_mail(
+                    "Turno solicitado", 
+                    f"Se ha registrado la solicitud de turno con la siguiente informacion:\n Motivo del turno: {nuevo_turno.motivo}\n Nombre del perro:  {nuevo_turno.mascota}\n Franja horaria: {nuevo_turno.franja}\n Fecha: {nuevo_turno.fecha}\n Estado del turno: Pendiente", 
+                    "ohmydog.veterinariacanina@gmail.com", 
+                    [request.user.email, "ohmydog.veterinariacanina@gmail.com"], 
+                    fail_silently=False
+                )
 
-            formulario=formulario_turno()
+                formulario=formulario_turno()
 
-            return render (request, 'turnos/misturnos.html',{'formulario':formulario, "mensaje":"ok",'turnos':turnos})
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "mensaje":"ok",'turnos':turnos})
         
     return render(request, 'turnos/misturnos.html', {'formulario':formulario,'turnos':turnos})
 

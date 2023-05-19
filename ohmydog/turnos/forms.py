@@ -9,13 +9,14 @@ from crum import get_current_user
 
 
 
+
 class formulario_turno(forms.Form,):
 
     
-    current = get_current_user()
+    current = get_current_user
 
   
-    mascota=forms.ModelChoiceField(queryset=(Mascota.objects.filter(dueño=current)))
+    mascota=forms.ModelChoiceField(queryset=(Mascota.objects.all()))
     motivo=forms.ChoiceField(label='Motivo', choices=Turno.motivos)
     franja=forms.ChoiceField(label='Franja Horaria', choices=Turno.franja)
     fecha=forms.DateField(label='Fecha', widget=forms.TextInput(     
