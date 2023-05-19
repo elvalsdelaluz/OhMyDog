@@ -131,7 +131,7 @@ def cancelar_turno(request, pk):
                 fail_silently=False
             )
 
-    return publicacion(request)
+    return redirect ('/mis_turnos/?valido')
 
 
 

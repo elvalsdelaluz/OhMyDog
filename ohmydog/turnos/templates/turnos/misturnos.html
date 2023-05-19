@@ -42,11 +42,16 @@
 
     {% if turnos %}
     <ul>
-            {% if 'novalido' in request.GET %}
+        {% if 'novalido' in request.GET %}
                     <div class="alert alert-danger" role="alert">
                         Lo sentimos. Un turno debe cancelarse con al menos un dia de anticipacion
                   </div>
-                {% endif %}
+        {% endif %}
+        {% if 'valido' in request.GET %}
+                    <div class="alert alert-succes" role="alert">
+                        El turno se ha cancelado exitosamente
+                  </div>
+        {% endif %}
         {% for turno in turnos %}
         <div class="tarjeta-carac" style="width: 100%;">
         <div class="container">
