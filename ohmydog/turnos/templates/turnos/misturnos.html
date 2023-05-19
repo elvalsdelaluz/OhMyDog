@@ -54,6 +54,9 @@
                     <p class="card-text" style="color: white;"><strong> Motivo:</strong> {{turno.get_motivo_display}}</p>
                     <p class="card-text"style="color: white;"><strong> Fecha:</strong> {{turno.fecha}}</p>
                     <p class="card-text"style="color: white;"><strong> Estado:</strong> {{turno.get_estado_display}}</p>
+                    {% if turno.get_estado_display == 'Rechazado' %}
+                        <a href="{% url 'motivo_rechazo' turno.motivo_rechazo %}" class="btn btn-primary" style="color: white; ">Informacion adicional</a>
+                    {% endif %}
                     </div>
                     <div >
                     </div>

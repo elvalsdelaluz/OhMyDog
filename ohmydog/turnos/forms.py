@@ -39,3 +39,6 @@ class formulario_turno(forms.Form):
         ]
 
 
+
+class Formulario_rechazado(forms.Form):
+    motivo_rechazo = forms.CharField(widget=forms.Textarea, required=True)
