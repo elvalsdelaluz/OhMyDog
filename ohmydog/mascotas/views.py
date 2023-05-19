@@ -34,13 +34,10 @@ def alta_mascota(request):
             #nueva_mascota.dueño=request.user
             if request.user.is_staff:
                 #Tengo que recuperar al usuario que acaba de registrar el veterinario
-                dueño = verificacion_email(request.POST.get('dueño'))
-                if dueño == None:
-                    mensaje_error="El email ingresado no pertenece a una cuenta registrada"
-                    return render(request, 'mascotas/alta_mascota_fallida.html', {'mensaje':mensaje_error})
-                else:
-                    nueva_mascota.dueño= dueño
-                    nueva_mascota.save()
+                email = request.GET.get('email') 
+                dueño = Cuenta.objects.get(email=email)
+                nueva_mascota.dueño= dueño
+                nueva_mascota.save()
             else:
                 nueva_mascota.dueño=request.user
                 nueva_mascota.save()

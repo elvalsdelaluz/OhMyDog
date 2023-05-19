@@ -9,7 +9,7 @@ from autenticacion.forms import RegistrationForm
 import random
 import string
 from django.core.mail import send_mail
-
+from django.urls import reverse
 # Create your views here.
 def autenticacion(request):
     return redirect ('home') #ESTO ME PA QUE NO VAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -59,7 +59,7 @@ def vista_registro(request, *args, **kwargs):
             send_mail("La contraseña para acceder al sitio ¡OhMyDog!", f"Hola {nombre}, gracias por registrarse en nuestro sitio. Su contraseña es: {password}", "ohmydog.veterinariacanina@gmail.com", [email], fail_silently=False)
             if destination: #ver q mierda es esto
                 return redirect(destination)
-            return redirect("home")#cambiar redirect al formulario de registrar de un perro
+            return redirect(reverse('alta_mascota') + f'?email={email}')
         else:
             context['registration_form'] = form
     else:

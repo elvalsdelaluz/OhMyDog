@@ -42,6 +42,9 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
+              {% if not request.user.is_staff %}
+                <a class="dropdown-item" href="{% url 'alta_mascota' %}">Agregar nuevo perro</a>
+              {%endif%}
               <a class="dropdown-item" href="#">Cambiar contraseña</a>
             </div>
           </div>
