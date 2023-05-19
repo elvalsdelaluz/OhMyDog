@@ -1,0 +1,38 @@
+<html>
+
+    {% extends "ohmydogapp/base.html" %}
+    
+    {% load crispy_forms_tags %}
+    
+    {% load static %}
+    
+    {% block content %}
+
+    
+
+    <body>
+
+        <div class="container" >
+            
+            <div class="row">
+                <div class="col-lg-4 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            Motivo de rechazo del turno
+                        </div>
+                        <div class="card-body">
+                            <p>{{motivo}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'mis_turnos' %}" class="btn btn-primary"> Volver </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+
+    {% endblock %}
+</html>

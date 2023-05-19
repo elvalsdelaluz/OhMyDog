@@ -1,0 +1,30 @@
+<html>
+    {% extends "ohmydogapp/base.html" %}
+
+    {% load crispy_forms_tags %}
+    
+    {% load static %}
+    
+    {% block content %}
+
+
+
+    <body>
+
+        <div class="contenedorFormulario">
+            <div class="col-md-12">
+              <h3 class="text-center" style="margin-top: 5px;"><strong>Motivo de rechazo del turno</strong></h3>
+                <form action="" method="POST"> {% csrf_token %}
+                    <table style="color:white; margin: 20px auto;">{{formulario.as_table}}<table>
+                    <input class="btn btn-primary" type="submit" value="Confirmar">
+                </form>   
+                <a href="{% url 'turnos_pendientes' %}" class="btn btn-primary" type="submit"> Volver </a>
+            </div>
+        </div>
+
+
+    </body>
+
+    {% endblock %}
+
+</html>

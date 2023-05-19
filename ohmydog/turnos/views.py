@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import formulario_turno
+from .forms import formulario_turno, Formulario_rechazado
 from .models import Turno
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -93,3 +93,40 @@ def aceptar_turno(request, pk):
 
     return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
 
+
+
+def rechazar_turno(request, pk):
+    turno = get_object_or_404(Turno, pk=pk)
+
+    formu = Formulario_rechazado()
+
+    if request.method=='POST':
+
+        formu = Formulario_rechazado(data=request.POST)
+        if formu.is_valid():
+
+            motivo_rechazo = formu.cleaned_data['motivo_rechazo']
+
+            turno.motivo_rechazo = motivo_rechazo
+            turno.estado=Turno.estados[2][1]
+            turno.save()
+
+            send_mail(
+                        "Turno rechazado", 
+                        f"El turno ha sido rechazado.\n Motivo del turno: {turno.motivo}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.franja}\n Fecha: {turno.fecha} \n \n Motivo el rechazo {motivo_rechazo}", 
+                        "ohmydog.veterinariacanina@gmail.com", 
+                        [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
+                        fail_silently=False
+                    )
+
+
+            turnos_pendientes=Turno.objects.filter(estado='Pendiente')
+
+        return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+    
+    return render(request, 'turnos/formulario_rechazo.html', {'formulario':formu})
+
+
+
+def ver_motivo_rechazo(request, motivo):
+    return render(request, 'turnos/informacion_rechazo.html', {'motivo': motivo})
