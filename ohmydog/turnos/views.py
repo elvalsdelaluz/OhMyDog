@@ -92,7 +92,7 @@ def ver_turnos_activos(request):
 
 def ver_turnos_pasados(request):
 
-    turnos_pasados=Turno.objects.filter(estado='2')|Turno.objects.filter(estado='3')|Turno.objects.filter(estado='4')
+    turnos_pasados=Turno.objects.filter(estado='Rechazado')|Turno.objects.filter(estado='Cancelado')|Turno.objects.filter(estado='Cerrado')
 
     return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados})
 
