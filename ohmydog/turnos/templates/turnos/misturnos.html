@@ -21,21 +21,12 @@
                         Solicitud enviada correctamente
                 </div>
                 {% endif %}
-                {% if error1 %}
+                {% if error %}
                     <div class="alert alert-danger" role="alert">
-                        Por favor selecciona una fecha valida
+                        {{error}}
                   </div>
                 {% endif %}
-                {% if error2 %}
-                    <div class="alert alert-warning" role="alert">
-                        Por favor, solicita tu turno con al menos 24hs de antelacion
-                  </div>
-                {% endif %}
-                {% if error3 %}
-                    <div class="alert alert-warning" role="alert">
-                        Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana
-                  </div>
-                {% endif %}
+                
 
 
                 <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>

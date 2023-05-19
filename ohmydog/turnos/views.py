@@ -23,11 +23,14 @@ def publicacion(request):
         if formulario.is_valid():
             #Aca hay que hacerlo andar
             if formulario.cleaned_data['fecha'] < date.today():
-                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error1":"error1",'turnos':turnos})
+                error= " Por favor selecciona una fecha valida"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             elif (formulario.cleaned_data['fecha'] - date.today()).days < 1:
-                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error2":"error2",'turnos':turnos})
+                error = "Por favor, solicita tu turno con al menos 24hs de antelacion"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             elif formulario.cleaned_data['fecha'].weekday() == 6:
-                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error3":"error3",'turnos':turnos})
+                error= "Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             else:
                 nuevo_turno=Turno()
                 nuevo_turno.dueño=request.user

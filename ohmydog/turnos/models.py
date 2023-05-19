@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from mascotas.models import Mascota
 
 
 User=get_user_model()
@@ -26,7 +27,7 @@ class Turno(models.Model):
     )
 
     dueño=models.ForeignKey(User, on_delete=models.CASCADE)
-    mascota=models.CharField(max_length=20)#no deberia ser una mascota de las q tiene registrada?
+    mascota=models.ForeignKey(Mascota, on_delete=models.CASCADE)#no deberia ser una mascota de las q tiene registrada?
     motivo=models.CharField('Motivo',max_length=1,choices=motivos)
     franjaHoraria=models.CharField('Franja horaria',max_length=1,choices=franja)
     fecha=models.DateField()
