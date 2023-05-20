@@ -24,9 +24,16 @@
                   <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{adopcion.get_sexo_display}}</p>
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
-                <div>
-                  <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
-                </div>
+                {% if not request.user == adopcion.dueño %} 
+                  <div>
+                    <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
+                  </div>
+                {% endif %} 
+                {% if request.user == adopcion.dueño %} 
+                  <div>
+                    <a href="{% url 'editar_informacion' adopcion.id %}" class="btn btn-success">Editar Post</a>
+                  </div>
+                {% endif %} 
               </div>
             </div>
           </div>

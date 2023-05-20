@@ -72,3 +72,30 @@ def datos_adopcion(request, adopcion_id):
 
         form = FormularioDatosAdopcionNoUsuario()
         return render(request, "adopcion/contactar.html",{'formulario':form})
+
+
+def editar_perro_adopcion(request, adopcion_id):    
+    posteo = Adopcion.objects.get(id=adopcion_id)
+
+    if request.method=='POST':
+        formulario_adopcion = formulario_Adopcion(data=request.POST)
+        if formulario_adopcion.is_valid():
+            posteo.dueño=request.user
+            posteo.nombre = formulario_adopcion.cleaned_data['nombre']
+            posteo.fecha_nacimiento = formulario_adopcion.cleaned_data['fecha_nacimiento']
+            posteo.sexo = formulario_adopcion.cleaned_data['sexo']
+            posteo.tamaño = formulario_adopcion.cleaned_data['tamaño']
+            posteo.comentarios = formulario_adopcion.cleaned_data['comentarios']
+            posteo.estado=Adopcion.Estado[0][1]
+            posteo.save()
+            return redirect("home") #modificar para que lo redirija a donde estan los perros publicados "adopcion"
+
+    else:
+        formulario_adopcion = formulario_Adopcion(initial={
+            'nombre': posteo.nombre,
+            'fecha_nacimiento': posteo.fecha_nacimiento,
+            'sexo': posteo.sexo,
+            'tamaño': posteo.tamaño,
+            'comentarios': posteo.comentarios
+        })
+        return render(request, 'adopcion/editar_post.html', {'formulario_adopcion': formulario_adopcion})
