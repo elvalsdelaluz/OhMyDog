@@ -4,9 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.admin import widgets
 from django.forms.widgets import SelectDateWidget
 from mascotas.models import Mascota
-from django import forms
-from .models import Turno
-from mascotas.models import Mascota
 from datetime import date
 
 def present_or_future_date(value):
@@ -42,3 +39,8 @@ class formulario_turno(forms.Form):
 
 class Formulario_rechazado(forms.Form):
     motivo_rechazo = forms.CharField(widget=forms.Textarea, required=True)
+
+
+class Formulario_concluido(forms.Form):
+    observaciones = forms.CharField(widget=forms.Textarea, required=True, max_length=150)
+    monto = forms.DecimalField(label='Monto en $', decimal_places=2,required=True)

@@ -1,0 +1,33 @@
+<html>
+    {% extends "ohmydogapp/base.html" %}
+
+    {% load crispy_forms_tags %}
+    
+    {% load static %}
+    
+    {% block content %}
+
+
+    <body>
+
+        <div class="contenedorFormulario">
+            <div class="col-md-12">
+              <h3 class="text-center" style="margin-top: 5px;"><strong>Historial del turno</strong></h3>
+                <form action="" method="POST"> 
+                    {% csrf_token %}
+
+                    <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>
+
+                    <input class="btn btn-primary" type="submit" value="Confirmar">
+                    <a href="{% url 'turnos_activos' %}" class="btn btn-primary" type="submit"> Volver </a>
+                </form>   
+
+            </div>
+        </div>
+
+
+    </body>
+
+    {% endblock %}
+
+</html>

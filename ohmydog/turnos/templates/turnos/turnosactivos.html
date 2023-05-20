@@ -9,6 +9,16 @@
 
 <h1 style="color: white; margin: auto; margin-top: 30px; text-align: center;"><strong>Turnos activos</strong></h1>
 
+    {% if 'valido' in request.GET %}
+        <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+            El turno se ha cerrado exitosamente
+        </div>
+    {% endif %}
+    {% if 'novalido' in request.GET %}
+        <div class="alert alert-danger" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+            No puede cerrarse un turno que aun no ha ocurrido
+        </div>
+    {% endif %}
     {% if turnos %}
     <ul>
         {% for turno in turnos %}
@@ -26,6 +36,9 @@
                     <p class="card-text"style="color: white;"><strong> Franja Horaria:</strong> {{turno.get_franjaHoraria_display}}</p>
                     </div>
                     <div >
+                    </div>
+                    <div>
+                        <a href="{% url 'concluir_turno' pk=turno.id %}" class="btn btn-primary">Cerrar turno</a>
                     </div>
                 </div>
                 </div>

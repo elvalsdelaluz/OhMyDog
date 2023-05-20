@@ -1,0 +1,41 @@
+<html>
+
+    {% extends "ohmydogapp/base.html" %}
+    
+    {% load crispy_forms_tags %}
+    
+    {% load static %}
+    
+    {% block content %}
+
+    
+
+    <body>
+
+        <div class="container" >
+            <h1 class="section-heading-upper" style="color:white; margin: 20px; text-align: center;"><strong>Historia de turno</strong></h1>
+            
+            <div class="row">
+          
+                    <div class="card" style="margin:auto">
+                        <div class="card-header" style="text-align: center;">
+                            <strong>Turno de {{turno.mascota}}</strong>
+                        </div>
+                        <div class="card-body">
+                        <p class="card-text"style="color: black;"><strong> Fecha:</strong> {{turno.fecha}}</p>
+                        <p class="card-text"style="color: black;"><strong> Motivo:</strong> {{turno.get_motivo_display}}</p>
+                        <p class="card-text"style="color: black;"><strong> Observaciones:</strong> {{turno.observaciones}}</p>
+                        <p class="card-text"style="color: black;"><strong> Monto:</strong> {{turno.monto}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'mis_turnos' %}" class="btn btn-primary" style="margin: auto; align-self: auto; position: relative;"> Volver </a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+
+    {% endblock %}
+</html>

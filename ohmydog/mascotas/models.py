@@ -47,14 +47,6 @@ class Mascota(models.Model): #va con mayus. Mascota. xD
     def __str__(self):
         return self.nombre
 
-class LibretaSanitaria(models.Model):
-    perro=models.OneToOneField(Mascota, on_delete=models.CASCADE, primary_key=True)
-
-    class Meta:
-        verbose_name='libreta'
-
-    def __str__(self):
-        return 'Libreta de %{}' %self.perro
     
 class EntradaLibretaSanitaria(models.Model):
     Motivo=(
@@ -65,4 +57,4 @@ class EntradaLibretaSanitaria(models.Model):
     motivo=models.CharField('Motivo', max_length=1,choices=Motivo)
     peso=models.DecimalField(decimal_places=2, max_digits=5)
     fecha=models.DateTimeField(auto_now_add=True)
-    libreta=models.ForeignKey(LibretaSanitaria, on_delete=models.CASCADE)
+    perro=models.ForeignKey(Mascota, on_delete=models.CASCADE, default=None)

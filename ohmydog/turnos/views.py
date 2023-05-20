@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import formulario_turno, Formulario_rechazado
+from .forms import formulario_turno, Formulario_rechazado, Formulario_concluido
 from .models import Turno
+from mascotas.models import EntradaLibretaSanitaria
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
@@ -36,6 +37,16 @@ def publicacion(request):
             nuevo_turno.fecha=formulario.cleaned_data['fecha']
             nuevo_turno.estado=Turno.estados[0][1]
 
+            distancia_edad_turno=((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
+            + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)
+            distancia_libreta_turno=0
+            distancia_libreta_turnoB=0
+            if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota)):
+                ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').order_by('fecha').get[0]
+                distancia_libreta_turno= (ultima_libreta.fecha -date.today()).days
+                ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').order_by('fecha').get[0]
+                distancia_libreta_turnoB= (ultima_libretaB.fecha -date.today()).days
+
             """if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
@@ -48,19 +59,27 @@ def publicacion(request):
                 error= "Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})"""
             
-            if (nuevo_turno.motivo== '1' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
-                                    + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)< 2)):
+            if (nuevo_turno.motivo== '1' and (distancia_edad_turno< 2)):
                 error= "Lo sentimos, la Vacuna A solo puede aplicarse a perros mayores a dos meses"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
-            elif (nuevo_turno.motivo== '2' and (((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
-                                    + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)< 4)):
+            elif (nuevo_turno.motivo== '2' and (distancia_edad_turno< 4)):
                 error= "Lo sentimos, la Vacuna B solo puede aplicarse a perros mayores a cuatro meses"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
             elif (Turno.objects.filter(mascota=nuevo_turno.mascota).filter(estado='Pendiente') or 
-                  (Turno.objects.filter(mascota=nuevo_turno.mascota).filter(estado='Activo'))):
+                  (Turno.objects.filter(mascota=nuevo_turno.mascota).filter(estado='Aceptado'))):
                 error= "Lo sentimos, tu mascota ya tiene un turno activo"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            
+            elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<4) and distancia_libreta_turno<21):
+                error = "Lo sentimos. El refuerzo de la Vacuna A a perros menores a 4 meses debe darse recién pasados 21 días"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            elif (nuevo_turno.motivo== '1' and distancia_libreta_turno<365):
+                error = "Lo sentimos. El refuerzo de la Vacuna A debe darse recién un año desde la ultima aplicacion"
+                return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
+            elif (nuevo_turno.motivo== '2' and distancia_libreta_turnoB<365):
+                error = "Lo sentimos. El refuerzo de la Vacuna B debe darse recién un año desde la ultima aplicacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             else:
 
@@ -95,9 +114,11 @@ def ver_turnos_activos(request):
 
 def ver_turnos_pasados(request):
 
-    turnos_pasados=Turno.objects.filter(estado='Rechazado')|Turno.objects.filter(estado='Cancelado')|Turno.objects.filter(estado='Cerrado')
+    turnos_pasados=Turno.objects.filter(estado='Rechazado')|Turno.objects.filter(estado='Cancelado')
 
-    return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados})
+    turnos_cerrados=Turno.objects.filter(estado='Cerrado')
+
+    return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados,'turnos1':turnos_cerrados})
 
 def aceptar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
@@ -173,3 +194,46 @@ def rechazar_turno(request, pk):
 
 def ver_motivo_rechazo(request, motivo):
     return render(request, 'turnos/informacion_rechazo.html', {'motivo': motivo})
+
+
+
+def concluir_turno(request, pk):
+
+    turno = get_object_or_404(Turno, pk=pk)
+
+    if (turno.fecha > date.today()):
+                return redirect ('/mis_turnos/turnos_activos/?novalido')
+
+    formu = Formulario_concluido()
+
+    if request.method=='POST':
+
+        formu = Formulario_concluido(data=request.POST)
+        if formu.is_valid():
+
+            observaciones = formu.cleaned_data['observaciones']
+            monto = formu.cleaned_data['monto']
+
+            turno.observaciones = observaciones
+            turno.monto = monto
+            turno.estado=Turno.estados[4][1]
+            turno.save()
+
+            """ send_mail(
+                "Turno rechazado", 
+                f"El turno ha sido cancelado.\n Motivo del turno: {turno.get_motivo_display()}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.get_franjaHoraria_display()}\n Fecha: {turno.fecha}", 
+                "ohmydog.veterinariacanina@gmail.com", 
+                [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
+                fail_silently=False
+            )"""
+
+
+        return redirect ('/mis_turnos/turnos_activos/?valido')
+    
+    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu})
+
+def ver_historia_turno(request, pk):
+
+    turno = get_object_or_404(Turno, pk=pk)
+
+    return render(request, 'turnos/historia_turno.html', {'turno': turno})
