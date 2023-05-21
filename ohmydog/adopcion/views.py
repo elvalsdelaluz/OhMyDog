@@ -88,7 +88,7 @@ def editar_perro_adopcion(request, adopcion_id):
             posteo.comentarios = formulario_adopcion.cleaned_data['comentarios']
             posteo.estado=Adopcion.Estado[0][1]
             posteo.save()
-            return redirect("home") #modificar para que lo redirija a donde estan los perros publicados "adopcion"
+            return redirect("adopcion") #modificar para que lo redirija a donde estan los perros publicados "adopcion"
 
     else:
         formulario_adopcion = formulario_Adopcion(initial={
@@ -99,3 +99,11 @@ def editar_perro_adopcion(request, adopcion_id):
             'comentarios': posteo.comentarios
         })
         return render(request, 'adopcion/editar_post.html', {'formulario_adopcion': formulario_adopcion})
+
+
+
+def cerrar_post(request, adopcion_id): #mas adelante hacer que le pregunte al usuario si quiere o no realizar la operacion (paso intermedio)
+    posteo = Adopcion.objects.get(id=adopcion_id)
+    posteo.estado = Adopcion.Estado[1][1]
+    posteo.save()   
+    return redirect("adopcion")

@@ -5,12 +5,15 @@
   
   
   {% block content %}
-  <div style="margin-left: 15px; text-align: left; margin-top: 15px; margin-right: 10%; ">
-    <a href="{% if user.is_authenticated %} {% url 'solicitud' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
-  </div>
+  {% if request.user.is_authenticated and not user.is_staff %}
+    <div style="margin-left: 15px; text-align: left; margin-top: 15px; margin-right: 10%; ">
+      <a href="{% if user.is_authenticated %} {% url 'solicitud' %} {% else %} {% url 'loguear' %} {% endif %}" class="btn btn-success">Publicar perro en adopción</a>
+    </div>
+  {% endif %}
   {% if adopciones %}
   <ul>
     {% for adopcion in adopciones %}
+    
     <div class="tarjeta-carac">
       <div class="container">
         <div class="row">
@@ -24,15 +27,18 @@
                   <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{adopcion.get_sexo_display}}</p>
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
-                {% if not request.user == adopcion.dueño %} 
-                  <div>
-                    <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
-                  </div>
-                {% endif %} 
-                {% if request.user == adopcion.dueño %} 
-                  <div>
-                    <a href="{% url 'editar_informacion' adopcion.id %}" class="btn btn-success">Editar Post</a>
-                  </div>
+                {% if adopcion.get_estado_display == 'En adopción' %}
+                  {% if not request.user == adopcion.dueño %} 
+                    <div>
+                      <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
+                    </div>
+                  {% endif %} 
+                  {% if request.user == adopcion.dueño %} 
+                    <div>
+                      <a href="{% url 'editar_informacion' adopcion.id %}" class="btn btn-success">Editar post</a>
+                      <a href="{% url 'cerrar_post' adopcion.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0);">Cerrar post</a>
+                    </div>
+                  {% endif %} 
                 {% endif %} 
               </div>
             </div>
