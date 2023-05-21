@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import formulario_turno, Formulario_rechazado, Formulario_concluido
 from .models import Turno
+from donacion.models import Donante
 from mascotas.models import EntradaLibretaSanitaria
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -41,10 +42,10 @@ def publicacion(request):
             + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)
             distancia_libreta_turno=0
             distancia_libreta_turnoB=0
-            if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota)):
-                ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').order_by('fecha').get[0]
+            if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).exists()):
+                ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').order_by('fecha').first()
                 distancia_libreta_turno= (ultima_libreta.fecha -date.today()).days
-                ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').order_by('fecha').get[0]
+                ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').order_by('fecha').first()
                 distancia_libreta_turnoB= (ultima_libretaB.fecha -date.today()).days
 
             """if nuevo_turno.fecha < date.today():
@@ -75,10 +76,10 @@ def publicacion(request):
             elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<4) and distancia_libreta_turno<21):
                 error = "Lo sentimos. El refuerzo de la Vacuna A a perros menores a 4 meses debe darse recién pasados 21 días"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif (nuevo_turno.motivo== '1' and distancia_libreta_turno<365):
+            elif (nuevo_turno.motivo== '1' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').exists() and distancia_libreta_turno<365):
                 error = "Lo sentimos. El refuerzo de la Vacuna A debe darse recién un año desde la ultima aplicacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif (nuevo_turno.motivo== '2' and distancia_libreta_turnoB<365):
+            elif (nuevo_turno.motivo== '2' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').exists() and distancia_libreta_turnoB<365):
                 error = "Lo sentimos. El refuerzo de la Vacuna B debe darse recién un año desde la ultima aplicacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             else:
@@ -133,9 +134,8 @@ def aceptar_turno(request, pk):
                 [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
                 fail_silently=False
             )
-    turnos_pendientes=Turno.objects.filter(estado='Pendiente')
-
-    return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+    
+    return redirect('/mis_turnos/turnos_pendientes/?valido')
 
 def cancelar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
@@ -201,10 +201,17 @@ def concluir_turno(request, pk):
 
     turno = get_object_or_404(Turno, pk=pk)
 
-    if (turno.fecha > date.today()):
-                return redirect ('/mis_turnos/turnos_activos/?novalido')
+    """if (turno.fecha > date.today()):
+                return redirect ('/mis_turnos/turnos_activos/?novalido')"""
 
     formu = Formulario_concluido()
+
+    monto_descuento=0
+
+    if (turno.dueño.es_donante):
+        ultima_donacion = Donante.objects.filter(dueño=turno.dueño).order_by('fecha').first()
+
+        monto_descuento=ultima_donacion.monto *20/100
 
     if request.method=='POST':
 
@@ -215,7 +222,18 @@ def concluir_turno(request, pk):
             monto = formu.cleaned_data['monto']
 
             turno.observaciones = observaciones
-            turno.monto = monto
+            if (turno.dueño.es_donante):
+                turno.monto = monto - monto_descuento
+                turno.descuento=True
+                ultima_donacion.delete()
+                if (not Donante.objects.filter(dueño=turno.dueño).exists()):
+                    turno.dueño.es_donante=False
+                    turno.dueño.save()
+
+            else:
+                turno.monto=monto
+                turno.descuento=False
+
             turno.estado=Turno.estados[4][1]
             turno.save()
 
@@ -230,7 +248,7 @@ def concluir_turno(request, pk):
 
         return redirect ('/mis_turnos/turnos_activos/?valido')
     
-    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu})
+    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu, 'descuento':monto_descuento})
 
 def ver_historia_turno(request, pk):
 

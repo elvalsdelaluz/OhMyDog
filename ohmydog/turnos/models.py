@@ -35,6 +35,7 @@ class Turno(models.Model):
     estado=models.CharField('Estado',max_length=15,choices=estados)
     observaciones=models.CharField(max_length=150,null=True, blank=True, default=None)
     monto=models.DecimalField(decimal_places=2, max_digits=8, null=True, blank=True, default=None)
+    descuento=models.BooleanField(null=True, blank=True,default=False)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
     id = models.AutoField(primary_key=True)

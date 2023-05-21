@@ -10,6 +10,11 @@
     
     
     <h1 style="color: white; margin: auto; margin-top: 30px; text-align: center;"><strong>Turnos pendientes</strong></h1>
+    {% if 'valido' in request.GET %}
+        <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+            El turno se ha aceptado exitosamente
+        </div>
+    {% endif %}
     {% if turnos %}
     <ul>
         {% for turno in turnos %}

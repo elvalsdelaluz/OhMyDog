@@ -16,6 +16,15 @@
                 <form action="" method="POST"> 
                     {% csrf_token %}
 
+                    {% if 0 not in descuento %}
+                    
+                    <div class="alert alert-info" role="alert">
+                        El cliente es donante. Al monto de la consulta se le aplicara un descuento de ${{descuento}}
+                      </div>
+
+                    {% endif %}
+                    
+                    
                     <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>
 
                     <input class="btn btn-primary" type="submit" value="Confirmar">
