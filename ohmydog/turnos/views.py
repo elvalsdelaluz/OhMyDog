@@ -38,8 +38,8 @@ def publicacion(request):
             nuevo_turno.fecha=formulario.cleaned_data['fecha']
             nuevo_turno.estado=Turno.estados[0][1]
 
-            distancia_edad_turno=((nuevo_turno.fecha.year - nuevo_turno.mascota.fecha_nacimiento.year)*12) 
-            + (nuevo_turno.fecha.month - nuevo_turno.mascota.fecha_nacimiento.month)
+            distancia_edad_turno=(nuevo_turno.fecha - nuevo_turno.mascota.fecha_nacimiento).days
+            
             distancia_libreta_turno=0
             distancia_libreta_turnoB=0
             if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).exists()):
@@ -60,11 +60,11 @@ def publicacion(request):
                 error= "Lo sentimos, no trabajamos los domingos. Por favor elegi otro dia de la semana"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})"""
             
-            if (nuevo_turno.motivo== '1' and (distancia_edad_turno< 2)):
+            if (nuevo_turno.motivo== '1' and (distancia_edad_turno< 60)):
                 error= "Lo sentimos, la Vacuna A solo puede aplicarse a perros mayores a dos meses"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
-            elif (nuevo_turno.motivo== '2' and (distancia_edad_turno< 4)):
+            elif (nuevo_turno.motivo== '2' and (distancia_edad_turno< 120)):
                 error= "Lo sentimos, la Vacuna B solo puede aplicarse a perros mayores a cuatro meses"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
@@ -73,7 +73,7 @@ def publicacion(request):
                 error= "Lo sentimos, tu mascota ya tiene un turno activo"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
-            elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<4) and distancia_libreta_turno<21):
+            elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<120) and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').exists() and distancia_libreta_turno<21):
                 error = "Lo sentimos. El refuerzo de la Vacuna A a perros menores a 4 meses debe darse recién pasados 21 días"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             elif (nuevo_turno.motivo== '1' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').exists() and distancia_libreta_turno<365):
