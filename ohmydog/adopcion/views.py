@@ -37,6 +37,7 @@ def publicacion(request):
 
 def datos_adopcion(request, adopcion_id):
     user = request.user
+    form = FormularioDatosAdopcionLogueado()
     if user.is_authenticated:
         if request.method == 'POST':
             form = FormularioDatosAdopcionLogueado(request.POST)
@@ -57,9 +58,9 @@ def datos_adopcion(request, adopcion_id):
                 )
                 return redirect("home")
 
-        form = FormularioDatosAdopcionLogueado()
         return render(request, "adopcion/contactar.html", {'formulario': form})
     else:
+        form = FormularioDatosAdopcionNoUsuario()
         if request.method == 'POST':
             form = FormularioDatosAdopcionNoUsuario(request.POST)
             if form.is_valid():
@@ -82,7 +83,6 @@ def datos_adopcion(request, adopcion_id):
                 )
                 return redirect("home")
 
-        form = FormularioDatosAdopcionNoUsuario()
         return render(request, "adopcion/contactar.html",{'formulario':form})
 
 
