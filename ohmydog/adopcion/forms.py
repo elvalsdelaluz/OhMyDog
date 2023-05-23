@@ -21,9 +21,17 @@ class formulario_Adopcion(forms.Form):
 
 
 class FormularioDatosAdopcionLogueado(forms.Form):  
-    motivo=forms.CharField(label='motivo', widget=forms.Textarea, required=True)
+    motivo=forms.CharField(label='motivo', widget=forms.Textarea(attrs={'resize': 'none'}), required=True)
 
 class FormularioDatosAdopcionNoUsuario(FormularioDatosAdopcionLogueado):  
     nombre=forms.CharField(label='nombre', required=True)
-    email = forms.EmailField(max_length=60, required=True)
-    numero=forms.CharField(label='numero', required=True)
+    email = forms.EmailField(max_length=60, label='email', required=True)
+    numero=forms.CharField(max_length=10, label='numero', required=True)
+
+    def clean_numero(self):
+        numero = self.cleaned_data['numero']
+        if len(numero) < 10:
+            raise forms.ValidationError('Número de teléfono inválido')
+        if not numero.isdigit():
+            raise forms.ValidationError('Error en el formato del número de telefono. Ingrese solo el número')
+        return numero

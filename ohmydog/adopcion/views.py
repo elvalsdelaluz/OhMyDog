@@ -45,9 +45,15 @@ def datos_adopcion(request, adopcion_id):
                 adopcion = Adopcion.objects.get(id=adopcion_id)
                 send_mail(
                     "Solicitud de adopción",
-                    f"{request.user.nombre} se quiere contactar para adoptar el perro que publicaste.\n Esta es su información de contacto:\n *Numero: {request.user.numero}\n *Email: {request.user.email} \n Motivo: {motivo}",
+                    f"{request.user.nombre} se quiere contactar para adoptar a {adopcion.nombre}.\n Esta es su información de contacto:\n *Numero: {request.user.numero}\n *Email: {request.user.email} \n Motivo: {motivo}",
                     "ohmydog.veterinariacanina@gmail.com",
-                    ["ohmydog.veterinariacanina@gmail.com", request.user.email, adopcion.dueño.email]
+                    ["ohmydog.veterinariacanina@gmail.com", adopcion.dueño.email]
+                )
+                send_mail(
+                    "Solicitud de adopción - Información del perro",
+                    f"Email del dueño: {adopcion.dueño.email} \n Nombre del perro: {adopcion.nombre} \n Fecha de nacimiento: {adopcion.fecha_nacimiento} \n Sexo: {adopcion.get_sexo_display()} \n Tamaño: {adopcion.get_tamaño_display()} \n Comentarios: {adopcion.comentarios}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", request.user.email]
                 )
                 return redirect("home")
 
@@ -64,9 +70,15 @@ def datos_adopcion(request, adopcion_id):
                 adopcion = Adopcion.objects.get(id=adopcion_id)
                 send_mail(
                     "Solicitud de adopción",
-                    f"{nombre} se quiere contactar para adoptar el perro que publicaste.\n Esta es su información de contacto:\n *Numero: {numero}\n *Email: {email} \n Motivo: {motivo}",
+                    f"{nombre} se quiere contactar para adoptar a {adopcion.nombre}.\n Esta es su información de contacto:\n *Numero: {numero}\n *Email: {email} \n Motivo: {motivo}",
                     "ohmydog.veterinariacanina@gmail.com",
-                    ["ohmydog.veterinariacanina@gmail.com", email, adopcion.dueño.email]
+                    ["ohmydog.veterinariacanina@gmail.com", adopcion.dueño.email]
+                )
+                send_mail(
+                    "Solicitud de adopción - Información del perro",
+                    f"Email del dueño: {adopcion.dueño.email} \n Nombre del perro: {adopcion.nombre} \n Fecha de nacimiento: {adopcion.fecha_nacimiento} \n Sexo: {adopcion.get_sexo_display()} \n Tamaño: {adopcion.get_tamaño_display()} \n Comentarios: {adopcion.comentarios}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", email]
                 )
                 return redirect("home")
 
