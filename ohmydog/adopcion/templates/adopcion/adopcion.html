@@ -28,7 +28,7 @@
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
                 </div>
                 {% if adopcion.get_estado_display == 'En adopción' %}
-                  {% if not request.user == adopcion.dueño %} 
+                  {% if not request.user == adopcion.dueño and not request.user.is_staff %} 
                     <div>
                       <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success">Contactar</a>
                     </div>
