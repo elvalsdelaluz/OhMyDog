@@ -9,9 +9,9 @@ class MascotaAdmin(admin.ModelAdmin):
     search_field=('nombre','dueño')
 
 class EntradaLibretaSanitariaAdmin(admin.ModelAdmin):
-    readonly_field=('fecha')
+    #readonly_field=('fecha')
     list_display=('motivo','peso','fecha')
-    list_filter=('fecha',)
+    #list_filter=('fecha',)
     
 admin.site.register(Mascota, MascotaAdmin)
 admin.site.register(EntradaLibretaSanitaria,EntradaLibretaSanitariaAdmin)
