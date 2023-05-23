@@ -43,10 +43,12 @@ def publicacion(request):
             distancia_libreta_turno=0
             distancia_libreta_turnoB=0
             if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).exists()):
-                ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').order_by('fecha').first()
-                distancia_libreta_turno= (ultima_libreta.fecha -date.today()).days
-                ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').order_by('fecha').first()
-                distancia_libreta_turnoB= (ultima_libretaB.fecha -date.today()).days
+                if (EntradaLibretaSanitaria.objects.filter(motivo='Vacuna A').exists()):
+                    ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna A').order_by('fecha').first()
+                    distancia_libreta_turno= (ultima_libreta.fecha - date.today()).days
+                if (EntradaLibretaSanitaria.objects.filter(motivo='Vacuna B').exists()):
+                    ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='Vacuna B').order_by('fecha').first()
+                    distancia_libreta_turnoB= (ultima_libretaB.fecha - date.today()).days
 
             """if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
