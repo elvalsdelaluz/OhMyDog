@@ -36,6 +36,7 @@
                   {% endif %} 
                   {% if request.user == adopcion.dueño %} 
                     <div>
+                      <a href="#" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863)">¡Me arrepentí!</a>
                       <a href="{% url 'editar_informacion' adopcion.id %}" class="btn btn-success">Editar post</a>
                       <a href="{% url 'cerrar_post' adopcion.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0);">Cerrar post</a>
                     </div>
