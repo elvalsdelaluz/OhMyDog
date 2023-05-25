@@ -24,7 +24,7 @@ def ya_esta_publicado(user, nombre, fecha_nacimiento_str, sexo):
     #fecha_datetime = datetime.strptime(fecha_str, "%Y-%m-%d")  
 
     print(type(fecha_nacimiento_str))
-    fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, "%Y-%m-%d").date()  
+    fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, "%Y-%m-%d").date()  #sin el date es un obj datatime y hace mal la comparacion :$
 
     if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
         #Verifico para cada publicacion los campos nombre, fN y sexo
@@ -62,7 +62,8 @@ def publicacion(request):
         if formulario_adopcion.is_valid():
             if ya_esta_publicado(request.user, formulario_adopcion.data['nombre'], formulario_adopcion.data['fecha_nacimiento'], formulario_adopcion.data['sexo']):
                 #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
-                return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje":"ok"})
+                error_ya_publicado="¡Ya tiene publicada una mascota con esos datos!"
+                return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje2":error_ya_publicado})
             else:
                 #Aca hay que hacerlo andar
                 nueva_adopcion=Adopcion()

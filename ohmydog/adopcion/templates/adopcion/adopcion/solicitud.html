@@ -17,11 +17,16 @@
           <div class="alert alert-danger" role="alert">
            {{error}}
         </div>
+        {% elif mensaje2 %}
+        <div class="alert alert-success" role="alert">
+          {{ mensaje2 }}
+      </div>
         {% elif mensaje %}
           <div class="alert alert-success" role="alert">
             Tu publiicacion fue añadida correctamente
         </div>
         {% endif %}
+
 
         {{ formulario|crispy }}
         <input class="btn btn-primary" type="submit" value="Confirmar">
