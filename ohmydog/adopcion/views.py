@@ -14,38 +14,18 @@ def adopcion (request):
 def ya_esta_publicado(user, nombre, fecha_nacimiento_str, sexo): 
     """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
        la función devuelve true
-    """
-   
+    """ 
     existe_publicacion=False
     publicaciones_del_usuario= Adopcion.objects.filter(dueño=user)
-
     #Antes que nada tengo que transformar fecha_nacimiento en un datatime (es un str :$)
     #fecha_str = "2023-05-17"
     #fecha_datetime = datetime.strptime(fecha_str, "%Y-%m-%d")  
-
     print(type(fecha_nacimiento_str))
     fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, "%Y-%m-%d").date()  #sin el date es un obj datatime y hace mal la comparacion :$
-
     if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
         #Verifico para cada publicacion los campos nombre, fN y sexo
         #En caso de encontrar una igual modifico el valor de existe_publicacion
-        print ("---------MASCOTAS PUBLICADAS-------")
         for publicacion in publicaciones_del_usuario:
-            print(type(fecha_nacimiento))
-            print(type(publicacion.fecha_nacimiento))
-            print(publicacion.nombre)
-            print(nombre)
-            print(publicacion.fecha_nacimiento)
-            print(fecha_nacimiento)
-            print(publicacion.sexo)
-            print(sexo)
-            print ("-------boolean---------")
-            print (publicacion.nombre == nombre)
-            print (publicacion.fecha_nacimiento == fecha_nacimiento)
-            print (publicacion.sexo == sexo)
-            print ("----------------")
-            print((publicacion.nombre == nombre) and (publicacion.fecha_nacimiento == fecha_nacimiento) and  (publicacion.sexo == sexo))
-
             if publicacion.nombre == nombre and publicacion.fecha_nacimiento == fecha_nacimiento and  publicacion.sexo == sexo:
                 existe_publicacion=True
                 break
@@ -167,4 +147,10 @@ def cerrar_post(request, adopcion_id): #mas adelante hacer que le pregunte al us
     posteo = Adopcion.objects.get(id=adopcion_id)
     posteo.estado = Adopcion.Estado[1][1]
     posteo.save()   
+    return redirect("adopcion")
+
+
+def bajar_post(request, adopcion_id):
+    posteo = Adopcion.objects.get(id=adopcion_id)
+    posteo.delete()
     return redirect("adopcion")
