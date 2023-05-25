@@ -3,9 +3,53 @@ from adopcion.models import Adopcion
 from .forms import formulario_Adopcion, FormularioDatosAdopcionLogueado, FormularioDatosAdopcionNoUsuario
 from django.core.mail import send_mail
 
+from datetime import datetime, date
+
+
+
 def adopcion (request):
     adopciones = Adopcion.objects.all()
     return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
+
+def ya_esta_publicado(user, nombre, fecha_nacimiento_str, sexo): 
+    """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
+       la función devuelve true
+    """
+   
+    existe_publicacion=False
+    publicaciones_del_usuario= Adopcion.objects.filter(dueño=user)
+
+    #Antes que nada tengo que transformar fecha_nacimiento en un datatime (es un str :$)
+    #fecha_str = "2023-05-17"
+    #fecha_datetime = datetime.strptime(fecha_str, "%Y-%m-%d")  
+
+    print(type(fecha_nacimiento_str))
+    fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, "%Y-%m-%d").date()  
+
+    if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
+        #Verifico para cada publicacion los campos nombre, fN y sexo
+        #En caso de encontrar una igual modifico el valor de existe_publicacion
+        print ("---------MASCOTAS PUBLICADAS-------")
+        for publicacion in publicaciones_del_usuario:
+            print(type(fecha_nacimiento))
+            print(type(publicacion.fecha_nacimiento))
+            print(publicacion.nombre)
+            print(nombre)
+            print(publicacion.fecha_nacimiento)
+            print(fecha_nacimiento)
+            print(publicacion.sexo)
+            print(sexo)
+            print ("-------boolean---------")
+            print (publicacion.nombre == nombre)
+            print (publicacion.fecha_nacimiento == fecha_nacimiento)
+            print (publicacion.sexo == sexo)
+            print ("----------------")
+            print((publicacion.nombre == nombre) and (publicacion.fecha_nacimiento == fecha_nacimiento) and  (publicacion.sexo == sexo))
+
+            if publicacion.nombre == nombre and publicacion.fecha_nacimiento == fecha_nacimiento and  publicacion.sexo == sexo:
+                existe_publicacion=True
+                break
+    return existe_publicacion
 
 
 def publicacion(request):
@@ -14,25 +58,29 @@ def publicacion(request):
 
     if request.method=='POST':
         formulario_adopcion=formulario_Adopcion(data=request.POST)
+       
         if formulario_adopcion.is_valid():
-            #Aca hay que hacerlo andar
-            nueva_adopcion=Adopcion()
-            nueva_adopcion.dueño=request.user
-            nueva_adopcion.nombre=formulario_adopcion.cleaned_data['nombre']
-            nueva_adopcion.sexo=formulario_adopcion.cleaned_data['sexo']
-            nueva_adopcion.edad=formulario_adopcion.cleaned_data['fecha_nacimiento']
-            nueva_adopcion.tamaño=formulario_adopcion.cleaned_data['tamaño']
-            nueva_adopcion.estado=Adopcion.Estado[0][1]
-            nueva_adopcion.comentarios=formulario_adopcion.cleaned_data['comentarios']
+            if ya_esta_publicado(request.user, formulario_adopcion.data['nombre'], formulario_adopcion.data['fecha_nacimiento'], formulario_adopcion.data['sexo']):
+                #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
+                return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje":"ok"})
+            else:
+                #Aca hay que hacerlo andar
+                nueva_adopcion=Adopcion()
+                nueva_adopcion.dueño=request.user
+                nueva_adopcion.nombre=formulario_adopcion.cleaned_data['nombre']
+                nueva_adopcion.sexo=formulario_adopcion.cleaned_data['sexo']
+                nueva_adopcion.edad=formulario_adopcion.cleaned_data['fecha_nacimiento']
+                nueva_adopcion.tamaño=formulario_adopcion.cleaned_data['tamaño']
+                nueva_adopcion.estado=Adopcion.Estado[0][1]
+                nueva_adopcion.comentarios=formulario_adopcion.cleaned_data['comentarios']
 
-            nueva_adopcion.save()
+                nueva_adopcion.save()
 
-            formulario_adopcion=formulario_Adopcion()
+                formulario_adopcion=formulario_Adopcion()
 
-            return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje":"ok"})
+                return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje":"ok"})
         
     return render(request, 'adopcion/adopcion/solicitud.html', {'formulario':formulario_adopcion})
-
 
 
 def datos_adopcion(request, adopcion_id):
