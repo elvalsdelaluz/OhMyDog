@@ -24,7 +24,7 @@ class Adopcion(models.Model):
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
     nombre=models.CharField(max_length=20)
-    fecha_nacimiento=models.DateField(default=date.today)
+    fecha_nacimiento=models.DateField(default=date.today, editable=True)
     comentarios=models.CharField(max_length=100)
     sexo=models.CharField('Sexo',max_length=1, choices=Sexo)
     tamaño=models.CharField('Tamaño',max_length=1, choices=Tamaño)
