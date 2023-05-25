@@ -26,6 +26,7 @@
                   <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{adopcion.get_tamaño_display}}</p>
                   <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{adopcion.get_sexo_display}}</p>
                   <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{adopcion.comentarios}}</p>
+                  <p class="card-title"style="color: white; "><strong> Estado:</strong> {{adopcion.get_estado_display}}</p>
                 </div>
                 {% if adopcion.get_estado_display == 'En adopción' %}
                   {% if not request.user == adopcion.dueño and not request.user.is_staff %} 
