@@ -10,13 +10,19 @@ import random
 import string
 from django.core.mail import send_mail
 from django.urls import reverse
+from mascotas.models import Mascota
 # Create your views here.
-def autenticacion(request):
-    return redirect ('home') #ESTO ME PA QUE NO VAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 
-def loguear(request):##arreglar
-    if request.method == "POST": #quiere decir que el user clickeo el botón 
+def tiene_mascotas(usuario_dueño):
+    tiene=False
+    mascotas = Mascota.objects.filter(dueño=usuario_dueño)
+    if mascotas.exists():
+        tiene = True
+    return tiene
+
+def loguear(request):
+    if request.method == "POST": #quiere decir que el user clickeo el botón iniciar sesión
         form=AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             nombre_usuario=form.cleaned_data.get("username")
@@ -24,7 +30,13 @@ def loguear(request):##arreglar
             usuario=authenticate(username=nombre_usuario, password=contraseña)
             if usuario is not None:
                 login(request, usuario)
-                return redirect('home')
+                if tiene_mascotas(usuario):
+                    #No tiene mascotas registradas
+                    return redirect('home')
+                elif usuario.is_staff:
+                    return redirect('turnos_pendientes')
+                else:
+                    return redirect('alta_mascota')
             else:
                 messages.error(request, "Hubo un error de autenticación, vuelva a intentarlo")
         else:
