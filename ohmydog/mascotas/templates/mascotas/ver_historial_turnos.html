@@ -29,14 +29,22 @@
         {% for turno in mi_historial %}
           <tr>
             <th scope="row">{{turno.fecha}}</th>
-            <td>{{turno.estado}}</td>
-            <td>{{turno.motivo}}</td>
-            <td>{{turno.monto}}$ {{turno.descuento}}</td>
-            <td>{{turno.observaciones}}</td>
+            <td> {{turno.estado}}</td>
+            <td>{{turno.get_motivo_display}}</td>
+
+            {% if turno.get_estado_display == "Rechazado" or turno.get_estado_display == "Cancelado" %}
+                <td> - </td>
+                <td> - </td>
+            {% else %}
+                <td>{{turno.monto}}$ {% if turno.descuento %} S/D  {% else %} C/D {% endif %}</td>
+                <td>{{turno.observaciones}}</td>
+            {% endif %}
+
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      &nbsp;<a href="{% url 'ver_mis_mascotas' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
       </section>
 
       
