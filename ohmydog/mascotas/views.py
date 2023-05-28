@@ -4,7 +4,7 @@ from .forms import MascotaForm
 from .models import Mascota
 from autenticacion.models import Cuenta
 from datetime import date
-
+from turnos.models import Turno
 # Create your views here.
 
 def verificacion_email(email_ingresado):
@@ -54,3 +54,28 @@ def alta_mascota(request):
                         return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form, 'mensaje':"ok"})
         
     return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form})
+
+
+def ver_mis_mascotas(request):
+    """
+    Filtro las mascotas del usuario que inicio sesión
+    """
+    mascotas_registradas= Mascota.objects.filter(dueño=request.user)
+    print(request.user)
+    for mascota in mascotas_registradas:
+        print (mascota.nombre)
+    return render(request, 'mascotas/ver_mis_mascotas.html', {'mascotas_registradas': mascotas_registradas})
+
+
+def ver_historial_turnos(request, mascota_id):
+    """
+    Necesito recibir a la mascota y filtrar.
+    """
+    mi_historial=Turno.objects.filter(mascota=mascota_id)
+    nombre_mascota=Mascota.objects.get(id=mascota_id)
+    """
+    for historia in mi_historial:
+        print(historia.mascota)
+        print (historia.fecha)
+    """
+    return render(request, 'mascotas/ver_historial_turnos.html', {'mi_historial':mi_historial, 'nombre_mascota':nombre_mascota.nombre})

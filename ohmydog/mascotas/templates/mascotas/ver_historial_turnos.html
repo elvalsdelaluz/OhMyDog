@@ -1,0 +1,45 @@
+<html>
+  {% extends "ohmydogapp/base.html" %}
+  
+  {% load static %}
+  
+  
+  {% block content %}
+    <section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
+
+    <h2 class="text-center">
+        <span class="section-heading-upper">Historial de turnos de {{nombre_mascota}}</span>
+    </h2>
+    <p>
+
+    </p>
+
+    <table class="table table-bordered">
+       
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Motivo</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for turno in mi_historial %}
+          <tr>
+            <th scope="row">{{turno.fecha}}</th>
+            <td>{{turno.estado}}</td>
+            <td>{{turno.motivo}}</td>
+            <td>{{turno.monto}}$ {{turno.descuento}}</td>
+            <td>{{turno.observaciones}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </section>
+
+      
+     
+  {% endblock %}
+</html>

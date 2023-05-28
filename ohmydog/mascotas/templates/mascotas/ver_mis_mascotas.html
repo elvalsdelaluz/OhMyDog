@@ -1,0 +1,66 @@
+<html>
+  {% extends "ohmydogapp/base.html" %}
+  
+  {% load static %}
+  
+  
+  {% block content %}
+  
+  {% if mascotas_registradas %}
+  <ul>
+    {% for mascota in mascotas_registradas %}
+    
+    <div class="tarjeta-carac">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <div class="card" style="background-color: rgba(12, 159, 159);">
+                <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                  <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{mascota.nombre}}</p>
+                  <p class="card-text"style="color: white;"><strong> Raza:</strong> {{raza.get_tamaño_display}}</p>
+                  <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{mascota.fecha_nacimiento}}</p>
+                  <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{mascota.get_sexo_display}}</p>
+                  <p class="card-text"style="color: white;"><strong> Observaciones:</strong> {{mascota.observaciones}}</p>
+                 
+                </div>
+                  {% if request.user == mascota.dueño %} 
+                    <div>
+                      <a href="#" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863)">Editar datos</a>
+                      <a href="{% url 'ver_historial_turnos' mascota.id %}" class="btn btn-success" style="background-color: rgba(31, 167, 54, 0.781);">Ver historial turnos</a>
+                      <a href="#" class="btn btn-success" style="background-color: rgb(159, 0, 0);">Ver libreta sanitaria</a>
+
+                    </div>
+                  {% endif %} 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      &nbsp;
+    </div>
+  </div>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <p></p>
+                <span class="section-heading-upper">No tienes perros registrados D: </span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    
+    
+    {% endblock %}
+</html>
