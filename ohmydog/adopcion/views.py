@@ -11,22 +11,18 @@ def adopcion (request):
     adopciones = Adopcion.objects.all()
     return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
 
-def ya_esta_publicado(user, nombre, fecha_nacimiento_str, sexo): 
+def ya_esta_publicado(user, nombre): 
     """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
        la función devuelve true
     """ 
     existe_publicacion=False
     publicaciones_del_usuario= Adopcion.objects.filter(dueño=user)
-    #Antes que nada tengo que transformar fecha_nacimiento en un datatime (es un str :$)
-    #fecha_str = "2023-05-17"
-    #fecha_datetime = datetime.strptime(fecha_str, "%Y-%m-%d")  
-    print(type(fecha_nacimiento_str))
-    fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, "%Y-%m-%d").date()  #sin el date es un obj datatime y hace mal la comparacion :$
+
     if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
-        #Verifico para cada publicacion los campos nombre, fN y sexo
+        #Verifico para cada publicacion el campo nombre
         #En caso de encontrar una igual modifico el valor de existe_publicacion
         for publicacion in publicaciones_del_usuario:
-            if publicacion.nombre == nombre and publicacion.fecha_nacimiento == fecha_nacimiento and  publicacion.sexo == sexo:
+            if publicacion.nombre == nombre:
                 existe_publicacion=True
                 break
     return existe_publicacion
@@ -40,9 +36,9 @@ def publicacion(request):
         formulario_adopcion=formulario_Adopcion(data=request.POST)
        
         if formulario_adopcion.is_valid():
-            if ya_esta_publicado(request.user, formulario_adopcion.data['nombre'], formulario_adopcion.data['fecha_nacimiento'], formulario_adopcion.data['sexo']):
+            if ya_esta_publicado(request.user, formulario_adopcion.data['nombre']):
                 #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
-                error_ya_publicado="¡Ya tiene publicada una mascota con esos datos!"
+                error_ya_publicado="¡Ya tiene publicada una mascota con ese nombre!"
                 return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje2":error_ya_publicado})
             else:
                 #Aca hay que hacerlo andar
@@ -117,19 +113,26 @@ def datos_adopcion(request, adopcion_id):
 
 def editar_perro_adopcion(request, adopcion_id):    
     posteo = Adopcion.objects.get(id=adopcion_id)
-
+    
     if request.method=='POST':
         formulario_adopcion = formulario_Adopcion(data=request.POST)
         if formulario_adopcion.is_valid():
-            posteo.dueño=request.user
-            posteo.nombre = formulario_adopcion.cleaned_data['nombre']
-            posteo.fecha_nacimiento = formulario_adopcion.cleaned_data['fecha_nacimiento']
-            posteo.sexo = formulario_adopcion.cleaned_data['sexo']
-            posteo.tamaño = formulario_adopcion.cleaned_data['tamaño']
-            posteo.comentarios = formulario_adopcion.cleaned_data['comentarios']
-            posteo.estado=Adopcion.Estado[0][1]
-            posteo.save()
-            return redirect("adopcion") #modificar para que lo redirija a donde estan los perros publicados "adopcion"
+            #Verifico que no tenga una mascota en adopción con el mismo nombre
+            if ya_esta_publicado(request.user, formulario_adopcion.data['nombre']):
+                #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
+                error_ya_publicado="¡Ya tiene publicada una mascota con ese nombre!"
+                return render (request, 'adopcion/editar_post.html',{'formulario_adopcion':formulario_adopcion, "mensaje2":error_ya_publicado})
+            else:
+                posteo.dueño=request.user
+                posteo.nombre = formulario_adopcion.cleaned_data['nombre']
+                posteo.fecha_nacimiento = formulario_adopcion.cleaned_data['fecha_nacimiento']
+                posteo.sexo = formulario_adopcion.cleaned_data['sexo']
+                posteo.tamaño = formulario_adopcion.cleaned_data['tamaño']
+                posteo.comentarios = formulario_adopcion.cleaned_data['comentarios']
+                posteo.estado=Adopcion.Estado[0][1]
+                posteo.save()
+                mensaje="Los cambios se han guardado correctamente."
+                return render(request, 'adopcion/editar_post.html', {'formulario_adopcion': formulario_adopcion, "mensaje": mensaje})
 
     else:
         formulario_adopcion = formulario_Adopcion(initial={
