@@ -44,3 +44,15 @@ class Formulario_rechazado(forms.Form):
 class Formulario_concluido(forms.Form):
     observaciones = forms.CharField(widget=forms.Textarea, required=True, max_length=150)
     monto = forms.DecimalField(label='Monto en $', decimal_places=2,required=True)
+
+class Formulario_aceptado(forms.Form):
+
+    
+
+    def __init__(self, franja, *args, **kwargs):
+        super(Formulario_aceptado, self).__init__(*args, **kwargs)
+        self.fields['hora'].choices = franja
+
+    
+
+    hora = forms.ChoiceField(label='Hora', choices=())

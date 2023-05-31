@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import formulario_turno, Formulario_rechazado, Formulario_concluido
+from .forms import formulario_turno, Formulario_rechazado, Formulario_concluido, Formulario_aceptado
 from .models import Turno
 from donacion.models import Donante
 from mascotas.models import EntradaLibretaSanitaria
@@ -133,18 +133,41 @@ def ver_turnos_pasados(request):
 def aceptar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
 
-    turno.estado='Aceptado'
-    turno.save()
+    def set_horario(franja):
+        if franja == 'Mañana':
+            return Turno.horarios[0:8]
+        elif franja == 'Tarde':
+            return Turno.horarios[8:16]
 
-    send_mail(
+    formu = Formulario_aceptado(set_horario(devolver_turno(turno.franjaHoraria)))
+
+    if request.method=='POST':
+
+        formu = Formulario_aceptado(set_horario(devolver_turno(turno.franjaHoraria)),data=request.POST)
+        if formu.is_valid():
+
+            if (Turno.objects.filter(fecha=turno.fecha).filter(hora=formu.cleaned_data['hora']).exists):
+                error="Ese horario ya esta ocupado"
+                return render(request, 'turnos/formulario_aceptacion.html', {'formulario':formu,'error':error, 'turno':turno})
+
+            turno.hora = formu.cleaned_data['hora']
+
+            turno.estado='Aceptado'
+            turno.save()
+
+            send_mail(
                 "Turno aceptado", 
-                f"El turno ha sido aceptado.\n Motivo del turno: {turno.get_motivo_display()}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.get_franjaHoraria_display()}\n Fecha: {turno.fecha}", 
+                f"El turno ha sido aceptado.\n Motivo del turno: {turno.get_motivo_display()}\n Nombre del perro:  {turno.mascota}\n Franja horaria: {turno.get_franjaHoraria_display()}\n Hora:{turno.get_hora_display()}\n Fecha: {turno.fecha}", 
                 "ohmydog.veterinariacanina@gmail.com", 
                 [turno.dueño.email, "ohmydog.veterinariacanina@gmail.com"], 
                 fail_silently=False
             )
+
+
+        return redirect('/mis_turnos/turnos_pendientes/?valido')
     
-    return redirect('/mis_turnos/turnos_pendientes/?valido')
+    return render(request, 'turnos/formulario_aceptacion.html', {'formulario':formu, 'turno':turno})
+    
 
 def cancelar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
@@ -197,7 +220,7 @@ def rechazar_turno(request, pk):
 
         return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
     
-    return render(request, 'turnos/formulario_rechazo.html', {'formulario':formu})
+    return render(request, 'turnos/formulario_rechazo.html', {'formulario':formu, 'turno':turno})
 
 
 

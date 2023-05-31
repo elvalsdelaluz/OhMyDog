@@ -11,14 +11,25 @@
 
     <body>
 
-        <div class="contenedorFormulario">
+        <div class="contenedorFormulario" style="width: 40%; padding-left: 0%; padding-right: 0%;">
             <div class="col-md-12">
               <h3 class="text-center" style="margin-top: 5px;"><strong>Motivo de rechazo del turno</strong></h3>
+              <div class="cta-inner text-center rounded">
                 <form action="" method="POST"> {% csrf_token %}
-                    <table style="color:white; margin: 20px auto;">{{formulario.as_table}}<table>
-                    <input class="btn btn-primary" type="submit" value="Confirmar">
+
+                    <p class="card-title"style="color: white; "><strong> Solicitante:</strong> {{turno.dueño.nombre}}</p>
+                    <p class="card-text" style="color: white;"><strong> Nombre del perro:</strong> {{turno.mascota.nombre}}</p>
+                    <p class="card-text"style="color: white;"><strong> Motivo:</strong> {{turno.get_motivo_display}}</p>
+                    <p class="card-text"style="color: white;"><strong> Fecha:</strong> {{turno.fecha}}</p>
+                    <p class="card-text"style="color: white;"><strong> Franja Horaria:</strong> {{turno.get_franjaHoraria_display}}</p>
+
+                    {{formulario|crispy}}
+                    
+                    <input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
+                    <a href="{% url 'turnos_pendientes' %}" class="btn btn-danger" type="submit"  style="margin-left: 10px;"> Volver </a>
+                    
                 </form>   
-                <a href="{% url 'turnos_pendientes' %}" class="btn btn-primary" type="submit"> Volver </a>
+            </div>
             </div>
         </div>
 

@@ -26,14 +26,19 @@ class Turno(models.Model):
         ('4','Cerrado'),
         ('5','Vencido'),
     )
+    horarios= (('0','08:00 hs'), ('1','08:30 hs'),('2','09:00 hs'),('3','09:30 hs'),('4','10:00 hs'),
+                                                    ('5','10:30 hs'),('6','11:00 hs'),('7','11:30 hs'),
+                        ('8','16:00 hs'), ('9','16:30 hs'),('10','17:00 hs'),('11','17:30 hs'),('12','18:00 hs'),
+                                                    ('13','18:30 hs'),('14','19:00 hs'),('15','19:30 hs'))
 
     dueño=models.ForeignKey(User, on_delete=models.CASCADE)
-    mascota=models.ForeignKey(Mascota, on_delete=models.CASCADE)#no deberia ser una mascota de las q tiene registrada?
+    mascota=models.ForeignKey(Mascota, on_delete=models.CASCADE)
     motivo=models.CharField('Motivo',max_length=15,choices=motivos)
     motivo_rechazo = models.CharField(max_length=100, null=True, blank=True, default=None)
     franjaHoraria=models.CharField('Franja horaria',max_length=1,choices=franja)
     fecha=models.DateField()
     estado=models.CharField('Estado',max_length=15,choices=estados)
+    hora=models.CharField('Horario',max_length=8,choices=horarios)
     observaciones=models.CharField(max_length=150,null=True, blank=True, default=None)
     monto=models.DecimalField(decimal_places=2, max_digits=8, null=True, blank=True, default=None)
     descuento=models.BooleanField(null=True, blank=True,default=False)
