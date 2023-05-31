@@ -10,8 +10,9 @@
 
     <body>
 
-        <div class="contenedorFormulario">
+        <div class="contenedorFormulario" style="width: 50%;">
             <div class="col-md-12">
+            <div class="cta-inner text-center rounded">
               <h3 class="text-center" style="margin-top: 5px;"><strong>Historial del turno</strong></h3>
                 <form action="" method="POST"> 
                     {% csrf_token %}
@@ -23,6 +24,12 @@
                       </div>
 
                     {% endif %}
+
+                    <p class="card-title"style="color: white; "><strong> Solicitante:</strong> {{turno.dueño.nombre}}</p>
+                    <p class="card-text" style="color: white;"><strong> Nombre del perro:</strong> {{turno.mascota.nombre}}</p>
+                    <p class="card-text"style="color: white;"><strong> Motivo:</strong> {{turno.get_motivo_display}}</p>
+                    <p class="card-text"style="color: white;"><strong> Fecha:</strong> {{turno.fecha}}</p>
+                    <p class="card-text"style="color: white;"><strong> Franja Horaria:</strong> {{turno.get_franjaHoraria_display}}</p>
                     
                     
                     <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>
@@ -30,7 +37,7 @@
                     <input class="btn btn-primary" type="submit" value="Confirmar">
                     <a href="{% url 'turnos_activos' %}" class="btn btn-primary" type="submit"> Volver </a>
                 </form>   
-
+            </div> 
             </div>
         </div>
 

@@ -24,6 +24,7 @@ class Turno(models.Model):
         ('2','Rechazado'),
         ('3','Cancelado'),
         ('4','Cerrado'),
+        ('5','Vencido'),
     )
 
     dueño=models.ForeignKey(User, on_delete=models.CASCADE)
