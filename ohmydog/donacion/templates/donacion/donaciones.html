@@ -1,0 +1,60 @@
+{% extends "ohmydogapp/base.html" %} {% load static %} {% block content %}
+<html>
+
+<head>
+    <title>Donaciones</title>
+</head>
+
+<body>
+    <div style="
+        margin-left: 15px;
+        text-align: left;
+        margin-top: 15px;
+        margin-right: 10%;
+      ">
+        {% if request.user.is_staff %}
+        <a href="{% if user.is_staff %} {% url 'subir_donacion' %} {% endif %}" class="btn btn-success">Subir
+            donación</a>
+        {%endif%}
+    </div>
+    {% if donaciones %}
+        <div class="container">
+            <div class="row">
+                {% for donacion in donaciones %}
+                    <div class="col-md-4">
+                        <div class="card" style="background-color: rgba(12, 159, 159); margin: 35px 30px;">
+                            <!-- ACA IRIA LA IMAGEN -->
+                            <div class="card-body" style=" text-align: center;">
+                                <p class="card-title" style="color: white">
+                                    <strong> Motivo:</strong> {{donacion.motivo}}
+                                </p>
+                                <p class="card-text" style="color: white">
+                                    <strong> Descripción:</strong>
+                                    {{donacion.descripcion}}
+                                </p>
+                                <p class="card-text" style="color: white">
+                                    <strong> Fecha de finalización:</strong> {{donacion.finalizacion}}
+                                </p>
+                            </div>
+                            {% if not request.user.is_staff %}
+                            <div class="card-footer text-center">
+                                <a href="{% url 'donar' donacion.id %}" class="btn btn-primary"
+                                style="margin-bottom: 10px">Donar a esta campaña</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div>
+        <h1>No hay campañas de donación para mostrar</h1>
+    </div>
+    {% endif %}
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<html>
+    <form method="POST" action="" style="color: white">
+        {% csrf_token %}
+        <div style="width: 75%; margin:auto;">
+            <div style="width: 50%; margin: auto;">
+                {{formulario|crispy}}
+                <button type="submit" class="btn btn-success">
+                    Subir campaña de donación
+                </button>
+            </div>
+        </div>
+    
+    </form>
+</html>
+{% endblock %}

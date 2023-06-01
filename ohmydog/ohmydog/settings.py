@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-b!&rx*c+b0=e!(a+0o0q48umn0rb*0o30b%@&m!5#5x1er22bg
 DEBUG = True
 
 ALLOWED_HOSTS = []
+STRIPE_PUBLIC_KEY = 'pk_test_51NDyipASwHsRVYQPq0IiTASUhbGRNeusdUNmVV8d9hyyxM5Vlh63w4sAegewRT4j96l6JUSUicz4nhcd8G5qar3i00qiEZ2wcJ'
+STRIPE_SECRET_KEY = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh1CCt15p6ubERTxZWur6JBYpKH8sclckfVzW00c3ehlY9Z'
 
 
 # Application definition

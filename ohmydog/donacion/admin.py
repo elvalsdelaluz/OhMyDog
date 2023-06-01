@@ -13,6 +13,7 @@ class DonanteAdmin(admin.ModelAdmin):
     readonly_fields=('fecha',)
     list_display=('dueño','monto','fecha')
 
+
 admin.site.register(donacion, DonacionAdmin)
 admin.site.register(Donante,DonanteAdmin)
 # Register your models here.
