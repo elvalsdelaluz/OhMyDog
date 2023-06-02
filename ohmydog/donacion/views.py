@@ -20,8 +20,8 @@ def vista_subir_donacion(request):
             nueva_donacion.finalizacion = formulario.cleaned_data['finalizacion']
             nueva_donacion.save()
             return redirect("donaciones")
-    else:
-        return render(request, "donacion/subir_donacion.html", {'formulario': formulario})
+    
+    return render(request, "donacion/subir_donacion.html", {'formulario': formulario})
 
 
 def vista_donaciones (request):

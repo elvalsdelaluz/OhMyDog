@@ -8,10 +8,10 @@
 
 
 
-<div class="contenedorFormulario">
+<div class="contenedorFormulario" style="justify-items: center;">
     <div class="col-md-12">
-      <h3 class="text-center" style="margin-top: 5px;"><strong>Subir adopcion</strong></h3>
-      <form action="" method="POST">
+      <h2 class="text-center" style="margin-top: 5px;"><strong>Subir adopcion</strong></h2>
+      <form action="" method="POST" style="width: 80%; margin: auto;">
         {% csrf_token %}
         {% if error %}
           <div class="alert alert-danger" role="alert">
@@ -29,9 +29,12 @@
 
 
         {{ formulario|crispy }}
-        <input class="btn btn-primary" type="submit" value="Confirmar">
+        <div style="justify-items: center; text-align: center;">
+        <input class="btn btn-success" type="submit" value="Confirmar" style="margin: auto; margin-bottom: 10px;">
+        <a class="btn btn-danger" type="submit" href="{% url 'home' %}" style="margin: auto;  margin-bottom: 10px">Volver</a>
+      </div>
       </form>   
-    <a class="btn btn-primary" type="submit" href="{% url 'home' %}">Volver</a> </a>
+    
     </div>
   </div>
 {% endblock %}
