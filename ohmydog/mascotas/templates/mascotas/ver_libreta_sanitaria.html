@@ -1,0 +1,44 @@
+<html>
+  {% extends "ohmydogapp/base.html" %}
+  
+  {% load static %}
+  
+  
+  {% block content %}
+    <section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
+
+    <h2 class="text-center">
+        <span class="section-heading-upper">Libreta Sanitaria de {{nombre_mascota}}</span>
+    </h2>
+    <p>
+
+    </p>
+
+    <table class="table table-bordered">
+       
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Tipo vacuna</th>
+            <th scope="col">Cantidad desparasitario</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for  entrada in mi_libreta %}
+          <tr>
+            <th scope="row">{{entrada.fecha|date}}</th>
+            <td> {{entrada.peso}}</td>
+            <td>{{entrada.get_motivo_display}}</td>
+            <td>nada</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      &nbsp;<a href="{% url 'ver_mis_mascotas' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+      </section>
+
+      
+     
+  {% endblock %}
+</html>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import MascotaForm
-from .models import Mascota
+from .models import Mascota, EntradaLibretaSanitaria
 from autenticacion.models import Cuenta
 from datetime import date
 from turnos.models import Turno
@@ -79,3 +79,14 @@ def ver_historial_turnos(request, mascota_id):
         print (historia.fecha)
     """
     return render(request, 'mascotas/ver_historial_turnos.html', {'mi_historial':mi_historial, 'nombre_mascota':nombre_mascota.nombre})
+
+def ver_libreta_sanitaria(request, mascota_id):
+    """
+       Guardar la fecha, el peso actual del perro y en caso de que sea vacunación, 
+       el tipo de vacuna, si es desparasitación, la cantidad de antiparasitario. 
+    """
+    mi_libreta=EntradaLibretaSanitaria.objects.filter(mascota=mascota_id)
+    nombre_mascota=Mascota.objects.get(id=mascota_id)
+    return render(request, 'mascotas/ver_libreta_sanitaria.html', {'mi_libreta':mi_libreta, 'nombre_mascota':nombre_mascota.nombre})
+
+
