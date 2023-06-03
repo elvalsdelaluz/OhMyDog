@@ -1,0 +1,38 @@
+<html>
+    {% extends "ohmydogapp/base.html" %}
+
+    {% load crispy_forms_tags %}
+    
+    {% load static %}
+    
+    {% block content %}
+
+
+    <body>
+
+        <div class="contenedorFormulario" style="width: 50%;">
+            <div class="col-md-12">
+            <div class="cta-inner text-center rounded">
+              <h3 class="text-center" style="margin-top: 5px;"><strong>Actualizar libreta Sanitaria</strong></h3>
+                <form action="" method="POST"> 
+                    {% csrf_token %}
+
+                    <p class="card-title"style="color: white; "><strong> Fecha:</strong> {{info_turno.fecha}}</p>
+                    <p class="card-text" style="color: white;"><strong> Nombre del perro:</strong> {{info_turno.mascota.nombre}}</p>
+                    <p class="card-text"style="color: white;"><strong> Tipo vacuna/desparacitario:</strong> {{info_turno.get_motivo_display}}</p>
+                    
+                    <div style="width: 50%; margin: auto">{{formulario_libreta|crispy}}</div>
+
+                    <a href="{% url 'turnos_activos' %}" class="btn btn-success" type="submit"  style="margin-left: 10px;"> Confirmar </a>
+                    
+                </form>   
+            </div> 
+            </div>
+        </div>
+
+
+    </body>
+
+    {% endblock %}
+
+</html>

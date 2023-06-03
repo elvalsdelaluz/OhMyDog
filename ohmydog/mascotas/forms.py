@@ -1,5 +1,5 @@
 from django import forms
-from .models import Mascota
+from .models import Mascota, EntradaLibretaSanitaria
 
 
 class MascotaForm(forms.Form):
@@ -11,3 +11,8 @@ class MascotaForm(forms.Form):
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', widget=forms.TextInput(     
         attrs={'type': 'date'} ))
     observaciones=forms.CharField(label='Observaciones', widget=forms.Textarea, required=False) 
+
+
+class EntradaLibretaSanitariaForm(forms.Form):
+    peso=forms.DecimalField()
+    cantidad_desparacitario=forms.DecimalField(required=False) #En caso de ser vacuna A o B no se va a completar

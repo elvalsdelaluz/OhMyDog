@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from datetime import date, timedelta
-
+from django.db.models import Q
+from mascotas.forms import EntradaLibretaSanitariaForm
 
 # Create your views here.
 #def mis_turnos(request):
@@ -117,8 +118,12 @@ def ver_turnos_pendientes(request):
     return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes, 'turnosV':turnos_vencidos})
 
 def ver_turnos_activos(request):
-
-    turnos_activos=Turno.objects.filter(estado='Aceptado')
+    """
+    for objeto in Turno.objects.all():
+        print(objeto.estado)
+        print(objeto.fecha)
+    """
+    turnos_activos=Turno.objects.filter(Q(estado='Aceptado') | Q(estado="1"))
 
     return render(request, 'turnos/turnosactivos.html', {'turnos':turnos_activos})
 
@@ -279,3 +284,23 @@ def ver_historia_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
 
     return render(request, 'turnos/historia_turno.html', {'turno': turno})
+
+
+def actualizar_libreta_sanitaria(request, turno_id): 
+    info_turno = Turno.objects.get(id=turno_id)
+    formulario_libreta= EntradaLibretaSanitariaForm()
+    
+    if request.method=='POST':
+        formulario_libreta = EntradaLibretaSanitariaForm(data=request.POST)
+        if formulario_libreta.is_valid():
+            entrada_nueva = EntradaLibretaSanitaria()
+            entrada_nueva.fecha = info_turno.fecha
+            entrada_nueva.motivo = info_turno.motivo
+            entrada_nueva.perro = info_turno.mascota
+            entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
+            #entrada_nueva.cantidad_desparacitario = formulario_libreta.cleaned_data['cantidad_desparacitario']
+            entrada_nueva.save()
+
+            return redirect('turnos_activos')
+
+    return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':info_turno})

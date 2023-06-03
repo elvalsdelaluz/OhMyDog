@@ -13,6 +13,6 @@ urlpatterns = [
     path('<int:pk>', views.cancelar_turno, name="cancelar_turno"),
     path('turnos_activos/concluir/<int:pk>', views.concluir_turno, name="concluir_turno"),
     path('historia_turno/<int:pk>', views.ver_historia_turno, name="historia_turno"),
-
+    path('actualizar_libreta_sanitaria/<int:turno_id>', views.actualizar_libreta_sanitaria, name="actualizar_libreta_sanitaria"),
 
 ]
