@@ -7,6 +7,24 @@ from datetime import date
 from turnos.models import Turno
 # Create your views here.
 
+def mascota_registrada (user, nombre_mascota): 
+    """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
+       la función devuelve true
+    """ 
+    existe_publicacion=False
+    publicaciones_del_usuario= Mascota.objects.filter(dueño=user)
+
+    if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
+        #Verifico para cada publicacion el campo nombre
+        #En caso de encontrar una igual modifico el valor de existe_publicacion
+        for publicacion in publicaciones_del_usuario:
+            if publicacion.nombre == nombre_mascota:
+                existe_publicacion=True
+                break
+    return existe_publicacion
+
+
+
 def verificacion_email(email_ingresado):
     #existe_producto = Producto.objects.filter(codigo='ABC123').exists()
     existe_cuenta=Cuenta.objects.filter(email=email_ingresado).exists()
@@ -90,3 +108,101 @@ def ver_libreta_sanitaria(request, mascota_id):
     return render(request, 'mascotas/ver_libreta_sanitaria.html', {'mi_libreta':mi_libreta, 'nombre_mascota':nombre_mascota.nombre})
 
 
+def no_hubo_cambios(mi_mascota, formulario_mascota):
+    estado= mi_mascota.nombre == formulario_mascota.cleaned_data['nombre'] and mi_mascota.fecha_nacimiento == formulario_mascota.cleaned_data['fecha_nacimiento'] and mi_mascota.sexo == formulario_mascota.cleaned_data['sexo'] and mi_mascota.raza == formulario_mascota.cleaned_data['raza'] and mi_mascota.observaciones == formulario_mascota.cleaned_data['observaciones']
+    print (estado)
+    print ("hadfaskjdfh")
+    return estado
+
+def formulario_mascota_inicial(mi_mascota):
+    formulario_mascota = MascotaForm(initial={
+            'nombre': mi_mascota.nombre,
+            'fecha_nacimiento': mi_mascota.fecha_nacimiento,
+            'sexo': mi_mascota.sexo,
+            'raza': mi_mascota.raza,
+            'observaciones': mi_mascota.observaciones
+        })
+    return formulario_mascota
+
+def guardar_datos(mi_mascota, formulario_mascota, dueño):
+    mi_mascota.dueño=dueño
+    mi_mascota.nombre = formulario_mascota.cleaned_data['nombre']
+    mi_mascota.fecha_nacimiento = formulario_mascota.cleaned_data['fecha_nacimiento']
+    mi_mascota.sexo = formulario_mascota.cleaned_data['sexo']
+    mi_mascota.raza = formulario_mascota.cleaned_data['raza']
+    mi_mascota.observaciones = formulario_mascota.cleaned_data['observaciones']
+    mi_mascota.save()
+
+def editar_mi_mascota(request, mascota_id):
+    mi_mascota = Mascota.objects.get(id=mascota_id)
+    
+    if request.method=='POST': #Toco confirmar
+        formulario_mascota = MascotaForm(data=request.POST)
+        if formulario_mascota.is_valid():
+            if  no_hubo_cambios(mi_mascota, formulario_mascota):
+                return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota_inicial(mi_mascota)})
+            elif mi_mascota.nombre != formulario_mascota.cleaned_data['nombre']:
+                if mascota_registrada(request.user, formulario_mascota.data['nombre']):
+                    #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
+                    error_ya_publicado="¡Ya tiene una mascota con ese nombre!"
+                    return render (request, 'mascotas/editar_mi_mascota.html',{'formulario_mascota':formulario_mascota, "mensaje2":error_ya_publicado})
+                else:
+                    #guardar datos   
+                    guardar_datos(mi_mascota, formulario_mascota, request.user) 
+                    mensaje="Los cambios se han guardado correctamente."
+                    return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota, "mensaje": mensaje})
+            else:
+               # guardar datos
+                guardar_datos(mi_mascota, formulario_mascota, request.user) 
+                mensaje="Los cambios se han guardado correctamente."
+                return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota, "mensaje": mensaje})
+    
+    return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota_inicial(mi_mascota)})
+
+
+"""
+def editar_mi_mascota(request, mascota_id):
+    mi_mascota = Mascota.objects.get(id=mascota_id)
+    
+    if request.method=='POST':
+        formulario_mascota = MascotaForm(data=request.POST)
+        if formulario_mascota.is_valid():
+            #Verifico que no tenga una mascota en adopción con el mismo nombre
+            nombre_ingresado = formulario_mascota.cleaned_data['nombre']
+            if nombre_ingresado != mi_mascota.nombre:
+                if mascota_registrada(request.user, formulario_mascota.data['nombre']):
+                    #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
+                    error_ya_publicado="¡Ya tiene una mascota con ese nombre!"
+                    return render (request, 'mascotas/editar_mi_mascota.html',{'formulario_mascota':formulario_mascota, "mensaje2":error_ya_publicado})
+                else:
+                    mi_mascota.dueño=request.user
+                    mi_mascota.nombre = formulario_mascota.cleaned_data['nombre']
+                    mi_mascota.fecha_nacimiento = formulario_mascota.cleaned_data['fecha_nacimiento']
+                    mi_mascota.sexo = formulario_mascota.cleaned_data['sexo']
+                    mi_mascota.raza = formulario_mascota.cleaned_data['raza']
+                    mi_mascota.observaciones = formulario_mascota.cleaned_data['observaciones']
+                    mi_mascota.save()
+                    mensaje="Los cambios se han guardado correctamente."
+                    return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota, "mensaje": mensaje})
+            else:
+                mi_mascota.dueño=request.user
+                mi_mascota.nombre = formulario_mascota.cleaned_data['nombre']
+                mi_mascota.fecha_nacimiento = formulario_mascota.cleaned_data['fecha_nacimiento']
+                mi_mascota.sexo = formulario_mascota.cleaned_data['sexo']
+                mi_mascota.raza = formulario_mascota.cleaned_data['raza']
+                mi_mascota.observaciones = formulario_mascota.cleaned_data['observaciones']
+                mi_mascota.save()
+                mensaje="Los cambios se han guardado correctamente."
+                ..return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota, "mensaje": mensaje})
+
+    else:
+        formulario_mascota = MascotaForm(initial={
+            'nombre': mi_mascota.nombre,
+            'fecha_nacimiento': mi_mascota.fecha_nacimiento,
+            'sexo': mi_mascota.sexo,
+            'raza': mi_mascota.raza,
+            'observaciones': mi_mascota.observaciones
+        })
+        return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota})
+
+"""
