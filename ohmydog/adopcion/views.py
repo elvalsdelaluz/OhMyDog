@@ -11,7 +11,7 @@ def adopcion (request):
     adopciones = Adopcion.objects.all()
     return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
 
-def ya_esta_publicado(user, nombre): 
+def ya_esta_publicado(user, nombre_mascota): 
     """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
        la función devuelve true
     """ 
@@ -22,7 +22,10 @@ def ya_esta_publicado(user, nombre):
         #Verifico para cada publicacion el campo nombre
         #En caso de encontrar una igual modifico el valor de existe_publicacion
         for publicacion in publicaciones_del_usuario:
-            if publicacion.nombre == nombre:
+            print(publicacion)
+            print(publicacion.nombre)
+            print(nombre_mascota)
+            if publicacion.nombre == nombre_mascota:
                 existe_publicacion=True
                 break
     return existe_publicacion
@@ -210,6 +213,10 @@ def cerrar_post(request, adopcion_id): #mas adelante hacer que le pregunte al us
 
 
 def bajar_post(request, adopcion_id):
+    print(adopcion_id)
+    print(Adopcion.objects.get(id=adopcion_id))
+    
     posteo = Adopcion.objects.get(id=adopcion_id)
+
     posteo.delete()
     return redirect("adopcion")
