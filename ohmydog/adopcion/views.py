@@ -36,7 +36,7 @@ def publicacion(request):
         formulario_adopcion=formulario_Adopcion(data=request.POST)
        
         if formulario_adopcion.is_valid():
-            if ya_esta_publicado(request.user, formulario_adopcion.data['nombre']):
+            if ya_esta_publicado(request.user, formulario_adopcion.cleaned_data['nombre']):
                 #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
                 error_ya_publicado="¡Ya tiene publicada una mascota con ese nombre!"
                 return render (request, 'adopcion/adopcion/solicitud.html',{'formulario':formulario_adopcion, "mensaje2":error_ya_publicado})
@@ -109,8 +109,65 @@ def datos_adopcion(request, adopcion_id):
                 return redirect("home")
 
         return render(request, "adopcion/contactar.html",{'formulario':form})
+    
+
+def no_hubo_cambios_post(posteo, formulario_adopcion):
+    estado=posteo.nombre == formulario_adopcion.cleaned_data['nombre'] and posteo.fecha_nacimiento == formulario_adopcion.cleaned_data['fecha_nacimiento'] and posteo.sexo == formulario_adopcion.cleaned_data['sexo'] and posteo.tamaño == formulario_adopcion.cleaned_data['tamaño'] and posteo.comentarios == formulario_adopcion.cleaned_data['comentarios']
+    print (estado)
+    print ("posteorajjf")
+    return estado
 
 
+def formulario_posteo_inicial(posteo):
+    formulario_adopcion = formulario_Adopcion(initial={
+            'nombre': posteo.nombre,
+            'fecha_nacimiento': posteo.fecha_nacimiento,
+            'sexo': posteo.sexo,
+            'tamaño': posteo.tamaño,
+            'comentarios': posteo.comentarios
+        })
+    return formulario_adopcion
+
+
+def guardar_datos(posteo, formulario_adopcion, dueño):
+    posteo.dueño=dueño
+    posteo.nombre = formulario_adopcion.cleaned_data['nombre']
+    posteo.fecha_nacimiento = formulario_adopcion.cleaned_data['fecha_nacimiento']
+    posteo.sexo = formulario_adopcion.cleaned_data['sexo']
+    posteo.tamaño = formulario_adopcion.cleaned_data['tamaño']
+    posteo.comentarios = formulario_adopcion.cleaned_data['comentarios']
+    posteo.estado=Adopcion.Estado[0][1]
+    posteo.save()
+    
+
+def editar_post_adopcion(request, adopcion_id):    
+    posteo = Adopcion.objects.get(id=adopcion_id)
+    
+    if request.method=='POST':
+        formulario_adopcion = formulario_Adopcion(data=request.POST)
+        if formulario_adopcion.is_valid():
+            if  no_hubo_cambios_post(posteo, formulario_adopcion):
+                return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_posteo_inicial(posteo)})
+            elif posteo.nombre != formulario_adopcion.cleaned_data['nombre']:
+                if ya_esta_publicado(request.user, formulario_adopcion.data['nombre']):
+                    #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
+                    error_ya_publicado="¡Ya tiene una mascota con ese nombre!"
+                    return render (request, 'adopcion/editar_post_adopcion.html',{'formulario_adopcion':formulario_adopcion, "mensaje2":error_ya_publicado})
+                else:
+                    #guardar datos   
+                    guardar_datos(posteo, formulario_adopcion, request.user) 
+                    mensaje="Los cambios se han guardado correctamente."
+                    return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_adopcion, "mensaje": mensaje})
+            else:
+               # guardar datos
+                guardar_datos(posteo, formulario_adopcion, request.user) 
+                mensaje="Los cambios se han guardado correctamente."
+                return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_adopcion, "mensaje": mensaje})
+    
+    return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_posteo_inicial(posteo)})
+
+
+"""
 def editar_perro_adopcion(request, adopcion_id):    
     posteo = Adopcion.objects.get(id=adopcion_id)
     
@@ -143,8 +200,7 @@ def editar_perro_adopcion(request, adopcion_id):
             'comentarios': posteo.comentarios
         })
         return render(request, 'adopcion/editar_post.html', {'formulario_adopcion': formulario_adopcion})
-
-
+"""
 
 def cerrar_post(request, adopcion_id): #mas adelante hacer que le pregunte al usuario si quiere o no realizar la operacion (paso intermedio)
     posteo = Adopcion.objects.get(id=adopcion_id)
