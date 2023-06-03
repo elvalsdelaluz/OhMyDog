@@ -37,6 +37,7 @@ class Mascota(models.Model): #va con mayus. Mascota. xD
     sexo=models.CharField('Sexo', max_length=1, choices=sexo_choices)
     observaciones=models.TextField(blank=True, null=True)
     #foto=models.ImageField()
+    id = models.AutoField(primary_key=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 
