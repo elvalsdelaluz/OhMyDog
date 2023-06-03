@@ -6,7 +6,8 @@
   
   {% block content %}
     <section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
-
+     
+    {% if mi_historial %}
     <h2 class="text-center">
         <span class="section-heading-upper">Historial de turnos de {{nombre_mascota}}</span>
     </h2>
@@ -44,10 +45,22 @@
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <p></p>
+                <span class="section-heading-upper">No hay entradas en el historial de turnos de esta mascota</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
       &nbsp;<a href="{% url 'ver_mis_mascotas' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
-      </section>
-
-      
+    </section>
      
   {% endblock %}
 </html>
