@@ -36,11 +36,8 @@
                     
                     <div style="width: 50%; margin: auto">{{formulario|crispy}}</div>
 
-                    {% if turno.get_motivo_display == 'Vacuna A' or turno.get_motivo_display == 'Vacuna B' or turno.get_motivo_display == 'Desparacitacion' %}
-                    <a href="{% url 'actualizar_libreta_sanitaria' turno.id %}" class="btn btn-success" type="submit"  style="margin-left: 10px;"> Confirmar </a>
-                    {%else%}
+                    
                     <input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
-                    {% endif %}
                     <a href="{% url 'turnos_activos' %}" class="btn btn-danger" type="submit"  style="margin-left: 10px;"> Volver </a>
                     
                 </form>   
@@ -54,3 +51,4 @@
     {% endblock %}
 
 </html>
+  

@@ -235,6 +235,7 @@ def ver_motivo_rechazo(request, motivo):
 
 
 def concluir_turno(request, pk):
+    motivos_actualizacion_libreta=["Vacuna A", "Vacuna B", "Desparacitacion", "1", "2", "3"]
 
     turno = get_object_or_404(Turno, pk=pk)
 
@@ -249,9 +250,12 @@ def concluir_turno(request, pk):
         ultima_donacion = Donante.objects.filter(dueño=turno.dueño).order_by('fecha').first()
 
         monto_descuento=ultima_donacion.monto *20/100
-
+    
+    print ("Como que se me hace que ")
+    print(turno.motivo)
+    print(type(turno.motivo))
     if request.method=='POST':
-
+        print ("no estoy entrado..........................................")
         formu = Formulario_concluido(data=request.POST)
         if formu.is_valid():
 
@@ -272,12 +276,33 @@ def concluir_turno(request, pk):
                 turno.descuento=False
 
             turno.estado='Cerrado'
+            print (turno.estado)
+            print("TAYLORR")
             turno.save()
 
+        if not turno.motivo in motivos_actualizacion_libreta:
+            return redirect ('/mis_turnos/turnos_activos/?valido')
+        else:
+            formulario_libreta= EntradaLibretaSanitariaForm()
+            if request.method=='POST':
+            #Al parecer el botón utilizado es mucho muy importante. Dependiendo de que botón sea entra o no.
+            #<input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
+                formulario_libreta = EntradaLibretaSanitariaForm(data=request.POST)
+                if formulario_libreta.is_valid():
+                    entrada_nueva = EntradaLibretaSanitaria()
+                    entrada_nueva.fecha = turno.fecha
+                    entrada_nueva.motivo = turno.motivo
+                    entrada_nueva.perro = turno.mascota
+                    entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
+                    #entrada_nueva.cantidad_desparacitario = formulario_libreta.cleaned_data['cantidad_desparacitario']
+                    print(entrada_nueva.save())
+                    print("que pasooooooooooooooooo")
+                    return redirect ('/mis_turnos/turnos_activos/?valido')
+            return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':turno})
 
-        return redirect ('/mis_turnos/turnos_activos/?valido')
+        #return redirect ('/mis_turnos/turnos_activos/?valido')
     
-    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu, 'turno':turno, 'descuento':monto_descuento})
+    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu, 'turno':turno, 'descuento':monto_descuento, 'actualizar_libreta':motivos_actualizacion_libreta})
 
 def ver_historia_turno(request, pk):
 
@@ -286,11 +311,16 @@ def ver_historia_turno(request, pk):
     return render(request, 'turnos/historia_turno.html', {'turno': turno})
 
 
+"""
+
+#ESTO NO ME FUNCIONO, YO INTENTE QUE SEA LEGIBLE, NO ME JUZGEN SOY HUMANA
 def actualizar_libreta_sanitaria(request, turno_id): 
     info_turno = Turno.objects.get(id=turno_id)
     formulario_libreta= EntradaLibretaSanitariaForm()
-    
+
     if request.method=='POST':
+        #Al parecer el botón utilizado es mucho muy importante. Dependiendo de que botón sea entra o no.
+        #<input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
         formulario_libreta = EntradaLibretaSanitariaForm(data=request.POST)
         if formulario_libreta.is_valid():
             entrada_nueva = EntradaLibretaSanitaria()
@@ -299,8 +329,9 @@ def actualizar_libreta_sanitaria(request, turno_id):
             entrada_nueva.perro = info_turno.mascota
             entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
             #entrada_nueva.cantidad_desparacitario = formulario_libreta.cleaned_data['cantidad_desparacitario']
-            entrada_nueva.save()
-
-            return redirect('turnos_activos')
+            print(entrada_nueva.save())
+            print("que pasooooooooooooooooo")
+        return redirect ('/mis_turnos/turnos_activos/?valido')
 
     return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':info_turno})
+"""
