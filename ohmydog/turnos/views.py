@@ -151,9 +151,9 @@ def aceptar_turno(request, pk):
         formu = Formulario_aceptado(set_horario(devolver_turno(turno.franjaHoraria)),data=request.POST)
         if formu.is_valid():
 
-            if (Turno.objects.filter(fecha=turno.fecha).filter(hora=formu.cleaned_data['hora']).exists):
-                error="Ese horario ya esta ocupado"
-                return render(request, 'turnos/formulario_aceptacion.html', {'formulario':formu,'error':error, 'turno':turno})
+            if (Turno.objects.filter(fecha=turno.fecha).filter(estado="Aceptado").filter(hora=formu.cleaned_data['hora']).exists()):
+                error = "Lo sentimos. Ya tenes un turno reservado para esta hora"
+                return render(request, 'turnos/formulario_aceptacion.html', {'formulario':formu, 'error':error, 'turno':turno})
 
             turno.hora = formu.cleaned_data['hora']
 
