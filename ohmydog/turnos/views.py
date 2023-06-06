@@ -108,7 +108,7 @@ def ver_turnos_pendientes(request):
 
     turnos_pendientes=Turno.objects.filter(estado='Pendiente')|Turno.objects.filter(estado='0')
 
-    if (turnos_pendientes.filter(fecha__lte=date.today()).exists):
+    if (turnos_pendientes.filter(fecha__lte=date.today()).exists()):
         turnos_vencidos=turnos_pendientes.filter(fecha__lte=date.today())
         turnos_vencidos.update(estado='5')
         turnos_pendientes=Turno.objects.filter(estado='Pendiente')

@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 import stripe
 from .models import Donante, donacion
 from .forms import FormularioDonacion
+from datetime import date
 stripe.api_key = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh1CCt15p6ubERTxZWur6JBYpKH8sclckfVzW00c3ehlY9Z'
 
 
@@ -25,7 +26,16 @@ def vista_subir_donacion(request):
 
 
 def vista_donaciones (request):
-    donaciones = donacion.objects.all()
+
+    donaciones = donacion.objects.filter(finalizada=False)
+
+    if (donaciones.filter(finalizacion__lte=date.today()).exists()):
+        donaciones_vencidas=donaciones.filter(fecha__lte=date.today())
+        donaciones_vencidas.update(finalizada=True)
+        donaciones = donacion.objects.filter(finalizada=False)
+
+    
+
     return render(request, "donacion/donaciones.html", {"donaciones":donaciones})
 
 

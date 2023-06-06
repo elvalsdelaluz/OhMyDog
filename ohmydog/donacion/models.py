@@ -8,6 +8,7 @@ class donacion(models.Model):#poner en mayus el nombre d la clase
     descripcion=models.CharField(max_length=300)
     imagen = models.ImageField(upload_to='donacion', null=True, blank=True)
     finalizacion = models.DateField()
+    finalizada = models.BooleanField(default=False)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 
