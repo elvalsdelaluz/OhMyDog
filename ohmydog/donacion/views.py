@@ -8,29 +8,45 @@ stripe.api_key = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh
 
 #hacer vista de pago exitoso
 
-#no se como hacer para que la donacion, cuando pasa el tiempo, se cierre sola.
+
+def ya_esta_publicado(motivo, descripcion): 
+    '''Se verifica si hay una camapaña con la misma descripción y motivo. En caso afirmativo devuelve true; negativo, false.'''
+    existe_camapaña = False
+    campañas = donacion.objects.all()
+
+    if campañas.exists():
+        for campaña in campañas:
+            if (campaña.motivo == motivo) and (campaña.descripcion == descripcion):
+                existe_camapaña = True
+                break
+    return existe_camapaña
+
 def vista_subir_donacion(request):
+    '''se procesa la info de la plantilla subir_donacion.html'''
     formulario = FormularioDonacion()
     if request.method=='POST':
         formulario = FormularioDonacion(data=request.POST)
         if formulario.is_valid():
-            nueva_donacion = donacion()
-            nueva_donacion.motivo = formulario.cleaned_data['motivo']
-            nueva_donacion.descripcion = formulario.cleaned_data['descripcion']
-            #nueva_donacion.imagen = formulario.cleaned_data['imagen']
-            nueva_donacion.finalizacion = formulario.cleaned_data['finalizacion']
-            nueva_donacion.save()
-            return redirect("donaciones")
+            if (ya_esta_publicado(formulario.cleaned_data['motivo'],formulario.cleaned_data['descripcion'])):
+                return render (request, 'donacion/subir_donacion.html',{'formulario':formulario, "mensaje2":"Ya ha publicado una camapaña con ese motivo y descripción."})
+            else:
+                nueva_donacion = donacion()
+                nueva_donacion.motivo = formulario.cleaned_data['motivo']
+                nueva_donacion.descripcion = formulario.cleaned_data['descripcion']
+                #nueva_donacion.imagen = formulario.cleaned_data['imagen']
+                nueva_donacion.finalizacion = formulario.cleaned_data['finalizacion']
+                nueva_donacion.save()
+                return redirect("donaciones")
     
-    return render(request, "donacion/subir_donacion.html", {'formulario': formulario})
+    return render(request, 'donacion/subir_donacion.html', {'formulario': formulario})
 
 
 def vista_donaciones (request):
-
+    '''se hace un filtro por si se venció alguna donación y no debe mostrarse'''
     donaciones = donacion.objects.filter(finalizada=False)
 
     if (donaciones.filter(finalizacion__lte=date.today()).exists()):
-        donaciones_vencidas=donaciones.filter(fecha__lte=date.today())
+        donaciones_vencidas=donaciones.filter(finalizacion__lte=date.today())
         donaciones_vencidas.update(finalizada=True)
         donaciones = donacion.objects.filter(finalizada=False)
 
@@ -41,6 +57,7 @@ def vista_donaciones (request):
 
 
 def vista_donar (request, donacion_id):
+    '''se procesa la info de la plantilla donar.html'''
     dona = donacion.objects.get(id=donacion_id)
 
     if request.method == "POST":

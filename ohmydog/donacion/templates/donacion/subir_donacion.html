@@ -10,6 +10,11 @@
 <html>
     <form method="POST" action="" style="color: white">
         {% csrf_token %}
+        {%if mensaje2%} 
+        <div class="alert alert-danger alert-dismissible fade show" style="text-align: center;">
+            {{ mensaje2 }}
+        </div>
+        {%endif%} 
         <div style="width: 75%; margin:auto;">
             <div style="width: 50%; margin: auto;">
                 {{formulario|crispy}}

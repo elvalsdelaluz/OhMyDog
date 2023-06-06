@@ -13,7 +13,7 @@
         margin-right: 10%;
       ">
         {% if request.user.is_staff %}
-        <a href="{% if user.is_staff %} {% url 'subir_donacion' %} {% endif %}" class="btn btn-success">Subir
+        <a href="{% if user.is_staff %} {% url 'subir_donacion' %} {% endif %}" class="btn btn-success">Subir campaña de 
             donación</a>
         {%endif%}
     </div>
@@ -47,11 +47,12 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
     {% else %}
-    <div>
-        <h1>No hay campañas de donación para mostrar</h1>
-    </div>
+        <div style="width:550px; margin: auto;margin-bottom: 5%;font-size:italic;background-color:rgba(12, 159, 159);
+        color:#000;text-align: center; border-color: rgb(12, 10, 10); border-width: medium;  border-style: solid;">
+                <h2 style="color: white;">No hay campañas de donación comenzadas</h2>     
+        </div>
+       
     {% endif %}
 </body>
 

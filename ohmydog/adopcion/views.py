@@ -8,6 +8,7 @@ from datetime import datetime, date
 
 
 def adopcion (request):
+    '''Se muestra la plantilla adopcion.html'''
     adopciones = Adopcion.objects.all()
     return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
 
@@ -22,9 +23,9 @@ def ya_esta_publicado(user, nombre_mascota):
         #Verifico para cada publicacion el campo nombre
         #En caso de encontrar una igual modifico el valor de existe_publicacion
         for publicacion in publicaciones_del_usuario:
-            print(publicacion)
-            print(publicacion.nombre)
-            print(nombre_mascota)
+            print(publicacion)#sacar
+            print(publicacion.nombre)#sacar
+            print(nombre_mascota)#sacar
             if publicacion.nombre == nombre_mascota:
                 existe_publicacion=True
                 break
@@ -32,7 +33,7 @@ def ya_esta_publicado(user, nombre_mascota):
 
 
 def publicacion(request):
-
+    '''Se procesa la plantilla solicitud.html'''
     formulario_adopcion=formulario_Adopcion()
 
     if request.method=='POST':
@@ -64,6 +65,7 @@ def publicacion(request):
 
 
 def datos_adopcion(request, adopcion_id):
+    '''Se procesa la plantilla contactar.html'''
     user = request.user
     form = FormularioDatosAdopcionLogueado()
     if user.is_authenticated:
@@ -116,8 +118,8 @@ def datos_adopcion(request, adopcion_id):
 
 def no_hubo_cambios_post(posteo, formulario_adopcion):
     estado=posteo.nombre == formulario_adopcion.cleaned_data['nombre'] and posteo.fecha_nacimiento == formulario_adopcion.cleaned_data['fecha_nacimiento'] and posteo.sexo == formulario_adopcion.cleaned_data['sexo'] and posteo.tamaño == formulario_adopcion.cleaned_data['tamaño'] and posteo.comentarios == formulario_adopcion.cleaned_data['comentarios']
-    print (estado)
-    print ("posteorajjf")
+    print (estado) #sacar
+    print ("posteorajjf")#sacar
     return estado
 
 
@@ -170,6 +172,7 @@ def editar_post_adopcion(request, adopcion_id):
     return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_posteo_inicial(posteo)})
 
 
+#sacar si no se usa
 """
 def editar_perro_adopcion(request, adopcion_id):    
     posteo = Adopcion.objects.get(id=adopcion_id)
