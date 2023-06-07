@@ -21,7 +21,13 @@ class donacion(models.Model):#poner en mayus el nombre d la clase
     
 class Donante(models.Model):
     dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    monto=models.DecimalField(decimal_places=2, max_digits=8, default=None)
+    monto = models.IntegerField(default=None)
+    fecha=models.DateField(auto_now_add=True)
+
+
+class DonanteNoRegistrado(models.Model):
+    nombre=models.CharField(max_length=50)
+    monto = models.IntegerField(default=None)
     fecha=models.DateField(auto_now_add=True)
 
 
