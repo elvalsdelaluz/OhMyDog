@@ -27,7 +27,10 @@
 					<i class="icon ion-ios-navigate"></i>
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="number" name="amount" id="amount"  placeholder="Ingresa el monto a donar">
+					{%if not user.is_authenticated%}
+						<input class="form-control" type="nombre" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" pattern="[A-Za-z]+" title="Por favor, ingrese solo letras en el campo del nombre" required>
+					{% endif %}
+					<input class="form-control" type="number" name="amount" id="amount"  placeholder="Ingresa el monto a donar" min="1" max="999999" step="1" required>
 				</div>
 				<div>
 					<label for="card-elemenst" >
@@ -52,14 +55,24 @@
 </div>
 			
 			
-			
+<script>
+	// Obtén el elemento de entrada de monto
+	var amountInput = document.getElementById('amount');
+	
+	// Escucha el evento input en el campo de entrada de monto
+	amountInput.addEventListener('input', function(event) {
+	  // Elimina cualquier carácter no numérico
+	  amountInput.value = amountInput.value.replace(/\D/g, '');
+    
+	});
+</script>			
 			
 			
 			
 			
 
 			
-			<script>
+		<script>
 		// Create a Stripe client.
 		var stripe = Stripe('pk_test_51NDyipASwHsRVYQPq0IiTASUhbGRNeusdUNmVV8d9hyyxM5Vlh63w4sAegewRT4j96l6JUSUicz4nhcd8G5qar3i00qiEZ2wcJ');
 

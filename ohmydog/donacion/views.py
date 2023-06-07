@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 import stripe
-from .models import Donante, donacion
+from .models import Donante, donacion, DonanteNoRegistrado
 from .forms import FormularioDonacion
 from datetime import date
 stripe.api_key = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh1CCt15p6ubERTxZWur6JBYpKH8sclckfVzW00c3ehlY9Z'
@@ -59,7 +59,6 @@ def vista_donaciones (request):
 def vista_donar (request, donacion_id):
     '''se procesa la info de la plantilla donar.html'''
     dona = donacion.objects.get(id=donacion_id)
-
     if request.method == "POST":
         amount = int(request.POST["amount"]) 
         #Create customer
@@ -78,7 +77,7 @@ def vista_donar (request, donacion_id):
         except stripe.error.CardError as e:
             if e.code == 'card_declined':
                 if "insufficient funds" in str(e).lower():
-                    return HttpResponse("no tenes plata papá") #redirigir a otro lado con msg de error. esto es muy villero                    
+                    return HttpResponse("no tenes plata papá") #redirigir a otro lado con msg de error.                     
             return HttpResponse("ocurrió un problema con la tarjeta durante el pago, intente mas tarde") #se puede hacer que se trate el error de codigo de seguridad
                      
         ###errores randoms sin importancia
@@ -119,10 +118,18 @@ def vista_donar (request, donacion_id):
             nuevo_donante.dueño = request.user
             nuevo_donante.monto = amount=int(amount)
             nuevo_donante.save()
+        else:
+            no_registrado = DonanteNoRegistrado()
+            no_registrado.nombre = request.POST['nombre']
+            no_registrado.monto = amount = int(amount)
+            no_registrado.save()
         #return redirect("pay_success/")
-        return redirect("home")
-
-                   
-
-
+        return redirect("pago_realizado")
+    
     return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo})
+
+
+
+
+def vista_pago_realizado(request):
+    return render(request, "donacion/pago_realizado.html")

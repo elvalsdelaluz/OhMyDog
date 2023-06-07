@@ -7,4 +7,5 @@ urlpatterns = [
     path('donar/<int:donacion_id>/', views.vista_donar, name="donar"),
     path('subir_donacion', views.vista_subir_donacion, name="subir_donacion"),
     path('donaciones', views.vista_donaciones, name="donaciones"),
+    path('pago_realizado', views.vista_pago_realizado, name="pago_realizado"),
 ]
