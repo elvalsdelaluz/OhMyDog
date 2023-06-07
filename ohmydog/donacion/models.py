@@ -9,6 +9,7 @@ class donacion(models.Model):#poner en mayus el nombre d la clase
     imagen = models.ImageField(upload_to='donacion', null=True, blank=True)
     finalizacion = models.DateField()
     finalizada = models.BooleanField(default=False)
+    id= models.AutoField(primary_key=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 
@@ -20,12 +21,14 @@ class donacion(models.Model):#poner en mayus el nombre d la clase
         return self.motivo
     
 class Donante(models.Model):
+    campania_donacion = models.ForeignKey(donacion,on_delete=models.CASCADE, default=None)
     dueño=models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     monto = models.IntegerField(default=None)
     fecha=models.DateField(auto_now_add=True)
 
 
 class DonanteNoRegistrado(models.Model):
+    campania_donacion = models.ForeignKey(donacion,on_delete=models.CASCADE, default=None)
     nombre=models.CharField(max_length=50)
     monto = models.IntegerField(default=None)
     fecha=models.DateField(auto_now_add=True)

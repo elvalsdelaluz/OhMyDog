@@ -43,16 +43,27 @@ def vista_subir_donacion(request):
 
 def vista_donaciones (request):
     '''se hace un filtro por si se venció alguna donación y no debe mostrarse'''
-    donaciones = donacion.objects.filter(finalizada=False)
+    donacion_refugios= donacion.objects.filter(motivo='Donacion para refugios').get()
+    donaciones = donacion.objects.filter(finalizada=False).exclude(motivo='Donacion para refugios')
 
     if (donaciones.filter(finalizacion__lte=date.today()).exists()):
         donaciones_vencidas=donaciones.filter(finalizacion__lte=date.today())
         donaciones_vencidas.update(finalizada=True)
-        donaciones = donacion.objects.filter(finalizada=False)
+        donaciones = donacion.objects.filter(finalizada=False).exclude(motivo='Donacion para refugios')
 
     
 
-    return render(request, "donacion/donaciones.html", {"donaciones":donaciones})
+    return render(request, "donacion/donaciones.html", {"donaciones":donaciones, "refugios":donacion_refugios})
+
+def ver_registro(request, donacion_id):
+
+    donacion_ver= donacion.objects.get(id=donacion_id)
+
+    donantes_clientes =Donante.objects.filter(campania_donacion=donacion_id)
+
+    donantes_noclientes = DonanteNoRegistrado.objects.filter(campania_donacion=donacion_id)
+
+    return render (request, "donacion/registro_donaciones.html",{"donacion":donacion_ver, "donantes_clientes":donantes_clientes, "donantes_noclientes":donantes_noclientes})
 
 
 
@@ -115,11 +126,13 @@ def vista_donar (request, donacion_id):
         charge.save() # Uses the same API Key.
         if request.user.is_authenticated:
             nuevo_donante = Donante()
+            nuevo_donante.campania_donacion= dona
             nuevo_donante.dueño = request.user
             nuevo_donante.monto = amount=int(amount)
             nuevo_donante.save()
         else:
             no_registrado = DonanteNoRegistrado()
+            no_registrado.campania_donacion= dona
             no_registrado.nombre = request.POST['nombre']
             no_registrado.monto = amount = int(amount)
             no_registrado.save()

@@ -1,0 +1,79 @@
+{% extends "ohmydogapp/base.html" %} 
+{% load static %} 
+{% block content %}
+
+<body>
+<div style="display: flex; align-items: center; justify-content: center; margin-top: 15px; margin-bottom: 15px;">
+<h1 style="color: white;"> Donantes de {{donacion.motivo}}</h1>
+</div>
+
+<div class="contenedorFormulario" style="text-align: center;">
+    {% if donantes_clientes %}
+
+
+        <caption style="align-content: center;">Donantes clientes</caption>
+		<table border="3" style="position: relative; width: 100%;">
+		
+		<tr>
+			<th>Nombre</th>
+			<th>Fecha</th>
+            <th>Monto</th>
+		</tr>
+		{% for donante in donantes_clientes %}
+        <tr>
+            <td>{{donante.dueño.nombre}}</td>
+            <td>{{donante.fecha}}</td>
+            <td>$ {{donante.monto}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    {% else %}
+
+    <div style="width:550px; margin: auto; margin-top:20px; margin-bottom:20px; font-size:italic;background-color:rgba(12, 159, 159);
+    color:#000;text-align: center; border-color: rgb(12, 10, 10); border-width: medium;  border-style: solid;">
+            <h4 style="color: white; margin-top: 10px; margin-bottom: 10px;">Ningún cliente ha donado aun a esta campaña</h4>     
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+<div class="contenedorFormulario" style="text-align: center;">
+
+{% if donantes_noclientes %}
+
+
+    <caption>Donantes no clientes</caption>
+    <table border="3" style="position: relative;width: 100%; margin: auto;">
+    <tr>
+        <th>Nombre</th>
+		<th>Fecha</th>
+        <th>Monto</th>
+    </tr>
+    {% for donante in donantes_noclientes %}
+        <tr>
+            <td>{{donante.nombre}}</td>
+            <td>{{donante.fecha}}</td>
+            <td>$ {{donante.monto}}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+{% else %}
+
+<div style="width:550px; margin: auto; margin-top:20px; margin-bottom:20px; font-size:italic;background-color:rgba(12, 159, 159);
+color:#000;text-align: center; border-color: rgb(12, 10, 10); border-width: medium;  border-style: solid;">
+        <h4 style="color: white;  margin-top: 10px; margin-bottom: 10px;">Ningún no cliente ha donado aun a esta campaña</h4>     
+</div>
+
+
+{% endif %}
+
+</div>
+
+</body>
+
+{% endblock %}

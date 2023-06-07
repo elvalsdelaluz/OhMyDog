@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    <div><h2 style=" color: white; font-size: xx-large; margin-left: 600px; margin-top: 5px;">Campañas de donacion</h2></div>
     <div style="
         margin-left: 15px;
         text-align: left;
@@ -17,6 +18,34 @@
             donación</a>
         {%endif%}
     </div>
+
+    <div class="container" style="align-items: center; margin: auto;">
+    <div class="card" style="background-color: rgba(12, 159, 159); margin: auto; margin-bottom: 50px; width: 40%;">
+   
+        <div class="card-body" style=" text-align: center;">
+            <p class="card-title" style="color: white">
+                <strong> {{refugios.motivo}}</strong> 
+            </p>
+            <p class="card-text" style="color: white">
+                <strong> Descripción:</strong>
+                {{refugios.descripcion}}
+            </p>
+        </div>
+        {% if not request.user.is_staff %}
+        <div class="card-footer text-center">
+            <a href="{% url 'donar' refugios.id %}" class="btn btn-primary"
+            style="margin-bottom: 10px">Donar a esta campaña</a>
+        </div>
+        {% endif %}
+        
+        {% if request.user.is_staff %}
+        <div class="card-footer text-center">
+            <a href="{% url 'ver_registro' refugios.id %}" class="btn btn-light"
+            style="margin-bottom: 10px">Ver registro de donacion</a>
+        </div>
+        {% endif %}
+    </div>
+    </div>
     {% if donaciones %}
         <div class="container">
             <div class="row">
@@ -25,7 +54,7 @@
                         <div class="card" style="background-color: rgba(12, 159, 159); margin: 35px 30px;">
                             <!-- ACA IRIA LA IMAGEN -->
                             <div class="card-body" style=" text-align: center;">
-                                <p class="card-title" style="color: white">
+                                <p style="color: white">
                                     <strong> Motivo:</strong> {{donacion.motivo}}
                                 </p>
                                 <p class="card-text" style="color: white">
@@ -41,6 +70,11 @@
                                 <a href="{% url 'donar' donacion.id %}" class="btn btn-primary"
                                 style="margin-bottom: 10px">Donar a esta campaña</a>
                             </div>
+                            {% else %}
+                            <div class="card-footer text-center">
+                                <a href="{% url 'ver_registro' donacion.id %}" class="btn btn-light"
+                                style="margin-bottom: 10px">Ver registro de donacion</a>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -50,7 +84,7 @@
     {% else %}
         <div style="width:550px; margin: auto;margin-bottom: 5%;font-size:italic;background-color:rgba(12, 159, 159);
         color:#000;text-align: center; border-color: rgb(12, 10, 10); border-width: medium;  border-style: solid;">
-                <h2 style="color: white;">No hay campañas de donación comenzadas</h2>     
+                <h2 style="color: white;">No hay otras campañas de donación comenzadas</h2>     
         </div>
        
     {% endif %}
