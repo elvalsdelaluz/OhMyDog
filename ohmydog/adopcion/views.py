@@ -212,7 +212,7 @@ def cerrar_post(request, adopcion_id): #mas adelante hacer que le pregunte al us
     posteo = Adopcion.objects.get(id=adopcion_id)
     posteo.estado = Adopcion.Estado[1][1]
     posteo.save()   
-    return redirect("adopcion")
+    return redirect('/adopcion/?valido2')
 
 
 def bajar_post(request, adopcion_id):
@@ -222,7 +222,8 @@ def bajar_post(request, adopcion_id):
     posteo = Adopcion.objects.get(id=adopcion_id)
 
     posteo.delete()
-    return redirect("adopcion")
+    return redirect('/adopcion/?valido')
+
 
 def ver_mis_perros_en_adopcion(request):
     publicaciones_del_usuario= Adopcion.objects.filter(dueño=request.user)
