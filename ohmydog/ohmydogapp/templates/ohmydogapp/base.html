@@ -21,7 +21,7 @@
     {% if request.user.is_staff %}
     <div style="background-color: rgb(237, 237, 20); color: black;">
       <h7 style="margin-left: 630px;">Ingresaste en modo administrador</h7>
-      <a href="{% url 'register'%}" class="boton-iniciar-sesion" style="margin: right 4px; margin-left: 400px;">Registrar nuevo usuario</a>
+   
     </div>
     {% endif %}
 </head>
@@ -47,9 +47,6 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
-              {% if not request.user.is_staff %}
-                <a class="dropdown-item" href="{% url 'alta_mascota' %}">Agregar nuevo perro</a>
-              {%endif%}
               <a class="dropdown-item" href="#">Cambiar contraseña</a>
             </div>
           </div>
@@ -64,30 +61,14 @@
   
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-  <div style="float: left; margin-top: auto; margin-bottom: auto; margin-left: 10px;">
-        <!-- INICIO Y CIERRE DE SESIÓN -->
-   
-    {% if request.user.is_staff %}
-      <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle"
-                data-toggle="dropdown"> Turnos <span class="caret"></span>
-        </button>
-      
-        <ul class="dropdown-menu" role="menu">
-          <li><a class="dropdown-item" href="{% url 'turnos_pendientes' %}">Ver turnos pendientes</a></li>
-          <li><a class="dropdown-item" href="{% url 'turnos_activos' %}">Ver turnos activos</a></li>
-          <li><a class="dropdown-item" href="{% url 'turnos_pasados' %}">Ver turnos finalizados</a></li>
-        </ul>
-      </div>
-    {% endif %}
-  </div>
+  
     <div class="container" style="text-align: center; margin: auto;">
       <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="{% url 'home' %}">Oh My Dog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav nav-justified">
           <li class="nav-item {% if request.path == '/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'home' %}">Inicio</a>
           </li>
@@ -106,12 +87,34 @@
         </li>
        
           {% endif %}
+        
+
+          {% if request.user.is_staff %}
+          <li class="nav-item {% if request.path == '/register/' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'register'%}" >REGISTRAR USUARIO</a>
+          </li>
+          {% endif %}
 
           {% if request.user.is_authenticated and not user.is_staff %}
           <li class="nav-item {% if request.path == '/mis_turnos/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'mis_turnos' %}">MIS TURNOS</a>
           </li>
           {% endif %}
+
+
+      {% if request.user.is_staff %}
+      <li class="nav-item dropdown px-lg-4">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          TURNOS
+        </a>
+        <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
+          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_pendientes' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver turnos pendientes</a>
+          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_activos' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver turnos activos</a>
+          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_pasados' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver turnos finalizados</a>
+        
+        </div>
+      </li>
+      {% endif %}
 
 
           <li class="nav-item dropdown px-lg-4">
@@ -127,6 +130,20 @@
             </div>
           </li>
 
+          <li class="nav-item dropdown px-lg-4">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              DONACIONES
+            </a>
+            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver campañas</a>
+              {% if request.user.is_authenticated and user.is_staff %}
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'subir_donacion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar campaña</a>
+              {% endif %}
+            </div>
+          </li>
+
+          
+
           <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
             <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>-->
             <a class="nav-link text-uppercase text-expanded" href="#">Busqueda de perros</a>
@@ -140,8 +157,6 @@
               MÁS SERVICIOS
             </a>
             <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Donaciones</a>
-
               <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">Veterinarias de turno</a>
               <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
             </div>

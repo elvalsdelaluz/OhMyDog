@@ -13,10 +13,6 @@
         margin-top: 15px;
         margin-right: 10%;
       ">
-        {% if request.user.is_staff %}
-        <a href="{% if user.is_staff %} {% url 'subir_donacion' %} {% endif %}" class="btn btn-success">Subir campaña de 
-            donación</a>
-        {%endif%}
     </div>
 
     <div class="container" style="align-items: center; margin: auto;">
