@@ -1,0 +1,66 @@
+<html>
+  {% extends "ohmydogapp/base.html" %}
+  
+  {% load static %}
+  
+  
+  {% block content %}
+
+  {% if publicaciones %}
+  <ul>
+    {% for publicacion in publicaciones %}
+    
+    <div class="tarjeta-carac">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <div class="card" style="background-color: rgba(12, 159, 159);">
+                <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                  <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{publicacion.nombre}}</p>
+                  <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{publicacion.fecha_nacimiento}}</p>
+                  <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{publicacion.get_tamaño_display}}</p>
+                  <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{publicacion.get_sexo_display}}</p>
+                  <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{publicacion.comentarios}}</p>
+                  <p class="card-title"style="color: white; "><strong> Estado:</strong> {{publicacion.get_estado_display}}</p>
+                </div>
+                  {% if request.user == publicacion.dueño %} 
+                    <div>
+                      <a href="{% url 'bajar_post' publicacion.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">¡Me arrepentí!</a>
+                      <a href="{% url 'editar_post_adopcion' publicacion.id %}" class="btn btn-success" style="margin-bottom: 10px;">Editar post</a>
+                      <a href="{% url 'cerrar_post' publicacion.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">Cerrar post</a>
+                    </div>
+                  {% endif %} 
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      &nbsp;
+    </div>
+  </div>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <p></p>
+                <span class="section-heading-upper">No tenes perros en adopcion :D</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    
+    
+    {% endblock %}
+</html>

@@ -223,3 +223,7 @@ def bajar_post(request, adopcion_id):
 
     posteo.delete()
     return redirect("adopcion")
+
+def ver_mis_perros_en_adopcion(request):
+    publicaciones_del_usuario= Adopcion.objects.filter(dueño=request.user)
+    return render(request, 'adopcion/ver_mis_perros_en_adopcion.html', {"publicaciones":publicaciones_del_usuario})

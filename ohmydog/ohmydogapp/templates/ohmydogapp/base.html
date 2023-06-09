@@ -114,8 +114,17 @@
           {% endif %}
 
 
-          <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}">Adopcion</a>
+          <li class="nav-item dropdown px-lg-4">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ADOPCION
+            </a>
+            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver perros en adopcion</a>
+              {% if request.user.is_authenticated and not user.is_staff %}
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_perros_en_adopcion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver mis perros en adopcion</a>
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'solicitud' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar perro en adopcion</a>
+              {% endif %}
+            </div>
           </li>
 
           <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">

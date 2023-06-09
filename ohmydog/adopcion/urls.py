@@ -10,4 +10,5 @@ urlpatterns = [
     path('editar_post_adopcion/<int:adopcion_id>/', views.editar_post_adopcion, name="editar_post_adopcion"),
     path('cerrar_post/<int:adopcion_id>/', views.cerrar_post, name="cerrar_post"),
     path('bajar_post/<int:adopcion_id>/', views.bajar_post, name="bajar_post"),
+    path('ver_mis_perros_en_adopcion', views.ver_mis_perros_en_adopcion, name="ver_mis_perros_en_adopcion")
 ]
