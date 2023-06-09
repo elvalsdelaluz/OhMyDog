@@ -66,9 +66,7 @@
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
   <div style="float: left; margin-top: auto; margin-bottom: auto; margin-left: 10px;">
         <!-- INICIO Y CIERRE DE SESIÓN -->
-    {% if request.user.is_authenticated and not user.is_staff %}
-      <a href="{% url 'mis_turnos' %}" class="btn btn-sm btn-success" style="height: 40px;width: 130px; font-size: medium; padding: 6px;">Mis Turnos</a>
-    {% endif %}
+   
     {% if request.user.is_staff %}
       <div class="btn-group">
         <button type="button" class="btn btn-primary dropdown-toggle"
@@ -93,9 +91,33 @@
           <li class="nav-item {% if request.path == '/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'home' %}">Inicio</a>
           </li>
+          {% if request.user.is_authenticated and not user.is_staff %}
+      
+        <li class="nav-item dropdown px-lg-4">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMisMascotas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            MIS MASCOTAS
+          </a>
+          <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
+            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_mascotas' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">VER MIS MASCOTAS</a>
+
+            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'alta_mascota' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">AGREGAR NUEVA MASCOTA</a>
+            <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
+          </div>
+        </li>
+       
+          {% endif %}
+
+          {% if request.user.is_authenticated and not user.is_staff %}
+          <li class="nav-item {% if request.path == '/mis_turnos/' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'mis_turnos' %}">MIS TURNOS</a>
+          </li>
+          {% endif %}
+
+
           <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}">Adopcion</a>
           </li>
+
           <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
             <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>-->
             <a class="nav-link text-uppercase text-expanded" href="#">Busqueda de perros</a>
