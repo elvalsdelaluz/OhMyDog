@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from adopcion.models import Adopcion
+from mascotas.models import Mascota
 from .forms import formulario_Adopcion, FormularioDatosAdopcionLogueado, FormularioDatosAdopcionNoUsuario
 from django.core.mail import send_mail
 
@@ -8,7 +9,17 @@ from datetime import datetime, date
 
 
 def adopcion (request):
-    '''Se muestra la plantilla adopcion.html'''
+    ##########################################################
+    ###################BLOQUEO OPCION#########################
+    usuario_autenticado = request.user
+    if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
+        #pregunto si tiene perros  
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        if not tiene_perros:
+            return redirect('alta_mascota')
+    ##########################################################
+
+    '''Se muestra la plantilla adopcion.html la cual muestra las publicaciones de perros en adopción'''
     adopciones = Adopcion.objects.all()
     return render(request, "adopcion/adopcion.html", {"adopciones":adopciones})
 
@@ -33,6 +44,17 @@ def ya_esta_publicado(user, nombre_mascota):
 
 
 def publicacion(request):
+
+    ##########################################################
+    ###################BLOQUEO OPCION#########################
+    usuario_autenticado = request.user
+    if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
+        #pregunto si tiene perros  
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        if not tiene_perros:
+            return redirect('alta_mascota')
+    ##########################################################
+
     '''Se procesa la plantilla solicitud.html'''
     formulario_adopcion=formulario_Adopcion()
 
@@ -226,5 +248,15 @@ def bajar_post(request, adopcion_id):
 
 
 def ver_mis_perros_en_adopcion(request):
+    ##########################################################
+    ###################BLOQUEO OPCION#########################
+    usuario_autenticado = request.user
+    if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
+        #pregunto si tiene perros  
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        if not tiene_perros:
+            return redirect('alta_mascota')
+    ##########################################################
+    
     publicaciones_del_usuario= Adopcion.objects.filter(dueño=request.user)
     return render(request, 'adopcion/ver_mis_perros_en_adopcion.html', {"publicaciones":publicaciones_del_usuario})
