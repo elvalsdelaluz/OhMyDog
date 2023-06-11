@@ -33,20 +33,30 @@ def verificacion_email(email_ingresado):
     else:
         return None
 
+def tiene_mascotas(usuario_dueño):
+    tiene=False
+    mascotas = Mascota.objects.filter(dueño=usuario_dueño)
+    if mascotas.exists():
+        tiene = True
+    return tiene 
 
 def alta_mascota(request):
     mascota_form = MascotaForm()
+    mensaje2 = ""
+    if not tiene_mascotas(request.user):
+        mensaje2 = "No tienes mascotas registradas. Registra una para continuar."
+
     if request.method == 'POST':
         mascota_form = MascotaForm(data=request.POST)
         
         if mascota_form.is_valid():
             if (mascota_form.cleaned_data['fecha_nacimiento'])>date.today():
                 error = "No puedes ingresar una fecha de nacimiento posterior al dia de hoy"
-                return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form,'error':error})
+                return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form,'error':error, 'mensaje2':mensaje2})
             else:
                 if (Mascota.objects.filter(dueño=request.user).filter(nombre=mascota_form.cleaned_data['nombre'])):
-                    error = "Ya agregaste a esa mascota a nuestra base de datos"
-                    return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form,'error':error})
+                    error = "Ya agregaste a esa mascota con ese nombre."
+                    return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form,'error':error,'mensaje2':mensaje2})
                 else:
                     nueva_mascota=Mascota()
             
@@ -71,7 +81,7 @@ def alta_mascota(request):
                         mascota_form = MascotaForm()
                         return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form, 'mensaje':"ok"})
         
-    return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form})
+    return render(request, 'mascotas/alta_mascota.html', {'form':mascota_form,'mensaje2':mensaje2})
 
 
 def ver_mis_mascotas(request):

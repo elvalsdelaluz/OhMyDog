@@ -36,7 +36,6 @@ def loguear(request):
                 elif usuario.is_staff:
                     return redirect('turnos_pendientes')
                 else:
-                    messages.warning(request, "No tienes mascotas registradas. Registra una para continuar.")
                     return redirect('alta_mascota')
             else:
                 messages.error(request, "Hubo un error de autenticación, vuelva a intentarlo")
