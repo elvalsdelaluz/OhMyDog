@@ -160,6 +160,8 @@ def editar_mi_mascota(request, mascota_id):
                 guardar_datos(mi_mascota, formulario_mascota, request.user) 
                 mensaje="Los cambios se han guardado correctamente."
                 return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota, "mensaje": mensaje})
+
+        return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota})  
     
     return render(request, 'mascotas/editar_mi_mascota.html', {'formulario_mascota': formulario_mascota_inicial(mi_mascota)})
 

@@ -1,19 +1,19 @@
 <html>
     {% extends "ohmydogapp/base.html" %}
 
+    {% load crispy_forms_tags %}
+
     {% load static %}
 
 
     {% block content %}
-    <tittle>
-        Editar información
-    </tittle>
+  
     
     
     <body>
         <div class="contenedorFormulario">
             <div class="col-md-12">
-              <h3 class="text-center" style="margin-top: 5px;"><strong>Editar Información</strong></h3>
+              <h3 class="text-center" style="margin-top: 5px;"><strong>Editar mascota</strong></h3>
               <form action="" method="POST">{% csrf_token %}
                 {% if error %}
                 <div class="alert alert-danger" role="alert">
@@ -29,10 +29,13 @@
                 </div>
                 {% endif %}
 
-                <table style="color:white; margin: 20px auto;">{{formulario_mascota.as_table}}<table>
-                <input class="btn btn-primary" type="submit" value="Confirmar">
+                {{formulario_mascota|crispy}}
+                <div style="justify-items: center; text-align: center;">
+                  <input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
+                  <a href="{% url 'ver_mis_mascotas' %}" class="btn btn-danger" type="submit"  style="margin-left: 10px;"> Volver </a>
+                </div>
+    
               </form>   
-            <a class="btn btn-primary" type="submit" href="{% url 'ver_mis_mascotas' %}">Volver</a> </a>
             </div>
           </div>
     </body>

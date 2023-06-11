@@ -137,6 +137,10 @@ def vista_donar (request, donacion_id):
                 )
         charge.save() # Uses the same API Key.
         if request.user.is_authenticated:
+            donante = request.user
+            donante.es_donante= True
+            donante.descuento_acumulado= donante.descuento_acumulado + amount
+            donante.save()
             nuevo_donante = Donante()
             nuevo_donante.campania_donacion= dona
             nuevo_donante.dueño = request.user

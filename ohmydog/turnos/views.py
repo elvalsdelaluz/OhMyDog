@@ -34,6 +34,13 @@ def publicacion(request):
 
     turnos=Turno.objects.filter(dueño=request.user)
 
+    if (turnos.filter(estado='Pendiente' or 'Aceptado' or '0' or '1').filter(fecha__lte=date.today()).exists()):
+        turnos_vencidos=turnos.filter(estado='Pendiente' or 'Aceptado' or '0' or '1').filter(fecha__lte=date.today())
+        turnos_vencidos.update(estado='5')
+        turnos=Turno.objects.filter(dueño=request.user)
+
+    
+
 
     if request.method=='POST':
         formulario=formulario_turno(data=request.POST, user=request.user)
@@ -55,10 +62,10 @@ def publicacion(request):
             if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).exists()):
                 if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').exists()):
                     ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').order_by('fecha').first()
-                    distancia_libreta_turno= (date.today()-ultima_libreta.fecha.date()).days
+                    distancia_libreta_turno= (date.today()-ultima_libreta.fecha).days
                 if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').exists()):
                     ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').order_by('fecha').first()
-                    distancia_libreta_turnoB= (date.today()-ultima_libretaB.fecha.date()).days
+                    distancia_libreta_turnoB= (date.today()-ultima_libretaB.fecha).days
 
             """if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
@@ -260,11 +267,8 @@ def concluir_turno(request, pk):
 
         monto_descuento=ultima_donacion.monto *20/100
     
-    print ("Como que se me hace que ")
-    print(turno.motivo)
-    print(type(turno.motivo))
+
     if request.method=='POST':
-        print ("no estoy entrado..........................................")
         formu = Formulario_concluido(data=request.POST)
         if formu.is_valid():
 
@@ -285,8 +289,6 @@ def concluir_turno(request, pk):
                 turno.descuento=False
 
             turno.estado='Cerrado'
-            print (turno.estado)
-            print("TAYLORR")
             turno.save()
 
         if not turno.motivo in motivos_actualizacion_libreta:
@@ -305,7 +307,6 @@ def concluir_turno(request, pk):
                     entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
                     #entrada_nueva.cantidad_desparacitario = formulario_libreta.cleaned_data['cantidad_desparacitario']
                     print(entrada_nueva.save())
-                    print("que pasooooooooooooooooo")
                     return redirect ('/mis_turnos/turnos_activos/?valido')
             return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':turno})
 

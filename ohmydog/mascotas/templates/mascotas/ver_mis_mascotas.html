@@ -25,7 +25,7 @@
                  
                 </div>
                   {% if request.user == mascota.dueño %} 
-                    <div>
+                    <div style="margin-bottom: 15px;">
                       <a href="{% url 'editar_mi_mascota' mascota.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863)">Editar datos</a>
                       <a href="{% url 'ver_historial_turnos' mascota.id %}" class="btn btn-success" style="background-color: rgba(31, 167, 54, 0.781);">Ver historial turnos</a>
                       <a href="{% url 'ver_libreta_sanitaria' mascota.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0);">Ver libreta sanitaria</a>

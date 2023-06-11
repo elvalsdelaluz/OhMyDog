@@ -17,5 +17,5 @@ class FormularioDonacion(forms.Form):
     motivo = forms.CharField(required=True, validators=[no_solo_numeros])
     descripcion = forms.CharField(required=True, validators=[no_solo_numeros])
     #imagen = forms.ImageField(required=True)
-    finalizacion = forms.DateField(required=True, label='Fecha', widget=forms.TextInput(attrs={'type': 'date'}),
+    finalizacion = forms.DateField(required=True, label='Fecha de finalizacion', widget=forms.TextInput(attrs={'type': 'date'}),
                             validators=[present_or_future_date])

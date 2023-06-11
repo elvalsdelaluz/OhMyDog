@@ -65,7 +65,7 @@
                     <p class="card-text"style="color: white;"><strong> Fecha:</strong> {{turno.fecha}}</p>
                     <p class="card-text"style="color: white;"><strong> Estado:</strong> {{turno.get_estado_display}}</p>
                     {% if turno.get_estado_display == 'Rechazado' %}
-                        <a href="{% url 'motivo_rechazo' turno.motivo_rechazo %}" class="btn btn-primary" style="color: white; ">Informacion adicional</a>
+                        <p class="card-text"style="color: white;"><strong> Motivo rechazo:</strong> {{turno.motivo_rechazo}}</p>
                     {% endif %}
                     {% if turno.get_estado_display == 'Pendiente' or turno.get_estado_display == 'Aceptado' %}
                         <a href="{% url 'cancelar_turno' pk=turno.id %}" class="btn btn-danger" style="color: white; ">Cancelar</a>

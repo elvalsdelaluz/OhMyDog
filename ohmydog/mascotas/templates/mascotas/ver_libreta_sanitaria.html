@@ -29,9 +29,9 @@
         {% for  entrada in mi_libreta %}
           <tr>
             <th scope="row">{{entrada.fecha|date}}</th>
-            <td> {{entrada.peso}}</td>
+            <td> {{entrada.peso}} Kg. </td>
             <td>{{entrada.get_motivo_display}}</td>
-            <td>nada</td>
+            <td>Nada</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -40,7 +40,7 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-9 mx-auto">
-            <div class="cta-inner text-center rounded">
+            <div class="cta-inner text-center rounded" style="margin-bottom: 20px;">
               <h2 class="section-heading mb-4">
                 <p></p>
                 <span class="section-heading-upper">No hay entradas en la libreta sanitaria de esta mascota</span>
@@ -51,7 +51,9 @@
       </div>
   
       {% endif %}
-      &nbsp;<a href="{% url 'ver_mis_mascotas' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+      <div style="align-items: center; justify-content: center; align-content: center; text-align: center;">
+        <a href="{% url 'ver_mis_mascotas' %}" class="btn btn-dark" role="button" aria-pressed="true">Volver</a>
+    </div>
       </section>
 
       

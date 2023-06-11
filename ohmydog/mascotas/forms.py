@@ -1,6 +1,13 @@
 from django import forms
 from .models import Mascota, EntradaLibretaSanitaria
 import re
+from datetime import date
+
+
+def present_or_future_date(value):
+    if value >= date.today():
+        raise forms.ValidationError("No podes registrar una mascota aun no nacida")
+    return value
 
 def no_solo_numeros(value):
     if value.isdigit():
@@ -15,7 +22,7 @@ class MascotaForm(forms.Form):
     raza=forms.ChoiceField(label='Raza', choices=Mascota.razas_choices)
     sexo=forms.ChoiceField(label='Sexo', choices=Mascota.sexo_choices)
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', widget=forms.TextInput(     
-        attrs={'type': 'date'} ))
+        attrs={'type': 'date'} ),validators=[present_or_future_date])
     observaciones=forms.CharField(label='Observaciones', widget=forms.Textarea, required=False,validators=[no_solo_numeros]) 
 
 

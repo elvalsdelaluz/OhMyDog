@@ -79,7 +79,7 @@
             MIS MASCOTAS
           </a>
           <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_mascotas' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">VER MIS MASCOTAS</a>
+            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_mascotas' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">MIS MASCOTAS</a>
 
             <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'alta_mascota' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">AGREGAR NUEVA MASCOTA</a>
             <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
@@ -118,7 +118,7 @@
 
       {% if request.user.is_staff or  not request.user.is_authenticated%}
       <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
-        <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" >VER PERROS EN ADOPCIÓN</a>
+        <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" >PERROS EN ADOPCIÓN</a>
       </li>
       {% endif %}
        
@@ -128,8 +128,8 @@
               ADOPCION
             </a>
             <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver perros en adopcion</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_perros_en_adopcion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver mis perros en adopcion</a>
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Perros en adopcion</a>
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_perros_en_adopcion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Mis perros en adopcion</a>
               <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'solicitud' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar perro en adopcion</a>      
             </div>
           </li>
@@ -137,7 +137,7 @@
 
       {% if not request.user.is_staff or  not request.user.is_authenticated%}
       <li class="nav-item {% if request.path == '/donaciones/' %}active{% endif %} px-lg-4">
-        <a class="nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" >VER CAMPAÑAS DE DONACIÓN</a>
+        <a class="nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" >CAMPAÑAS DE DONACIÓN</a>
       </li>
       {% endif %}
        
@@ -147,7 +147,7 @@
               DONACIONES
             </a>
             <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver campañas</a>
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Campañas</a>
               <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'subir_donacion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar campaña</a>
             </div>
           </li>
@@ -161,7 +161,7 @@
             <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
               <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">Veterinarias de turno</a>
               <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">BUSQUEDA DE PERROS</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">PAESADORES Y CUIDADORES</a>
+              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">PASEADORES Y CUIDADORES</a>
               <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
             </div>
           </li>

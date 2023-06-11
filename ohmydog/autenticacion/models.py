@@ -31,6 +31,7 @@ class Cuenta(AbstractBaseUser):
     nombre = models.CharField(verbose_name="nombre",max_length=40)
     edad = models.IntegerField(verbose_name="edad", null=True)
     es_donante =models.BooleanField(default=False)
+    descuento_acumulado=models.IntegerField(default=0)
     date_joined = models.DateTimeField(verbose_name="date_joined",auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last_login",auto_now_add=True)
     is_admin = models.BooleanField(default=False)

@@ -190,6 +190,8 @@ def editar_post_adopcion(request, adopcion_id):
                 guardar_datos(posteo, formulario_adopcion, request.user) 
                 mensaje="Los cambios se han guardado correctamente."
                 return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_adopcion, "mensaje": mensaje})
+        
+        return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_adopcion})
     
     return render(request, 'adopcion/editar_post_adopcion.html', {'formulario_adopcion': formulario_posteo_inicial(posteo)})
 

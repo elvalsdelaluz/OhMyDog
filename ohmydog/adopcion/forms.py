@@ -5,7 +5,7 @@ from datetime import date
 import re
 def present_or_future_date(value):
     if value > date.today():
-        raise forms.ValidationError("La fecha de nacimiento no puede ser en el futuro")
+        raise forms.ValidationError("No pueden publicarse perros aun no nacidos")
     return value
 
 

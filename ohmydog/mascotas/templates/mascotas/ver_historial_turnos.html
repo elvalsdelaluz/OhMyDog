@@ -37,7 +37,7 @@
                 <td> - </td>
                 <td> - </td>
             {% else %}
-                <td>{{turno.monto}}$ {% if turno.descuento %} S/D  {% else %} C/D {% endif %}</td>
+                <td>${{turno.monto}} {% if turno.descuento %} S/Desc.  {% else %} C/Desc. {% endif %}</td>
                 <td>{{turno.observaciones}}</td>
             {% endif %}
 
@@ -59,7 +59,9 @@
         </div>
       </div>
       {% endif %}
-      &nbsp;<a href="{% url 'ver_mis_mascotas' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+      <div style="align-items: center; justify-content: center; align-content: center; text-align: center;">
+        <a href="{% url 'ver_mis_mascotas' %}" class="btn btn-dark" role="button" aria-pressed="true">Volver</a>
+    </div>
     </section>
      
   {% endblock %}
