@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import formulario_turno, Formulario_rechazado, Formulario_concluido, Formulario_aceptado
 from .models import Turno
 from donacion.models import Donante
-from mascotas.models import EntradaLibretaSanitaria
+from mascotas.models import EntradaLibretaSanitaria, Mascota
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
@@ -20,6 +20,15 @@ def devolver_turno(numero):
 
 
 def publicacion(request):
+    ##########################################################
+    ###################BLOQUEO OPCION#########################
+    usuario_autenticado = request.user
+    if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
+        #pregunto si tiene perros  
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        if not tiene_perros:
+            return redirect('alta_mascota')
+    ##########################################################
 
     formulario=formulario_turno(user=request.user)
 

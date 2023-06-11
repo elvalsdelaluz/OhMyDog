@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 import stripe
+from mascotas.models import Mascota
 from .models import Donante, donacion, DonanteNoRegistrado
 from .forms import FormularioDonacion
 from datetime import date
@@ -42,6 +43,17 @@ def vista_subir_donacion(request):
 
 
 def vista_donaciones (request):
+    ##########################################################
+    ###################BLOQUEO OPCION#########################
+    usuario_autenticado = request.user
+    if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
+        #pregunto si tiene perros  
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        if not tiene_perros:
+            return redirect('alta_mascota')
+    ##########################################################
+
+
     '''se hace un filtro por si se venció alguna donación y no debe mostrarse'''
     donacion_refugios= donacion.objects.filter(motivo='Donacion para refugios').get()
     donaciones = donacion.objects.filter(finalizada=False).exclude(motivo='Donacion para refugios')

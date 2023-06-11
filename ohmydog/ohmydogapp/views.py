@@ -9,7 +9,7 @@ def home (request):
         #pregunto si tiene perros
         tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
         if not tiene_perros:
-             return redirect('alta_mascota/?valido2')
+             return redirect('alta_mascota')
         else:
              return render(request, "ohmydogapp/home.html")  
     else:
