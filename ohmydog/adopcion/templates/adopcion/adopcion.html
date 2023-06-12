@@ -7,16 +7,27 @@
   {% block content %}
 
   {% if 'valido' in request.GET %}
-  <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
-      ¡La publicacion se ha eliminado correctamente!
-  </div>
-{% endif %}
+    <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+        ¡La publicacion se ha eliminado correctamente!
+    </div>
+  {% endif %}
 
-{% if 'valido2' in request.GET %}
-<div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
-    ¡Se ha cambiado el estado de la publicación!
-</div>
-{% endif %}
+  {% if 'valido2' in request.GET %}
+    <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+        ¡Se ha cambiado el estado de la publicación!
+    </div>
+  {% endif %}
+
+  <div style="margin:auto; text-align: center">
+    <h2 style=" text-align: center; color: white; font-size: xx-large; margin-top: 5px;">Publicaciones de perros en adopción</h2>
+    {% if user.is_authenticated and  not user.is_staff %}
+    <div style="text-align: center; display: inline-block;">
+      <a href=" {% url 'solicitud' %}" class="btn btn-success">Publicar perro en adopción</a>
+      <a href=" {% url 'ver_mis_perros_en_adopcion' %}" class="btn btn-success">Ver mis perros en adopción</a>
+      </div>
+    {% endif %}
+
+  </div>
 
   {% if adopciones %}
   <ul>
@@ -41,7 +52,14 @@
                     <div>
                       <a href="{% url 'contactar' adopcion.id %}" class="btn btn-success" style="margin-bottom: 10px;">Contactar</a>
                     </div>
-                  {% endif %} 
+                  {% endif %}
+                {% if request.user == adopcion.dueño and adopcion.get_estado_display == "En adopción"%} 
+                  <div>
+                    <a href="{% url 'bajar_post' adopcion.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">¡Me arrepentí!</a>
+                    <a href="{% url 'editar_post_adopcion' adopcion.id %}" class="btn btn-success" style="margin-bottom: 10px;">Editar post</a>
+                    <a href="{% url 'cerrar_post' adopcion.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">Cerrar post</a>
+                  </div>
+                {% endif %} 
                 {% endif %} 
               </div>
             </div>
