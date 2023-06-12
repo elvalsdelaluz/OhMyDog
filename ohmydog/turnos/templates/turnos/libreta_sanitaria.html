@@ -24,8 +24,10 @@
                         <div class="card-body">
                         <p class="card-text"style="color: black;"><strong> Fecha:</strong> {{turno.fecha}}</p>
                         <p class="card-text"style="color: black;"><strong> Motivo:</strong> {{turno.get_motivo_display}}</p>
-                        <p class="card-text"style="color: black;"><strong> Observaciones:</strong> {{turno.observaciones}}</p>
-                        <p class="card-text"style="color: black;"><strong> Monto:</strong> $ {{turno.monto}} {% if turno.descuento %} C/ descuento {% endif %}</p>
+                        <p class="card-text"style="color: black;"><strong> Peso:</strong> {{entrada.peso}} Kg.</p>
+                        {% if turno.get_motivo_display == 'Desparasitacion' %}
+                            <p class="card-text"style="color: black;"><strong> Cantidad desparasitario:</strong> {{entrada.cantidad_desparasitario}} Ml.</p>
+                        {% endif %}    
                         </div>
                         <div class="card-footer">
                             <a href="{% url 'mis_turnos' %}" class="btn btn-primary" style="margin: auto; align-self: auto; position: relative;"> Volver </a>

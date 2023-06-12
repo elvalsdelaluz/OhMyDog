@@ -25,8 +25,9 @@
                   <p class="card-text"style="color: white;"><strong> Raza:</strong> {{mascota.get_raza_display}}</p>
                   <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{mascota.fecha_nacimiento}}</p>
                   <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{mascota.get_sexo_display}}</p>
-                  <p class="card-text"style="color: white;"><strong> Observaciones:</strong> {{mascota.observaciones}}</p>
-                 
+                  {% if mascota.observaciones %}
+                    <p class="card-text"style="color: white;"><strong> Observaciones:</strong> {{mascota.observaciones}}</p>
+                  {% endif %}
                 </div>
                   {% if request.user == mascota.dueño %} 
                     <div style="margin-bottom: 15px;">

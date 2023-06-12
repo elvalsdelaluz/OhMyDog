@@ -99,13 +99,9 @@ def ver_historial_turnos(request, mascota_id):
     """
     Necesito recibir a la mascota y filtrar.
     """
-    mi_historial=Turno.objects.filter(mascota=mascota_id)
+    mi_historial=Turno.objects.filter(mascota=mascota_id).filter(estado='Cerrado')
     nombre_mascota=Mascota.objects.get(id=mascota_id)
-    """
-    for historia in mi_historial:
-        print(historia.mascota)
-        print (historia.fecha)
-    """
+  
     return render(request, 'mascotas/ver_historial_turnos.html', {'mi_historial':mi_historial, 'nombre_mascota':nombre_mascota.nombre})
 
 def ver_libreta_sanitaria(request, mascota_id):
@@ -113,10 +109,8 @@ def ver_libreta_sanitaria(request, mascota_id):
        Guardar la fecha, el peso actual del perro y en caso de que sea vacunación, 
        el tipo de vacuna, si es desparasitación, la cantidad de antiparasitario. 
     """
-    print("HOALDFASJKF")
-    print(mascota_id)
+
     objeto_mascota=Mascota.objects.get(id=mascota_id)
-    print(EntradaLibretaSanitaria.objects.filter(perro=objeto_mascota))
     mi_libreta=EntradaLibretaSanitaria.objects.filter(perro=objeto_mascota)
     
     return render(request, 'mascotas/ver_libreta_sanitaria.html', {'mi_libreta':mi_libreta, 'nombre_mascota':objeto_mascota.nombre})

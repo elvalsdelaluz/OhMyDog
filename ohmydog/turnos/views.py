@@ -25,7 +25,7 @@ def publicacion(request):
     usuario_autenticado = request.user
     if usuario_autenticado.is_authenticated and not usuario_autenticado.is_staff:
         #pregunto si tiene perros  
-        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists()
+        tiene_perros = Mascota.objects.filter(dueño=usuario_autenticado).exists() 
         if not tiene_perros:
             return redirect('alta_mascota')
     ##########################################################
@@ -253,8 +253,8 @@ def concluir_turno(request, pk):
 
     turno = get_object_or_404(Turno, pk=pk)
 
-    """if (turno.fecha > date.today()):
-                return redirect ('/mis_turnos/turnos_activos/?novalido')"""
+    if (turno.fecha > date.today()):
+                return redirect ('/mis_turnos/turnos_activos/?novalido')
 
     formu = Formulario_concluido()
 
@@ -331,6 +331,14 @@ def ver_historia_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
 
     return render(request, 'turnos/historia_turno.html', {'turno': turno})
+
+def ver_libreta_sanitaria(request, pk):
+
+    turno = get_object_or_404(Turno, pk=pk)
+
+    entrada = EntradaLibretaSanitaria.objects.filter(perro=turno.mascota).get(fecha=turno.fecha)
+
+    return render(request, 'turnos/libreta_sanitaria.html', {'turno': turno, 'entrada':entrada})
 
 
 """

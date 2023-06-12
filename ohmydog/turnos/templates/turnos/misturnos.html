@@ -67,11 +67,17 @@
                     {% if turno.get_estado_display == 'Rechazado' %}
                         <p class="card-text"style="color: white;"><strong> Motivo rechazo:</strong> {{turno.motivo_rechazo}}</p>
                     {% endif %}
+                    {% if turno.get_estado_display == 'Aceptado' %}
+                        <p class="card-text"style="color: white;"><strong> Hora:</strong> {{turno.get_hora_display}}</p>
+                    {% endif %}
                     {% if turno.get_estado_display == 'Pendiente' or turno.get_estado_display == 'Aceptado' %}
                         <a href="{% url 'cancelar_turno' pk=turno.id %}" class="btn btn-danger" style="color: white; ">Cancelar</a>
                     {% endif %}
                     {% if turno.get_estado_display == 'Cerrado' %}
                         <a href="{% url 'historia_turno' pk=turno.id %}" class="btn btn-primary" style="color: white; ">Ver Historia del turno</a>
+                        {% if turno.get_motivo_display == 'Vacuna A' or turno.get_motivo_display == 'Vacuna B' or turno.get_motivo_display == 'Desparasitacion' %}
+                            <a href="{% url 'libreta_sanitaria' pk=turno.id %}" class="btn btn-primary" style="color: white; ">Ver entrada libreta sanitaria</a>
+                        {% endif %}
                     {% endif %}
                     </div>
                     <div >
