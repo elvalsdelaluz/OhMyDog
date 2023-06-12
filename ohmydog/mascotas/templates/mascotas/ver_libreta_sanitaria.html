@@ -21,17 +21,17 @@
           <tr>
             <th scope="col">Fecha</th>
             <th scope="col">Peso</th>
-            <th scope="col">Tipo vacuna</th>
+            <th scope="col">Motivo turno</th>
             <th scope="col">Cantidad desparasitario</th>
           </tr>
         </thead>
         <tbody>
-        {% for  entrada in mi_libreta %}
+        {% for entrada in mi_libreta %}
           <tr>
             <th scope="row">{{entrada.fecha|date}}</th>
             <td> {{entrada.peso}} Kg. </td>
             <td>{{entrada.get_motivo_display}}</td>
-            <td>Nada</td>
+            <td>{% if not '3' in entrada.motivo %} No corresponde {% else %} {{entrada.cantidad_desparasitario}} Ml. {% endif %}</td>
           </tr>
           {% endfor %}
         </tbody>

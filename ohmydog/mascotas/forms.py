@@ -25,7 +25,9 @@ class MascotaForm(forms.Form):
         attrs={'type': 'date'} ),validators=[present_or_future_date])
     observaciones=forms.CharField(label='Observaciones', widget=forms.Textarea, required=False,validators=[no_solo_numeros]) 
 
+class EntradaLibretaSanitariaFormVac(forms.Form):
+    peso=forms.DecimalField(label= 'Peso en Kg.:')
 
-class EntradaLibretaSanitariaForm(forms.Form):
-    peso=forms.DecimalField()
-    cantidad_desparasitario=forms.DecimalField(label='Cantidad desparasitario (en caso de Vacuna A o B no completar): ',required=False) #En caso de ser vacuna A o B no se va a completar
+class EntradaLibretaSanitariaFormDesp(forms.Form):
+    peso=forms.DecimalField(label= 'Peso en Kg.:')
+    cantidad_desparasitario=forms.DecimalField(label='Cantidad desparasitario en ml: ') #En caso de ser vacuna A o B no se va a completar

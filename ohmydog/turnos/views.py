@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from datetime import date, timedelta
 from django.db.models import Q
-from mascotas.forms import EntradaLibretaSanitariaForm
+from mascotas.forms import EntradaLibretaSanitariaFormDesp,EntradaLibretaSanitariaFormVac
 
 # Create your views here.
 #def mis_turnos(request):
@@ -36,7 +36,7 @@ def publicacion(request):
 
     if (turnos.filter(estado='Pendiente' or 'Aceptado' or '0' or '1').filter(fecha__lte=date.today()).exists()):
         turnos_vencidos=turnos.filter(estado='Pendiente' or 'Aceptado' or '0' or '1').filter(fecha__lte=date.today())
-        turnos_vencidos.update(estado='5')
+        turnos_vencidos.update(estado='Vencido')
         turnos=Turno.objects.filter(dueño=request.user)
 
     
@@ -60,12 +60,12 @@ def publicacion(request):
             distancia_libreta_turno=0
             distancia_libreta_turnoB=0
             if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).exists()):
-                if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').exists()):
-                    ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').order_by('fecha').first()
-                    distancia_libreta_turno= (date.today()-ultima_libreta.fecha).days
                 if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').exists()):
-                    ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').order_by('fecha').first()
-                    distancia_libreta_turnoB= (date.today()-ultima_libretaB.fecha).days
+                    ultima_libreta = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').order_by('fecha').first()
+                    distancia_libreta_turno= (nuevo_turno.fecha-ultima_libreta.fecha).days
+                if (EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='2').exists()):
+                    ultima_libretaB = EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='2').order_by('fecha').first()
+                    distancia_libreta_turnoB= (nuevo_turno.fecha-ultima_libretaB.fecha).days
 
             """if nuevo_turno.fecha < date.today():
                 error= " Por favor selecciona una fecha valida"
@@ -92,14 +92,14 @@ def publicacion(request):
                 error= "Lo sentimos, tu mascota ya tiene un turno activo"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             
-            elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<120) and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').exists() and distancia_libreta_turno<21):
+            elif (nuevo_turno.motivo== '1' and (distancia_edad_turno<120) and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').exists() and distancia_libreta_turno<21):
                 error = "Lo sentimos. El refuerzo de la Vacuna A a perros menores a 4 meses debe darse recién pasados 21 días"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif (nuevo_turno.motivo== '1' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='0').exists() and distancia_libreta_turno<365):
-                error = "Lo sentimos. El refuerzo de la Vacuna A debe darse recién un año desde la ultima aplicacion"
+            elif (nuevo_turno.motivo== '1' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').exists() and distancia_libreta_turno<365):
+                error = "Lo sentimos. El refuerzo de la Vacuna A debe darse recién un año despues desde la ultima aplicacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
-            elif (nuevo_turno.motivo== '2' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='1').exists() and distancia_libreta_turnoB<365):
-                error = "Lo sentimos. El refuerzo de la Vacuna B debe darse recién un año desde la ultima aplicacion"
+            elif (nuevo_turno.motivo== '2' and EntradaLibretaSanitaria.objects.filter(perro=nuevo_turno.mascota).filter(motivo='2').exists() and distancia_libreta_turnoB<365):
+                error = "Lo sentimos. El refuerzo de la Vacuna B debe darse recién un año despues desde la ultima aplicacion"
                 return render (request, 'turnos/misturnos.html',{'formulario':formulario, "error":error,'turnos':turnos})
             else:
 
@@ -126,10 +126,10 @@ def ver_turnos_pendientes(request):
 
     if (turnos_pendientes.filter(fecha__lte=date.today()).exists()):
         turnos_vencidos=turnos_pendientes.filter(fecha__lte=date.today())
-        turnos_vencidos.update(estado='5')
+        turnos_vencidos.update(estado='Vencido')
         turnos_pendientes=Turno.objects.filter(estado='Pendiente')
 
-    turnos_vencidos=Turno.objects.filter(estado='5')
+    turnos_vencidos=Turno.objects.filter(estado='Vencido') | Turno.objects.filter(estado='5')
 
     return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes, 'turnosV':turnos_vencidos})
 
@@ -237,9 +237,7 @@ def rechazar_turno(request, pk):
             )
 
 
-            turnos_pendientes=Turno.objects.filter(estado='Pendiente')
-
-        return render(request, 'turnos/turnospendientes.html', {'turnos':turnos_pendientes})
+        return redirect('/mis_turnos/turnos_pendientes/?Rvalido')
     
     return render(request, 'turnos/formulario_rechazo.html', {'formulario':formu, 'turno':turno})
 
@@ -280,32 +278,46 @@ def concluir_turno(request, pk):
                     turno.monto = monto - monto_descuento
                     turno.dueño.descuento_acumulado=0
                     turno.dueño.es_donante=False
-                turno.dueño.save()
+                
                 turno.descuento=True
             else:
                 turno.monto=monto
                 turno.descuento=False
             turno.estado='Cerrado'
-            turno.save()
+            
 
         if not turno.motivo in motivos_actualizacion_libreta:
+            turno.dueño.save()
+            turno.save()
             return redirect ('/mis_turnos/turnos_activos/?valido')
         else:
-            formulario_libreta= EntradaLibretaSanitariaForm()
+            if (turno.motivo=='3'):
+                formulario_libreta= EntradaLibretaSanitariaFormDesp()
+            else:
+                formulario_libreta= EntradaLibretaSanitariaFormVac()
+
             if request.method=='POST':
+                turno.save()
+                turno.dueño.save()
             #Al parecer el botón utilizado es mucho muy importante. Dependiendo de que botón sea entra o no.
             #<input class="btn btn-success" type="submit" value="Confirmar"  style="margin-right: 10px;">
-                formulario_libreta = EntradaLibretaSanitariaForm(data=request.POST)
+                if (turno.motivo=='3'):
+                    formulario_libreta= EntradaLibretaSanitariaFormDesp(data=request.POST)
+                else:
+                    formulario_libreta= EntradaLibretaSanitariaFormVac(data=request.POST)
                 if formulario_libreta.is_valid():
                     entrada_nueva = EntradaLibretaSanitaria()
                     entrada_nueva.fecha = turno.fecha
                     entrada_nueva.motivo = turno.motivo
                     entrada_nueva.perro = turno.mascota
                     entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
-                    if turno.motivo =="Desparasitacion":
-                        entrada_nueva.cantidad_desparasitario = formulario_libreta.cleaned_data['cantidad_desparasitario']
+                    if turno.motivo != '3':
+                            entrada_nueva.cantidad_desparasitario=0
                     else:
-                        entrada_nueva.cantidad_desparasitario=0
+                        entrada_nueva.cantidad_desparasitario=formulario_libreta.cleaned_data['cantidad_desparasitario']
+
+
+                    
                     entrada_nueva.save()
                     return redirect ('/mis_turnos/turnos_activos/?valido')
             return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':turno})

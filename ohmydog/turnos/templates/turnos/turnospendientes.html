@@ -15,6 +15,11 @@
             El turno se ha aceptado exitosamente
         </div>
     {% endif %}
+    {% if 'Rvalido' in request.GET %}
+        <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+            El turno se ha rechazado exitosamente
+        </div>
+    {% endif %}
     {% if turnos %}
     <ul>
         {% for turno in turnos %}
@@ -93,7 +98,7 @@
                     <div >
                     </div>
                     <div>
-                        <a href="#" class="btn btn-primary" style="margin-bottom: 10px;">Contactar</a>
+                        <a href="{% url 'rechazar_turno' pk=turno.id %}" class="btn btn-primary" style="margin-bottom: 10px;">Contactar</a>
                     </div>
                 </div>
                 </div>
