@@ -100,8 +100,13 @@ def vista_donar (request, donacion_id):
         except stripe.error.CardError as e:
             if e.code == 'card_declined':
                 if "insufficient funds" in str(e).lower():
-                    return HttpResponse("no tenes plata papá") #redirigir a otro lado con msg de error.                     
-            return HttpResponse("ocurrió un problema con la tarjeta durante el pago, intente mas tarde") #se puede hacer que se trate el error de codigo de seguridad
+                    return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo, "mensaje": "La tarjeta tiene saldo insuficiente"})
+
+            elif e.code == 'incorrect_cvc':
+                return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo, "mensaje": "El código de seguridad es incorrecto"}) 
+
+            elif e.code == 'processing_error':
+                return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo, "mensaje": "El nombre ingresado no condice con el de la tarjeta"}) 
                      
         ###errores randoms sin importancia
         except stripe.error.RateLimitError as e:

@@ -14,22 +14,29 @@
 </head>
 <body>
 
+{%if mensaje%}
+	<div class="container" style="margin-top: 0.7%">
+		<div class="alert alert-danger alert-dismissible fade show" style="text-align: center;">
+			{{mensaje}}
+		</div>
+	</div>
+{%endif%}
 
-
-<div class="contact-clean">
-	<div class="container" style="background-color: white;">
+<div class="contact-clean;" style="margin-bottom: 0.7%; margin-top: 0.7%" >
+	<div class="container" style="background-color: white; border-color: rgb(12, 10, 10); border-width: medium;  border-style: solid">
 		
 			<h1 class="text-center text-dark">
-				Ingrese los datos para hacer la donación con motivo: {{donacion_motivo}}
+				Ingrese los datos para hacer la donación con motivo: <br>
+				{{donacion_motivo}}
 			</h1>
 			<form action="" style="width:100%; max-width:100%;" method="POST" id="payment-form">{% csrf_token %}
 				<div class="illustration">
 					<i class="icon ion-ios-navigate"></i>
 				</div>
-				<div class="form-group">
-					{%if not user.is_authenticated%}
-						<input class="form-control" type="nombre" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" pattern="[A-Za-z]+" title="Por favor, ingrese solo letras en el campo del nombre" required>
-					{% endif %}
+				<div class="form-group"; style="margin-top: 0.5%;">
+					
+					<input class="form-control" type="nombre" id="nombre" name="nombre" placeholder="Ingrese el nombre y apellido que figura en la tarjeta" pattern="[A-Za-z ]+" title="Por favor, ingrese solo letras en el campo del nombre" required >
+					<br>
 					<input class="form-control" type="number" name="amount" id="amount"  placeholder="Ingresa el monto a donar" min="1" max="999999" step="1" required>
 				</div>
 				<div>
@@ -45,7 +52,7 @@
 					
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" style="margin-top: 2%;">
 					<button class="btn btn-primary" type="submit">Donar</button>
 				</div>
 			</form>

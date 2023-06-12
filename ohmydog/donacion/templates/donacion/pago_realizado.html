@@ -6,24 +6,21 @@
 <html>
   <head>
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+    <title>Gracias por donar</title>
   </head>
-    <body style="text-align: center; padding: 40px 0; ">
-      <div style="background: white;
-      padding: 60px;
-      border-radius: 4px;
-      box-shadow: 0 2px 3px #C8D0D8;
-      display: inline-block;
-      margin: 0 auto;">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-        <i class="checkmark" style="color: #9ABC66; font-size: 100px;line-height: 200px; margin-left:-15px;">✓</i>
-      </div>
+    <body style="text-align: center;">
+      <div style="background: white;padding: 20px;border-radius: 4px;box-shadow: 0 2px 3px #C8D0D8;display: inline-block;margin: 0 auto;margin-top: 2%;margin-bottom: 2%;">
+        <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+          <i class="checkmark" style="color: #9ABC66; font-size: 100px;line-height: 200px; margin-left:-15px;">✓</i>
+        </div>
         <h1 style="color: #88B04B;font-weight: 900;
         font-size: 40px;margin-bottom: 10px;">Pago exitoso</h1> 
-        <p style="color: #404F5E;font-size:20px; margin: 0;">Gracias por donar</p>
-        <a class="btn btn-primary" style="margin-top: 0.5cm;" type="submit" href="{% url 'donaciones' %}">Volver a las campañas</a> </a>      </div>
+        <p style="color: #404F5E;font-size:20px; margin: 0;">¡Gracias por donar!</p>
+        {% if not request.user.is_authenticated %}
+          <p style="color: #404F5E;font-size:14px; margin: 0;"> Los clientes registrados tienen descuento por ser donantes. <br>Acérquese a la veterinaria para registrarse.</p>
+        {% endif %}
+        <a class="btn btn-primary" style="margin-top: 0.5cm;" type="submit" href="{% url 'donaciones' %}">Volver a las campañas</a>
+      </div>
     </body>
 </html>
-
-
-
 {% endblock %}
