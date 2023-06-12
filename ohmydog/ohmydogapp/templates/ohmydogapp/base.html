@@ -18,11 +18,16 @@
 
     <!-- Styles -->
     <link href="{% static 'ohmydogapp/css/gestion.css'%}" rel="stylesheet">
+
     {% if request.user.is_staff %}
-    <div style="background-color: rgb(237, 237, 20); color: black;">
-      <h7 style="margin-left: 630px;">Ingresaste en modo administrador</h7>
-   
+
+    <div style="background-color: rgb(237, 237, 20); color: black; text-align: center;">
+      <div style="padding: 0.2cm;">  
+        <h7>Ingresaste en modo administrador</h7>
+        <a href="{% url 'register'%}" class="boton-iniciar-sesion" style="background-color:rgb(0, 123, 255); color: white;">Registrar nuevo usuario</a>
+      </div>
     </div>
+
     {% endif %}
 </head>
 
@@ -35,8 +40,8 @@
       <h1 style="font-size:xx-large; margin: auto;">¡OHMYDOG!</h1>
     
       {% if not request.user.is_authenticated %}
-         <a href="{% url 'loguear' %}" class="boton-iniciar-sesion">Iniciar sesión</a> 
-    {%  endif %}
+         <a href="{% url 'loguear' %}" class="btn btn-success">Iniciar sesión</a> 
+      {%endif %}
 
       {% if request.user.is_authenticated %}
       <div style="margin-right: 2%;"> 
@@ -46,12 +51,16 @@
               Mi cuenta
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
+              {% if not request.user.is_staff %}
+              <a class="dropdown-item" href="{% url 'alta_mascota' %}">Agregar nueva mascota</a>
+              <a class="dropdown-item" href="{% url 'ver_mis_mascotas' %}">Mis mascotas</a>
+              {%endif%}
               <a class="dropdown-item" href="#">Cambiar contraseña</a>
+              <a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
             </div>
           </div>
       {%endif%}
-    </div>
+      </div>
     </div>
   </div>
   
@@ -61,7 +70,25 @@
   
  <!-- Navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-  
+    <div style="float: left; margin-top: 10px; margin-left: 10px;">
+      {% if request.user.is_authenticated and not user.is_staff %}
+        <a href="{% url 'mis_turnos' %}" class="btn btn-sm btn-success" style="height: 50px;width: 150px; font-size: large; padding: 12px;">Mis Turnos</a>
+      {% endif %}
+      {% if request.user.is_staff %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="dropdown">
+            Turnos <span class="caret"></span>
+          </button>
+        
+          <ul class="dropdown-menu" role="menu">
+            <li><a class="dropdown-item" href="{% url 'turnos_pendientes' %}">Ver turnos pendientes</a></li>
+            <li><a class="dropdown-item" href="{% url 'turnos_activos' %}">Ver turnos activos</a></li>
+            <li><a class="dropdown-item" href="{% url 'turnos_pasados' %}">Ver turnos finalizados</a></li>
+          </ul>
+        </div>
+      {% endif %}
+    </div>
     <div class="container" style="text-align: center; margin: auto;">
       <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="{% url 'home' %}">Oh My Dog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,101 +99,24 @@
           <li class="nav-item {% if request.path == '/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'home' %}">Inicio</a>
           </li>
-          {% if request.user.is_authenticated and not user.is_staff %}
-      
-        <li class="nav-item dropdown px-lg-4">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMisMascotas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            MIS MASCOTAS
-          </a>
-          <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_mascotas' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">MIS MASCOTAS</a>
-
-            <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'alta_mascota' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">AGREGAR NUEVA MASCOTA</a>
-            <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
-          </div>
-        </li>
-       
-          {% endif %}
-        
-
-          {% if request.user.is_staff %}
-          <li class="nav-item {% if request.path == '/register/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'register'%}" >REGISTRAR USUARIO</a>
+          <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" >Adopción de perros</a>
           </li>
-          {% endif %}
-
-          {% if request.user.is_authenticated and not user.is_staff %}
-          <li class="nav-item {% if request.path == '/mis_turnos/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="{% url 'mis_turnos' %}">MIS TURNOS</a>
+          <li class="nav-item {% if request.path == '/donacion/donaciones' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" >Campañas de donación</a>
           </li>
-          {% endif %}
-
-
-      {% if request.user.is_staff %}
-      <li class="nav-item dropdown px-lg-4">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          TURNOS
-        </a>
-        <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_pendientes' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Ver turnos pendientes</a>
-          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_activos' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver turnos activos</a>
-          <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'turnos_pasados' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Ver turnos finalizados</a>
-        
-        </div>
-      </li>
-      {% endif %}
-
-      {% if request.user.is_staff or  not request.user.is_authenticated%}
-      <li class="nav-item {% if request.path == '/adopcion/' %}active{% endif %} px-lg-4">
-        <a class="nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" >PERROS EN ADOPCIÓN</a>
-      </li>
-      {% endif %}
-       
-      {% if request.user.is_authenticated and not user.is_staff %}
-          <li class="nav-item dropdown px-lg-4">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              ADOPCION
-            </a>
-            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'adopcion' %}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Perros en adopcion</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'ver_mis_perros_en_adopcion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Mis perros en adopcion</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'solicitud' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar perro en adopcion</a>      
-            </div>
+          <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>-->
+            <a class="nav-link text-uppercase text-expanded" href="#">Búsqueda de perros</a>
           </li>
-      {% endif %}
-
-      {% if not request.user.is_staff or  not request.user.is_authenticated%}
-      <li class="nav-item {% if request.path == '/donaciones/' %}active{% endif %} px-lg-4">
-        <a class="nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" >CAMPAÑAS DE DONACIÓN</a>
-      </li>
-      {% endif %}
-       
-      {% if request.user.is_staff %}
-          <li class="nav-item dropdown px-lg-4">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              DONACIONES
-            </a>
-            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" style="background-color: transparent !important; color:rgb(246, 240, 237);">Campañas</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="{% url 'subir_donacion' %}" style="background-color: transparent !important; color: rgb(246, 240, 237);">Publicar campaña</a>
-            </div>
+          <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="#">Paseadores y cuidadores</a>
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>-->
           </li>
-      {% endif %}
-        
-
-          <li class="nav-item dropdown px-lg-4">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownServicios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              MÁS SERVICIOS
-            </a>
-            <div class="dropdown-menu" style="background-color: rgb(12, 159, 159)" aria-labelledby="navbarDropdownServicios">
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">Veterinarias de turno</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">BUSQUEDA DE PERROS</a>
-              <a class="dropdown-item nav-link text-uppercase text-expanded" href="#" style="background-color: transparent !important; color: rgb(246, 240, 237);">PASEADORES Y CUIDADORES</a>
-              <!--{% url 'veterinariasDeTurno'%}" poner eso en href cuando sea necesario-->
-            </div>
-          </li>
-         
-        
+          <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
+            <a class="nav-link text-uppercase text-expanded" href="#">Veterinarias de turno</a>
+            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>-->
+          </li>        
          
         </ul>
       </div>

@@ -6,15 +6,15 @@
 </head>
 
 <body>
-    <div><h2 style=" color: white; font-size: xx-large; margin-left: 600px; margin-top: 5px;">Campañas de donacion</h2></div>
-    <div style="
-        margin: auto;
-        position: absolute;
-      ">
+    <div>
+        <h2 style=" color: white; font-size: xx-large; margin-left: 600px; margin-top: 5px;">Campañas de donacion</h2>
     </div>
+    {% if user.is_staff%}
+        <a class="btn btn-md btn-success" href="{% url 'subir_donacion' %}">Publicar campaña</a>
+    {% endif%}
 
     <div class="container" style="align-items: center; margin: auto;">
-    <div class="card" style="background-color: rgba(12, 159, 159); margin: auto; margin-bottom: 50px; width: 40%;">
+        <div class="card" style="background-color: rgba(12, 159, 159); margin: auto; margin-bottom: 50px; width: 40%;">
    
         <div class="card-body" style=" text-align: center;">
             <p class="card-title" style="color: white">
