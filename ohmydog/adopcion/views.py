@@ -260,5 +260,8 @@ def ver_mis_perros_en_adopcion(request):
             return redirect('alta_mascota')
     ##########################################################
     
-    publicaciones_del_usuario= Adopcion.objects.filter(dueño=request.user)
+    publicaciones_del_usuario= Adopcion.objects.filter(dueño=request.user).filter(estado__in=["En adopción", "0"])
+    #EN ESTA PANTALLA SÓLO VOY A MOSTRAR LOS PERROS EN ADOPCIÓN, 
+    #LOS PERROS QUE FUERON ADOPTADOS SE VAN A VER EN PUBLICACIONES DE PERROS EN ADOPCION
+
     return render(request, 'adopcion/ver_mis_perros_en_adopcion.html', {"publicaciones":publicaciones_del_usuario})
