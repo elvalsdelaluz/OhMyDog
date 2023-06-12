@@ -139,7 +139,7 @@ def vista_donar (request, donacion_id):
         if request.user.is_authenticated:
             donante = request.user
             donante.es_donante= True
-            donante.descuento_acumulado= donante.descuento_acumulado + amount
+            donante.descuento_acumulado= donante.descuento_acumulado + (amount*20/100)
             donante.save()
             nuevo_donante = Donante()
             nuevo_donante.campania_donacion= dona

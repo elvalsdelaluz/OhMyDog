@@ -61,4 +61,4 @@ class EntradaLibretaSanitaria(models.Model):
     peso=models.DecimalField(decimal_places=2, max_digits=5)
     fecha=models.DateField(editable=True)
     perro=models.ForeignKey(Mascota, on_delete=models.CASCADE, default=None)
-    #cantidad_desparacitario=.models.DecimalField()
+    #cantidad_desparasitario=.models.DecimalField()

@@ -28,4 +28,4 @@ class MascotaForm(forms.Form):
 
 class EntradaLibretaSanitariaForm(forms.Form):
     peso=forms.DecimalField()
-    cantidad_desparacitario=forms.DecimalField(required=False) #En caso de ser vacuna A o B no se va a completar
+    cantidad_desparasitario=forms.DecimalField(label='Cantidad desparasitario (en caso de Vacuna A o B no completar): ',required=False) #En caso de ser vacuna A o B no se va a completar

@@ -17,7 +17,7 @@
                 <form action="" method="POST"> 
                     {% csrf_token %}
 
-                    {% if 0 not in descuento %}
+                    {% if donante %}
                     
                     <div class="alert alert-info" role="alert">
                         El cliente es donante. Al monto de la consulta se le aplicara un descuento de ${{descuento}}

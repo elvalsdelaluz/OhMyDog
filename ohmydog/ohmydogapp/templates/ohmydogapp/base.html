@@ -40,7 +40,7 @@
 
       {% if request.user.is_authenticated %}
       <div style="margin-right: 2%;"> 
-          <h6>¡Hola {{request.user.nombre}}! </h6> 
+          <h6>¡Hola {{request.user.nombre}}! {% if request.user.es_donante %}Sos Donante!{% endif %} </h6> 
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Mi cuenta

@@ -261,33 +261,30 @@ def concluir_turno(request, pk):
     formu = Formulario_concluido()
 
     monto_descuento=0
-
     if (turno.dueño.es_donante):
-        ultima_donacion = Donante.objects.filter(dueño=turno.dueño).order_by('fecha').first()
-
-        monto_descuento=ultima_donacion.monto *20/100
+        monto_descuento=turno.dueño.descuento_acumulado
     
 
     if request.method=='POST':
         formu = Formulario_concluido(data=request.POST)
         if formu.is_valid():
-
             observaciones = formu.cleaned_data['observaciones']
             monto = formu.cleaned_data['monto']
-
             turno.observaciones = observaciones
             if (turno.dueño.es_donante):
-                turno.monto = monto - monto_descuento
-                turno.descuento=True
-                ultima_donacion.delete()
-                if (not Donante.objects.filter(dueño=turno.dueño).exists()):
+                monto_descuento=turno.dueño.descuento_acumulado
+                if (monto<monto_descuento):
+                    turno.dueño.descuento_acumulado=turno.dueño.descuento_acumulado-monto
+                    monto=0
+                else:
+                    turno.monto = monto - monto_descuento
+                    turno.dueño.descuento_acumulado=0
                     turno.dueño.es_donante=False
-                    turno.dueño.save()
-
+                turno.dueño.save()
+                turno.descuento=True
             else:
                 turno.monto=monto
                 turno.descuento=False
-
             turno.estado='Cerrado'
             turno.save()
 
@@ -305,14 +302,17 @@ def concluir_turno(request, pk):
                     entrada_nueva.motivo = turno.motivo
                     entrada_nueva.perro = turno.mascota
                     entrada_nueva.peso = formulario_libreta.cleaned_data['peso']
-                    #entrada_nueva.cantidad_desparacitario = formulario_libreta.cleaned_data['cantidad_desparacitario']
-                    print(entrada_nueva.save())
+                    if turno.motivo =="Desparasitacion":
+                        entrada_nueva.cantidad_desparasitario = formulario_libreta.cleaned_data['cantidad_desparasitario']
+                    else:
+                        entrada_nueva.cantidad_desparasitario=0
+                    entrada_nueva.save()
                     return redirect ('/mis_turnos/turnos_activos/?valido')
             return render(request, 'turnos/actualizar_libreta_sanitaria.html', {'formulario_libreta':formulario_libreta, 'info_turno':turno})
 
         #return redirect ('/mis_turnos/turnos_activos/?valido')
     
-    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu, 'turno':turno, 'descuento':monto_descuento, 'actualizar_libreta':motivos_actualizacion_libreta})
+    return render(request, 'turnos/formulario_cierre.html', {'formulario':formu, 'turno':turno, 'donante':turno.dueño.es_donante, 'descuento':monto_descuento, 'actualizar_libreta':motivos_actualizacion_libreta})
 
 def ver_historia_turno(request, pk):
 
