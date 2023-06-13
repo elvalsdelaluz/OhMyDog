@@ -27,7 +27,13 @@
         <a href="{% url 'register'%}" class="boton-iniciar-sesion" style="background-color:rgb(0, 123, 255); color: white;">Registrar nuevo usuario</a>
       </div>
     </div>
-
+    {% endif %}
+    {% if request.user.es_donante %}
+    <div style="background-color: rgb(33, 137, 56); color: black; text-align: center;">
+      <div style="padding: 0.2cm;">  
+        <h7 style="color: white;">¡Gracias por haber donado! Recibirás un descuento en tu próximo turno. </h7> 
+      </div>
+    </div>
     {% endif %}
 </head>
 
@@ -45,7 +51,7 @@
 
       {% if request.user.is_authenticated %}
       <div style="margin-right: 2%;"> 
-          <h6>¡Hola {{request.user.nombre}}! {% if request.user.es_donante %}Sos Donante!{% endif %} </h6> 
+          
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Mi cuenta
