@@ -149,7 +149,9 @@ def ver_turnos_pasados(request):
 
     turnos_cerrados=Turno.objects.filter(estado='Cerrado')
 
-    return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados,'turnos1':turnos_cerrados})
+    entradas =EntradaLibretaSanitaria.objects.all()
+
+    return render(request, 'turnos/turnospasados.html', {'turnos':turnos_pasados,'turnos1':turnos_cerrados,'entradas':entradas})
 
 def aceptar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
@@ -329,6 +331,7 @@ def concluir_turno(request, pk):
 def ver_historia_turno(request, pk):
 
     turno = get_object_or_404(Turno, pk=pk)
+    
 
     return render(request, 'turnos/historia_turno.html', {'turno': turno})
 

@@ -33,6 +33,17 @@
                                 <h6 style="margin: auto; color: white;"><strong>Historial del turno</strong></h6>
                                 <p class="card-text"style="color: white;"><strong> Observaciones:</strong> {{turno.observaciones}}</p>
                                 <p class="card-text"style="color: white;"><strong> Monto:</strong> $ {{turno.monto}} {% if turno.descuento %} con descuento {% else %} sin descuento {% endif %}</p>
+                                {% if turno.get_motivo_display == 'Vacuna A' or turno.get_motivo_display == 'Vacuna B' or turno.get_motivo_display == 'Desparasitacion' %}
+                                    <h6 style="margin: auto; color: white;"><strong>Entrada libreta sanitaria</strong></h6>
+                                    {% for entrada in entradas %}
+                                        {% if turno.mascota == entrada.perro and turno.fecha == entrada.fecha %}
+                                            <p class="card-text"style="color: white;"><strong> Peso:</strong> {{entrada.peso}} Kg.</p>
+                                            {% if turno.get_motivo_display == 'Desparasitacion' %}
+                                            <p class="card-text"style="color: white;"><strong> Cantidad desparasitario:</strong> {{entrada.cantidad_desparasitario}} Ml.</p>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}  
                                 </div>
                                 <div >
                                 </div>
