@@ -1,6 +1,6 @@
 from django import forms
 from .models import PerroPerdido
-from mascotas.models import Raza, convertir_queryset
+from mascotas.models import Raza, Mascota
 from django.contrib.auth.models import User
 from datetime import date
 import re
@@ -27,7 +27,7 @@ class PerroPerdidoForm(forms.Form):
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
-    raza=forms.ChoiceField('Raza', max_length=2, choices=convertir_queryset(Raza.objects.all()))
+    raza=forms.ChoiceField(label="Raza", choices=Mascota.razas_choices)
     zona=forms.CharField(label='Zona', required=True) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
 
     comentarios=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])

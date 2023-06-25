@@ -1,5 +1,5 @@
 from django.db import models
-from mascotas.models import Raza, convertir_queryset
+from mascotas.models import Raza, Mascota
 from django.contrib.auth import get_user_model
 from datetime import date
 # Create your models here.
@@ -43,7 +43,7 @@ class PerroPerdido(models.Model):
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     tamaño=models.CharField('Tamaño', max_length=1, choices=Tamaño)
     #raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
-    raza=models.CharField('Raza', max_length=2, choices=convertir_queryset(Raza.objects.all()))
+    raza=models.CharField('Raza', max_length=2, choices=Mascota.razas_choices)
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
     #zona=models.ForeignKey(Zona, on_delete=models.CASCADE) #creo que no es necesario, preguntar
     zona=models.CharField(max_length=50, null=True, blank=True)
