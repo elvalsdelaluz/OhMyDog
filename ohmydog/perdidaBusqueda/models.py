@@ -36,6 +36,7 @@ class PerroPerdido(models.Model):
         ('2','Reunidos'),
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
+    nombre = models.CharField('Nombre', max_length=30)
     foto=models.ImageField(upload_to='perrosPerdidos', blank=True, null=True)
     fecha_perdido=models.DateField(default=date.today, editable=True) #hay que chequear que no se pierda mañana
     fecha_nacimiento=models.DateField(default=date.today, editable=True) #para sacar la edad 
