@@ -1,8 +1,10 @@
 from django.db import models
-from mascotas.models import Raza
+from mascotas.models import Raza, convertir_queryset
+from django.contrib.auth import get_user_model
+from datetime import date
 # Create your models here.
 
-class Zona(models.Model):
+class Zona(models.Model): #creo que no es necesario, preguntar, define el al atributo de tipo charField
     zona=models.CharField(max_length=25)
 
     def __str__(self):
@@ -13,8 +15,10 @@ class Estado(models.Model):
 
     def __str__(self):
         return self.estado
+    
+    
 
-class perro_perdido(models.Model):
+class PerroPerdido(models.Model):
     Sexo=(
         ('0','Hembra'),
         ('1','Macho'),
@@ -31,12 +35,18 @@ class perro_perdido(models.Model):
         ('1','Buscando perro'),
         ('2','Reunidos'),
     )
+    dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
+    foto=models.ImageField(upload_to='perrosPerdidos', blank=True, null=True)
+    fecha_perdido=models.DateField(default=date.today, editable=True) #hay que chequear que no se pierda mañana
+    fecha_nacimiento=models.DateField(default=date.today, editable=True) #para sacar la edad 
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     tamaño=models.CharField('Tamaño', max_length=1, choices=Tamaño)
-    raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
+    #raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
+    raza=models.CharField('Raza', max_length=2, choices=convertir_queryset(Raza.objects.all()))
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
-    zona=models.ForeignKey(Zona, on_delete=models.CASCADE)
+    #zona=models.ForeignKey(Zona, on_delete=models.CASCADE) #creo que no es necesario, preguntar
+    zona=models.CharField(max_length=50, null=True, blank=True)
     comentario=models.CharField(max_length=50, null=True, blank=True)
-    foto=models.ImageField()
+   
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
