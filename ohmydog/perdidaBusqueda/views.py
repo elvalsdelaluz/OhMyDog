@@ -46,7 +46,7 @@ def publicar_perro_perdido(request):
     formulario_perro_perdido = PerroPerdidoForm()
 
     if request.method=='POST':
-        formulario_perro_perdido=PerroPerdidoForm(data=request.POST)
+        formulario_perro_perdido=PerroPerdidoForm(request.POST, request.FILES)
        
         if formulario_perro_perdido.is_valid():
             if ya_esta_publicado(request.user, formulario_perro_perdido.cleaned_data['nombre']):
@@ -58,8 +58,12 @@ def publicar_perro_perdido(request):
                 publicacion_perro_perdido=PerroPerdido()
                 publicacion_perro_perdido.dueño=request.user
                 publicacion_perro_perdido.nombre=formulario_perro_perdido.cleaned_data['nombre']
+                
+                if request.FILES:
+                    foto_file=request.FILES['foto']
+                else:
+                    foto_file=None
 
-                publicar_perro_perdido.foto=formulario_perro_perdido.cleaned_data['foto']
 
                 publicacion_perro_perdido.fecha_perdido=formulario_perro_perdido.cleaned_data['fecha_perdido']
                 publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
@@ -72,8 +76,11 @@ def publicar_perro_perdido(request):
                 publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
                 publicacion_perro_perdido.estado=PerroPerdido.Estado[0][1]
-                publicacion_perro_perdido.comentarios=formulario_perro_perdido.cleaned_data['comentarios']
+                publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
 
+                publicacion_perro_perdido.save()
+
+                publicacion_perro_perdido.foto=foto_file
                 publicacion_perro_perdido.save()
 
                 formulario_perro_perdido=PerroPerdidoForm()

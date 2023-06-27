@@ -16,6 +16,9 @@ class Estado(models.Model):
     def __str__(self):
         return self.estado
     
+def user_directory_path(perdido, filename):
+    #file will be uploaded to MEDIA_ROOT/user <id>/<filename>
+    return 'user_{0}/{1}'.format(perdido.dueño.id, filename)
     
 
 class PerroPerdido(models.Model):
@@ -37,7 +40,7 @@ class PerroPerdido(models.Model):
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
     nombre = models.CharField('Nombre', max_length=30)
-    foto=models.ImageField(upload_to='perrosPerdidos', blank=True, null=True)
+    foto=models.ImageField(upload_to=user_directory_path, blank=True, null=True, max_length=256)
     fecha_perdido=models.DateField(default=date.today, editable=True) #hay que chequear que no se pierda mañana
     fecha_nacimiento=models.DateField(default=date.today, editable=True) #para sacar la edad 
     estado=models.CharField('Estado', max_length=1, choices=Estado)

@@ -30,5 +30,5 @@ class PerroPerdidoForm(forms.Form):
     raza=forms.ChoiceField(label="Raza", choices=Mascota.razas_choices)
     zona=forms.CharField(label='Zona', required=True) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
 
-    comentarios=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])
+    comentario=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])
 

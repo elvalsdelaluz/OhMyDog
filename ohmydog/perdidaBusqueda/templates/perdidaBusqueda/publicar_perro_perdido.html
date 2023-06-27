@@ -9,7 +9,7 @@
 <div class="contenedorFormulario" style="justify-items: center;">
     <div class="col-md-12">
       <h2 class="text-center" style="margin-top: 5px;"><strong>Publicar perro perdido</strong></h2>
-      <form action="" method="POST" style="width: 80%; margin: auto;">
+      <form action="" method="POST" enctype="multipart/form-data" style="width: 80%; margin: auto;">
         {% csrf_token %}
         {% if error %}
           <div class="alert alert-danger" role="alert">
