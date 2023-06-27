@@ -18,7 +18,7 @@ class Estado(models.Model):
     
 def user_directory_path(perdido, filename):
     #file will be uploaded to MEDIA_ROOT/user <id>/<filename>
-    return 'user_{0}/{1}'.format(perdido.dueño.id, filename)
+    return 'perrosPerdidos/user_{0}/{1}'.format(perdido.dueño.id, filename)
     
 
 class PerroPerdido(models.Model):
