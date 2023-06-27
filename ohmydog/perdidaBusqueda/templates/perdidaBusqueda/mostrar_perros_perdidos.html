@@ -36,6 +36,9 @@
         <div class="cta-inner text-center rounded">
           <div class="card" style="background-color: rgba(12, 159, 159);">
             <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+              {% if perdido.foto %}
+                  <img src="{{perdido.foto.url}}" class="card-img-top">
+              {% endif %}
               <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{perdido.nombre}}</p>
               <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{perdido.fecha_nacimiento}}</p>
               <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{perdido.get_tamaño_display}}</p>
