@@ -19,3 +19,10 @@ class FormularioDonacion(forms.Form):
     #imagen = forms.ImageField(required=True)
     finalizacion = forms.DateField(required=True, label='Fecha de finalizacion', widget=forms.TextInput(attrs={'type': 'date'}),
                             validators=[present_or_future_date])
+
+class FormularioDonar(forms.Form):
+    numero = forms.CharField(max_length=16)
+    nombre_dueño= forms.CharField(max_length=50)
+    saldo = forms.IntegerField()
+    codigo_seguridad = forms.CharField(max_length=3)
+    vencimiento = forms.DateField()

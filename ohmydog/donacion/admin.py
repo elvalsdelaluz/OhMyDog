@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import donacion, Donante, DonanteNoRegistrado
+from .models import donacion, Donante, DonanteNoRegistrado, Tarjeta
 
 # Register your models here.
 
@@ -16,8 +16,12 @@ class DonanteNoRegistradoAdmin(admin.ModelAdmin):
     readonly_fields=('fecha',)
     list_display=('nombre','monto','fecha')
 
+class TarjetaAdmin(admin.ModelAdmin):
+    list_display=('numero','nombre_dueño','saldo','vencimiento','codigo_seguridad')
+
 
 admin.site.register(donacion, DonacionAdmin)
 admin.site.register(Donante,DonanteAdmin)
+admin.site.register(Tarjeta,TarjetaAdmin)
 admin.site.register(DonanteNoRegistrado,DonanteNoRegistradoAdmin)
 # Register your models here.

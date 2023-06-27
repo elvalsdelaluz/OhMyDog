@@ -78,9 +78,13 @@ def ver_registro(request, donacion_id):
     return render (request, "donacion/registro_donaciones.html",{"donacion":donacion_ver, "donantes_clientes":donantes_clientes, "donantes_noclientes":donantes_noclientes})
 
 
+def vista_donar2 (request, donacion_id):
+    return render(request,"donacion/donar2.html")
 
+
+'''
 def vista_donar (request, donacion_id):
-    '''se procesa la info de la plantilla donar.html'''
+    #se procesa la info de la plantilla donar.html
     dona = donacion.objects.get(id=donacion_id)
     if request.method == "POST":
         amount = int(request.POST["amount"]) 
@@ -164,6 +168,7 @@ def vista_donar (request, donacion_id):
         return redirect("pago_realizado")
     
     return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo})
+'''
 
 
 
