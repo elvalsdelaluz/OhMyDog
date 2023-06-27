@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import perro_perdido, Zona
+from .models import PerroPerdido, Zona
 
 # Register your models here.
 
@@ -8,7 +8,7 @@ class perro_perdido_Admin(admin.ModelAdmin):
     list_display=('estado','raza','sexo','tamaño','zona')
     list_filter=('estado','zona')
 
-admin.site.register(perro_perdido, perro_perdido_Admin)
+admin.site.register(PerroPerdido, perro_perdido_Admin)
 admin.site.register(Zona)
 
 # Register your models here.

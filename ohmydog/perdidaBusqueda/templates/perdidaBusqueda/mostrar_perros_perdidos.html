@@ -1,0 +1,93 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+{% if 'valido' in request.GET %}
+<div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+    ¡La publicacion se ha eliminado correctamente!
+</div>
+{% endif %}
+
+{% if 'valido2' in request.GET %}
+<div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+    ¡Se ha cambiado el estado de la publicación!
+</div>
+{% endif %}
+
+<div style="margin:auto; text-align: center">
+<h2 style=" text-align: center; color: white; font-size: xx-large; margin-top: 5px;">Publicaciones de perros perdidos</h2>
+{% if user.is_authenticated and  not user.is_staff %}
+<div style="text-align: center; display: inline-block;">
+  <a href=" {% url 'publicar_perro_perdido' %}" class="btn btn-success">Publicar perro perdido</a>
+  </div>
+{% endif %}
+
+</div>
+
+{% if perros_perdidos %}
+<ul>
+{% for perdido in perros_perdidos %}
+
+<div class="tarjeta-carac">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <div class="cta-inner text-center rounded">
+          <div class="card" style="background-color: rgba(12, 159, 159);">
+            <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+              {% if perdido.foto %}
+                  <img src="{{perdido.foto.url}}" class="card-img-top">
+              {% endif %}
+              <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{perdido.nombre}}</p>
+              <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{perdido.fecha_nacimiento}}</p>
+              <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{perdido.get_tamaño_display}}</p>
+              <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{perdido.get_sexo_display}}</p>
+              <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{perdido.comentarios}}</p>
+              <p class="card-title"style="color: white; "><strong> Estado:</strong> {{perdido.get_estado_display}}</p>
+            </div>
+            {% if perdido.get_estado_display == 'En adopción' %}
+              {% if not request.user == perdido.dueño and not request.user.is_staff %} 
+                <div>
+                  <a href="#" class="btn btn-success" style="margin-bottom: 10px;">Contactar</a>
+                </div>
+              {% endif %}
+            {% if request.user == perdido.dueño and perdido.get_estado_display == "En adopción"%} 
+              <div>
+                <a href="#" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Dar de baja</a>
+                <a href="#" class="btn btn-success" style="margin-bottom: 10px;">Editar post</a>
+                <a href="#" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">Cerrar post</a>
+              </div>
+            {% endif %} 
+            {% endif %} 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  &nbsp;
+</div>
+</div>
+{% endfor %}
+</ul>
+{% else %}
+<section class="page-section cta"  style="background-color: rgba(12, 159, 159)">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <div class="cta-inner text-center rounded">
+          <h2 class="section-heading mb-4">
+            <p></p>
+            <span class="section-heading-upper">No hay perros perdidos :D</span>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+{% endblock %}

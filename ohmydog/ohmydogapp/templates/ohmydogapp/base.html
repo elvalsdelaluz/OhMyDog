@@ -112,8 +112,7 @@
             <a class="nav-link text-uppercase text-expanded" href="{% url 'donaciones'%}" >Donaciones</a>
           </li>
           <li class="nav-item {% if request.path == '/perdidaBusqueda/' %}active{% endif %} px-lg-4">
-            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'perdidaBusqueda' %}">Busqueda de perros</a>-->
-            <a class="nav-link text-uppercase text-expanded" href="#">Búsqueda de perros</a>
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'mostrar_perros_perdidos' %}">Búsqueda de perros</a>
           </li>
           <li class="nav-item {% if request.path == '/contactoPaseadoresCuidadores/' %}active{% endif %} px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="#">Paseadores y cuidadores</a>
