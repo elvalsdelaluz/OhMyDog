@@ -63,7 +63,7 @@
             {% if perdido.get_estado_display == 'Extraviado' or perdido.get_estado_display == 'Encontrado' %}
               {% if not request.user == perdido.dueño and not request.user.is_staff %} 
                 <div>
-                  <a href="#" class="btn btn-success" style="margin-bottom: 10px;">Contactar</a>
+                  <a href="{% url 'comunicarse_por_perro_perdido' perdido.id%}" class="btn btn-success" style="margin-bottom: 10px;">Contactar</a>
                 </div>
               {% endif %}
             {% endif %} 

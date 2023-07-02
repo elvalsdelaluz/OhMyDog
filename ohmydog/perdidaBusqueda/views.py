@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
-from .forms import PerroPerdidoForm
+from .forms import PerroPerdidoForm, ContartarsePerroPerdidioForm, ContartarsePerroPerdidoNoLogueadoForm
+from django.core.mail import send_mail
+
 
 def perdidaBusqueda (request):
     return render(request, "perdidaBusqueda/perdidaBusqueda.html")
@@ -110,3 +112,45 @@ def eliminar_publicacion(request, perdido_id):
     return redirect('mostrar_perros_perdidos')
     #return render(request, "perdidaBusqueda/mostrar_perros_perdidos.html", {"valido":True})
 
+def comunicarse_por_perro_perdido(request, perdido_id):
+    user = request.user
+    
+    if user.is_authenticated:
+        form = ContartarsePerroPerdidioForm()
+        if request.method == 'POST':
+            form = ContartarsePerroPerdidioForm(request.POST)
+            if form.is_valid():
+                mensaje= form.cleaned_data['mensaje']
+                perro_perdido = PerroPerdido.objects.get(id=perdido_id)
+                send_mail(
+                    "Hola.",
+                    f"{request.user.nombre} se quiere contactarse con usted por {perro_perdido.nombre}.\n Esta es su información de contacto:\n *Numero: {request.user.numero}\n *Email: {request.user.email} \n Mensaje: {mensaje}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", perro_perdido.dueño.email]
+                )
+                messages.success(request, '¡Su mensaje ha sido enviado!')    
+                return redirect("mostrar_perros_perdidos")
+
+        return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form, 'info_autocompletada': user})
+    else:
+        form = ContartarsePerroPerdidoNoLogueadoForm()
+        if request.method == 'POST':
+            form = ContartarsePerroPerdidoNoLogueadoForm(request.POST)
+            if form.is_valid():
+                nombre= form.cleaned_data['nombre']
+                numero_telefono= form.cleaned_data['numero_telefono']
+                email= form.cleaned_data['email']
+                
+                perro_perdido = PerroPerdido.objects.get(id=perdido_id)
+                send_mail(
+                    "Hola.",
+                    f"{nombre} se quiere contactarse con usted por {perro_perdido.nombre}.\n Esta es su información de contacto:\n *Numero: {numero_telefono}\n *Email: {email} \n Mensaje: {mensaje}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", perro_perdido.dueño.email]
+                )
+                messages.success(request, '¡Su mensaje ha sido enviado!')    
+                return redirect("mostrar_perros_perdidos")
+
+               
+        return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form})
+    

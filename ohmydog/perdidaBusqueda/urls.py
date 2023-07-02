@@ -8,4 +8,5 @@ urlpatterns = [
     path('publicar_perro_perdido', views.publicar_perro_perdido, name="publicar_perro_perdido"),
     path('cambiar_a_localizado/<int:perdido_id>/', views.cambiar_a_localizado, name="cambiar_a_localizado"),
     path('eliminar_publicacion/<int:perdido_id>/', views.eliminar_publicacion, name="eliminar_publicacion"),
+    path('comunicarse_por_perro_perdido/<int:perdido_id>/', views.comunicarse_por_perro_perdido, name="comunicarse_por_perro_perdido")
 ]

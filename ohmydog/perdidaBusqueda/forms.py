@@ -38,3 +38,20 @@ class PerroPerdidoForm(forms.Form):
 
     comentario=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])
 
+class ContartarsePerroPerdidoLogueadoForm(forms.Form):  
+    mensaje=forms.CharField(label='Mensaje', widget=forms.Textarea(attrs={'resize': 'none'}), required=False)
+
+class ContartarsePerroPerdidoNoLogueadoForm(ContartarsePerroPerdidoLogueadoForm):  
+    nombre=forms.CharField(label='Nombre', required=True,validators=[no_contiene_numeros])
+    numero=forms.CharField(max_length=10, label='Numero telefono', required=True)
+    email = forms.EmailField(max_length=60, label='Email', required=True)
+
+    def clean_numero(self):
+        numero = self.cleaned_data['numero']
+        if len(numero) < 10:
+            raise forms.ValidationError('Número de teléfono inválido')
+        if not numero.isdigit():
+            raise forms.ValidationError('Error en el formato del número de telefono. Ingrese solo el número')
+        return numero
+    
+
