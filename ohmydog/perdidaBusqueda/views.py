@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
-from .forms import PerroPerdidoForm, ContartarsePerroPerdidioForm, ContartarsePerroPerdidoNoLogueadoForm
+from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm
 from django.core.mail import send_mail
 
 
@@ -116,9 +116,9 @@ def comunicarse_por_perro_perdido(request, perdido_id):
     user = request.user
     
     if user.is_authenticated:
-        form = ContartarsePerroPerdidioForm()
+        form = ContartarsePerroPerdidoLogueadoForm()
         if request.method == 'POST':
-            form = ContartarsePerroPerdidioForm(request.POST)
+            form = ContartarsePerroPerdidoLogueadoForm(request.POST)
             if form.is_valid():
                 mensaje= form.cleaned_data['mensaje']
                 perro_perdido = PerroPerdido.objects.get(id=perdido_id)
@@ -138,9 +138,9 @@ def comunicarse_por_perro_perdido(request, perdido_id):
             form = ContartarsePerroPerdidoNoLogueadoForm(request.POST)
             if form.is_valid():
                 nombre= form.cleaned_data['nombre']
-                numero_telefono= form.cleaned_data['numero_telefono']
+                numero_telefono= form.cleaned_data['numero']
                 email= form.cleaned_data['email']
-                
+                mensaje=form.cleaned_data['mensaje']
                 perro_perdido = PerroPerdido.objects.get(id=perdido_id)
                 send_mail(
                     "Hola.",
