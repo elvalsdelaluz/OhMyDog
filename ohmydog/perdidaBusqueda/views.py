@@ -75,7 +75,7 @@ def publicar_perro_perdido(request):
                 publicacion_perro_perdido.raza=formulario_perro_perdido.cleaned_data['raza']
                 publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
-                publicacion_perro_perdido.estado=PerroPerdido.Estado[0][1]
+                publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
                 publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
 
                 publicacion_perro_perdido.save()

@@ -34,9 +34,9 @@ class PerroPerdido(models.Model):
         ('3','Gigante: más de 50 kilos'),
     )
     Estado=(
-        ('0','Buscando dueño'),
-        ('1','Buscando perro'),
-        ('2','Reunidos'),
+        ('0','Extraviado'),
+        ('1','Encontrado'),
+        ('2','Localizado'),
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
     nombre = models.CharField('Nombre', max_length=30)

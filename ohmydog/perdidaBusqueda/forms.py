@@ -19,6 +19,11 @@ def no_contiene_numeros(value):
         raise forms.ValidationError("El campo no puede contener números.")
 
 class PerroPerdidoForm(forms.Form):
+    Estado=(
+        ('0','Extraviado'),
+        ('1','Encontrado'),
+    )
+    estado=forms.ChoiceField(label="Estado", choices=Estado)
     nombre=forms.CharField(label='Nombre', required=True,validators=[no_contiene_numeros])
     foto=forms.ImageField(label="Foto", required=False)
     fecha_perdido=forms.DateField(label='Fecha perdido', widget=forms.TextInput(     
