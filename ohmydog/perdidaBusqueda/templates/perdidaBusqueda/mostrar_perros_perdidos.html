@@ -39,25 +39,39 @@
               {% if perdido.foto %}
                   <img src="{{perdido.foto.url}}" class="card-img-top">
               {% endif %}
-              <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{perdido.nombre}}</p>
-              <p class="card-text" style="color: white;"><strong> Fecha de nacimiento:</strong> {{perdido.fecha_nacimiento}}</p>
+              <p class="card-title"style="color: white; "><strong> Estado:</strong> {{perdido.get_estado_display}}</p>
+
+              {% if perdido.get_estado_display == "Encontrado" %}
+                  <p class="card-text" style="color: white;"><strong> Lo encontramos el:</strong> {{perdido.fecha_perdido}}</p>
+              {% else %}
+                  <p class="card-text" style="color: white;"><strong> Esta perdidio desde:</strong> {{perdido.fecha_perdido}}</p>
+              {% endif %}
+              
+              {% if perdido.nombre %}
+                  <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{perdido.nombre}}</p>
+              {% endif %}
+
+              {% if perdido.fecha_nacimiento %}
+                  <p class="card-text" style="color: white;"><strong> Edad:</strong> {{perdido.fecha_nacimiento}}</p>
+              {% endif %}
+
               <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{perdido.get_tamaño_display}}</p>
               <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{perdido.get_sexo_display}}</p>
-              <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{perdido.comentarios}}</p>
-              <p class="card-title"style="color: white; "><strong> Estado:</strong> {{perdido.get_estado_display}}</p>
+              <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{perdido.comentario}}</p>
+             
             </div>
-            {% if perdido.get_estado_display == 'En adopción' %}
+            {% if perdido.get_estado_display == 'Extraviado' or perdido.get_estado_display == 'Encontrado' %}
               {% if not request.user == perdido.dueño and not request.user.is_staff %} 
                 <div>
                   <a href="#" class="btn btn-success" style="margin-bottom: 10px;">Contactar</a>
                 </div>
               {% endif %}
-            {% if request.user == perdido.dueño and perdido.get_estado_display == "En adopción"%} 
+            {% endif %} 
+            {% if request.user == perdido.dueño %}
               <div>
                 <a href="#" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Eliminar publicación</a>
                 <a href="#" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">¡Fue localizado!</a>
               </div>
-            {% endif %} 
             {% endif %} 
           </div>
         </div>
