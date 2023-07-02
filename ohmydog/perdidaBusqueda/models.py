@@ -39,10 +39,10 @@ class PerroPerdido(models.Model):
         ('2','Localizado'),
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
-    nombre = models.CharField('Nombre', max_length=30)
+    nombre = models.CharField('Nombre', max_length=30, blank=True, null=True)
     foto=models.ImageField(upload_to=user_directory_path, blank=True, null=True, max_length=256)
     fecha_perdido=models.DateField(default=date.today, editable=True) #hay que chequear que no se pierda mañana
-    fecha_nacimiento=models.DateField(default=date.today, editable=True) #para sacar la edad 
+    fecha_nacimiento=models.DateField(null=True) #para sacar la edad 
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     tamaño=models.CharField('Tamaño', max_length=1, choices=Tamaño)
     #raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
