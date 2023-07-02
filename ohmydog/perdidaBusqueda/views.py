@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
 from .forms import PerroPerdidoForm
@@ -88,3 +89,24 @@ def publicar_perro_perdido(request):
                 return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'formulario_perro_perdido':formulario_perro_perdido, "mensaje":"ok"})
 
     return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"formulario_perro_perdido":formulario_perro_perdido})
+
+
+def cambiar_a_localizado(request, perdido_id): #mas adelante hacer que le pregunte al usuario si quiere o no realizar la operacion (paso intermedio)
+    posteo = PerroPerdido.objects.get(id=perdido_id)
+    posteo.estado = PerroPerdido.Estado[2][1]
+    posteo.save()   
+    messages.success(request, '¡Se ha cambiado el estado de la publicación!')
+    return redirect('mostrar_perros_perdidos')
+
+
+def eliminar_publicacion(request, perdido_id):
+    print(perdido_id)
+    print(PerroPerdido.objects.get(id=perdido_id))
+    
+    posteo = PerroPerdido.objects.get(id=perdido_id)
+
+    posteo.delete()
+    messages.success(request, '¡La publicacion se ha eliminado correctamente!')
+    return redirect('mostrar_perros_perdidos')
+    #return render(request, "perdidaBusqueda/mostrar_perros_perdidos.html", {"valido":True})
+

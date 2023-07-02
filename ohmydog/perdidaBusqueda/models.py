@@ -51,6 +51,8 @@ class PerroPerdido(models.Model):
     #zona=models.ForeignKey(Zona, on_delete=models.CASCADE) #creo que no es necesario, preguntar
     zona=models.CharField(max_length=50, null=True, blank=True)
     comentario=models.CharField(max_length=50, null=True, blank=True)
+
+    id = models.AutoField(primary_key=True)
    
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)

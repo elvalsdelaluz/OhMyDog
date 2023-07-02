@@ -3,17 +3,15 @@
 {% load static %}
 
 {% block content %}
-{% if 'valido' in request.GET %}
-<div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
-    ¡La publicacion se ha eliminado correctamente!
-</div>
+
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
+        {{message}}
+      </div>
+    {% endfor %}
 {% endif %}
 
-{% if 'valido2' in request.GET %}
-<div class="alert alert-success" role="alert" style="margin: auto; margin-top: 20px; margin-bottom: 20px; width: 50%; text-align: center;">
-    ¡Se ha cambiado el estado de la publicación!
-</div>
-{% endif %}
 
 <div style="margin:auto; text-align: center">
 <h2 style=" text-align: center; color: white; font-size: xx-large; margin-top: 5px;">Publicaciones de perros perdidos</h2>
@@ -44,7 +42,9 @@
               {% if perdido.get_estado_display == "Encontrado" %}
                   <p class="card-text" style="color: white;"><strong> Lo encontramos el:</strong> {{perdido.fecha_perdido}}</p>
               {% else %}
-                  <p class="card-text" style="color: white;"><strong> Esta perdidio desde:</strong> {{perdido.fecha_perdido}}</p>
+                  {% if not perdido.get_estado_display == "Localizado" %}
+                      <p class="card-text" style="color: white;"><strong> Esta perdidio desde:</strong> {{perdido.fecha_perdido}}</p>
+                  {% endif %}
               {% endif %}
               
               {% if perdido.nombre %}
@@ -67,10 +67,10 @@
                 </div>
               {% endif %}
             {% endif %} 
-            {% if request.user == perdido.dueño %}
+            {% if request.user == perdido.dueño and not perdido.get_estado_display == "Localizado" %}
               <div>
-                <a href="#" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Eliminar publicación</a>
-                <a href="#" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">¡Fue localizado!</a>
+                <a href="{% url 'eliminar_publicacion' perdido.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Eliminar publicación</a>
+                <a href="{% url 'cambiar_a_localizado' perdido.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">¡Fue localizado!</a>
               </div>
             {% endif %} 
           </div>
