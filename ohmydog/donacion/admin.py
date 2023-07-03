@@ -17,7 +17,7 @@ class DonanteNoRegistradoAdmin(admin.ModelAdmin):
     list_display=('nombre','monto','fecha')
 
 class TarjetaAdmin(admin.ModelAdmin):
-    list_display=('numero','nombre_dueño','saldo','vencimiento','codigo_seguridad')
+    list_display=('numero','nombre_dueño','saldo','año_vencimiento','mes_vencimiento','codigo_seguridad')
 
 
 admin.site.register(donacion, DonacionAdmin)
