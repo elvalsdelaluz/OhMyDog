@@ -49,7 +49,7 @@ class PerroPerdido(models.Model):
     raza=models.CharField('Raza', max_length=2, choices=Mascota.razas_choices)
     sexo=models.CharField('Sexo', max_length=1, choices=Sexo)
     #zona=models.ForeignKey(Zona, on_delete=models.CASCADE) #creo que no es necesario, preguntar
-    zona=models.CharField(max_length=50, null=True, blank=True)
+    zona=models.ForeignKey(Zona, on_delete=models.CASCADE)
     comentario=models.CharField(max_length=50, null=True, blank=True)
 
     id = models.AutoField(primary_key=True)

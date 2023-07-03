@@ -1,9 +1,19 @@
 from django.shortcuts import render,redirect
 from .forms import formulario_proveedor, formulario_fecha
 from .models import Proveedor
+from datetime import date
+
+
 
 def contactoPaseadoresCuidadores (request):
     proveedores = Proveedor.objects.all()
+
+    if proveedores.filter(baja=True).exists():
+        for prov in proveedores.filter(baja=True):
+            if prov.fecha_baja<=date.today():
+                prov.baja=False
+                prov.fecha_baja=None
+                prov.save()
     
     return render(request, "contactoPaseadoresCuidadores/contactoPaseadoresCuidadores.html",{'proveedores':proveedores})
 

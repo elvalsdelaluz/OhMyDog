@@ -1,5 +1,5 @@
 from django import forms
-from .models import PerroPerdido
+from .models import PerroPerdido, Zona
 from mascotas.models import Raza, Mascota
 from django.contrib.auth.models import User
 from datetime import date
@@ -34,7 +34,7 @@ class PerroPerdidoForm(forms.Form):
     tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
-    zona=forms.CharField(label='Zona', required=True) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
+    zona=forms.ModelChoiceField(label='Zona', required=True, queryset=Zona.objects.all()) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
 
     comentario=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])
 
