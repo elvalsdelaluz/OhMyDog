@@ -69,8 +69,12 @@ def publicar_perro_perdido(request):
 
 
                 publicacion_perro_perdido.fecha_perdido=formulario_perro_perdido.cleaned_data['fecha_perdido']
-                publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
-                
+
+                if not formulario_perro_perdido.cleaned_data['fecha_nacimiento']:
+                    publicacion_perro_perdido.fecha_nacimiento=None
+                else:
+                    publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
+                    
                 publicacion_perro_perdido.tamaño=formulario_perro_perdido.cleaned_data['tamaño']
                 publicacion_perro_perdido.sexo=formulario_perro_perdido.cleaned_data['sexo']
                 
