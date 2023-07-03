@@ -94,16 +94,15 @@ def vista_donar2 (request, donacion_id):
                 return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "El número de tarjeta es inválido"})
             else:
             #caso que la tarjeta exista
+                
                 mensaje_error = ""
                 if (formulario.cleaned_data['nombre_dueño'] != tarjeta.nombre_dueño):
-                    mensaje_error += "El nombre ingresado no condice con el de la tarjeta. \n"
+                    mensaje_error += "El nombre ingresado no condice con el de la tarjeta.<br>"
                 if (formulario.cleaned_data['codigo_seguridad'] != tarjeta.codigo_seguridad):
-                    mensaje_error += "El código de seguridad es incorrecto. \n"
-                if (formulario.cleaned_data['mes_vencimiento'] != tarjeta.mes_vencimiento or formulario.cleaned_data['año_vencimiento'] != tarjeta.año_vencimiento):
-                    mensaje_error += "La fecha es incorrecta. (CAMBIAR EN PIVOTAL)\n"
-                ##VERIFICAR FECHA
-
-
+                    mensaje_error += "El código de seguridad es incorrecto.<br>"
+                if (int(formulario.cleaned_data['mes_vencimiento']) != int(tarjeta.mes_vencimiento) or formulario.cleaned_data['año_vencimiento'] != tarjeta.año_vencimiento):
+                    mensaje_error += "La fecha es incorrecta. (CAMBIAR EN PIVOTAL)<br>"
+                print (mensaje_error)
                 if mensaje_error != "":
                     return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": mensaje_error})  
 
