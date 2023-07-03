@@ -4,7 +4,7 @@ from perdidaBusqueda.models import Zona
 # Create your models here.
 
 
-class proveedor(models.Model):
+class Proveedor(models.Model):
 
     Roles= (
         ('0','Paseador'),
@@ -16,6 +16,9 @@ class proveedor(models.Model):
     telefono=models.CharField(max_length=10)
     zona=models.ForeignKey(Zona, on_delete=models.CASCADE)
     rol=models.CharField('Trabajo', max_length=1, choices=Roles)
+    direccion=models.CharField(max_length=20, default='', blank=True)
+    baja=models.BooleanField(null=True, blank=True)
+    fecha_baja=models.DateField(default=None, null=True, blank=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 
@@ -25,3 +28,4 @@ class proveedor(models.Model):
 
     def __str__(self):
         return self.nombre
+    

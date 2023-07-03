@@ -4,6 +4,122 @@
 
 {% block content %}
 
-    Contacto paseadores y cuidadores
+
+
+    <div style="margin-bottom:0px; text-align: center">
+      <h1 style=" text-align: center; color: white; font-size: xx-large; margin-top: 5px;"><strong>Paseadores y cuidadores</strong></h1>
+    <div style="margin-right:20px; text-align: right">
+      {% if request.user.is_staff %}
+         <a href="{% url 'alta_proveedor' %}" class="btn btn-primary">Dar de alta proveedor</a> 
+      {%endif %}
+      
+    </div>
+    </div>
+
+    
+    {% if 'valido' in request.GET %}
+            <div class="alert alert-success" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
+                El proveedor de servicios se ha agregado exitosamente
+            </div>
+    {% endif %}
+    {% if 'elim' in request.GET %}
+            <div class="alert alert-warning" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
+                El proveedor de servicios se ha eliminado exitosamente
+            </div>
+    {% endif %}
+    {% if 'temp' in request.GET %}
+            <div class="alert alert-success" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
+                El proveedor de servicios se ha dado de baja temporalmente de manera exitosa
+            </div>
+    {% endif %}
+    {% if proveedores %}
+    
+        {% for proveedor in proveedores %}
+        {% if not proveedor.baja %}
+        
+        <div class="tarjeta-carac" style="margin-bottom: 10px; align-items: center;">
+        <div class="container" style="align-self: center">
+            <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <div class="cta-inner text-center rounded">
+                <div class="card" style="background-color: rgba(12, 159, 159); align-self: center; align-items: center;">
+                    <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                    <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{proveedor.nombre}} {{proveedor.apellido}}</p>
+                    <p class="card-text"style="color: white;"><strong> Email:</strong> {{proveedor.email}}</p>
+                    <p class="card-text"style="color: white;"><strong> Telefono:</strong> {{proveedor.telefono}}</p>
+                    <p class="card-text"style="color: white;"><strong> Servicio ofrecido:</strong> {{proveedor.get_rol_display}}</p>
+                    <p class="card-text" style="color: white;"><strong> Zona:</strong> {{proveedor.zona}}</p>
+                    {% if not proveedor.direccion == '' %}
+                        <p class="card-text" style="color: white;"><strong> Direccion:</strong> {{proveedor.direccion}}</p>
+                    {% endif %}
+                    {% if request.user.is_staff %} 
+                        <div style="margin-bottom: 15px;">
+                            <a onclick="return window.confirm('Estas seguro?')" href="{% url 'bajar_proveedor' proveedor.id %}" class="btn btn-danger">Eliminar {{proveedor.get_rol_display}}</a>
+                            <a href="{% url 'baja_temporal' proveedor.id %}" class="btn btn-warning">Baja temporal</a>
+                        </div>
+                    {% endif %} 
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div>
+        &nbsp;
+        </div>
+    </div>
+        {% endif %}
+        {% if proveedor.baja and request.user.is_staff %}
+        <div class="tarjeta-carac" style="margin-bottom: 10px; align-items: center;">
+            <div class="container" style="align-self: center">
+                <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <div class="cta-inner text-center rounded">
+                    <div class="card" style="background-color: rgba(12, 159, 159); align-self: center; align-items: center;">
+                        <div class="card-body " style="text-align: center; background-color: rgba(12, 159, 159);" >
+                        <h6 class="card-title"style="background-color: yellow; color: white;"><strong> Oculto</strong></h6>
+                        <p class="card-title"style="color: white; "><strong> Fecha limite:</strong> {{proveedor.fecha_baja}}</p>
+                        <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{proveedor.nombre}} {{proveedor.apellido}}</p>
+                        <p class="card-text"style="color: white;"><strong> Email:</strong> {{proveedor.email}}</p>
+                        <p class="card-text"style="color: white;"><strong> Telefono:</strong> {{proveedor.telefono}}</p>
+                        <p class="card-text"style="color: white;"><strong> Servicio ofrecido:</strong> {{proveedor.get_rol_display}}</p>
+                        <p class="card-text" style="color: white;"><strong> Zona:</strong> {{proveedor.zona}}</p>
+                        {% if not proveedor.direccion == '' %}
+                            <p class="card-text" style="color: white;"><strong> Direccion:</strong> {{proveedor.direccion}}</p>
+                        {% endif %}
+                            <div style="margin-bottom: 15px;">
+                                <a onclick="return window.confirm('Estas seguro?')" href="{% url 'bajar_proveedor' proveedor.id %}" class="btn btn-danger">Eliminar {{proveedor.get_rol_display}}</a>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div>
+            &nbsp;
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    {% else %}
+
+    <section class="page-section cta"  style="margin-top: 10px; background-color: rgba(12, 159, 159)">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading mb-4">
+              <p></p>
+              <span class="section-heading-upper">Lo sentimos. Aun no hay paseadores ni cuidadores publicados</span>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% endif %}
 
 {% endblock %}
