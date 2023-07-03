@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
-from .forms import PerroPerdidoForm
+from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm
+from django.core.mail import send_mail
+
 
 def perdidaBusqueda (request):
     return render(request, "perdidaBusqueda/perdidaBusqueda.html")
@@ -66,8 +69,12 @@ def publicar_perro_perdido(request):
 
 
                 publicacion_perro_perdido.fecha_perdido=formulario_perro_perdido.cleaned_data['fecha_perdido']
-                publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
-                
+
+                if not formulario_perro_perdido.cleaned_data['fecha_nacimiento']:
+                    publicacion_perro_perdido.fecha_nacimiento=None
+                else:
+                    publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
+                    
                 publicacion_perro_perdido.tamaño=formulario_perro_perdido.cleaned_data['tamaño']
                 publicacion_perro_perdido.sexo=formulario_perro_perdido.cleaned_data['sexo']
                 
@@ -75,7 +82,7 @@ def publicar_perro_perdido(request):
                 publicacion_perro_perdido.raza=formulario_perro_perdido.cleaned_data['raza']
                 publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
-                publicacion_perro_perdido.estado=PerroPerdido.Estado[0][1]
+                publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
                 publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
 
                 publicacion_perro_perdido.save()
@@ -88,3 +95,66 @@ def publicar_perro_perdido(request):
                 return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'formulario_perro_perdido':formulario_perro_perdido, "mensaje":"ok"})
 
     return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"formulario_perro_perdido":formulario_perro_perdido})
+
+
+def cambiar_a_localizado(request, perdido_id): #mas adelante hacer que le pregunte al usuario si quiere o no realizar la operacion (paso intermedio)
+    posteo = PerroPerdido.objects.get(id=perdido_id)
+    posteo.estado = PerroPerdido.Estado[2][1]
+    posteo.save()   
+    messages.success(request, '¡Se ha cambiado el estado de la publicación!')
+    return redirect('mostrar_perros_perdidos')
+
+
+def eliminar_publicacion(request, perdido_id):
+    print(perdido_id)
+    print(PerroPerdido.objects.get(id=perdido_id))
+    
+    posteo = PerroPerdido.objects.get(id=perdido_id)
+
+    posteo.delete()
+    messages.success(request, '¡La publicacion se ha eliminado correctamente!')
+    return redirect('mostrar_perros_perdidos')
+    #return render(request, "perdidaBusqueda/mostrar_perros_perdidos.html", {"valido":True})
+
+def comunicarse_por_perro_perdido(request, perdido_id):
+    user = request.user
+    
+    if user.is_authenticated:
+        form = ContartarsePerroPerdidoLogueadoForm()
+        if request.method == 'POST':
+            form = ContartarsePerroPerdidoLogueadoForm(request.POST)
+            if form.is_valid():
+                mensaje= form.cleaned_data['mensaje']
+                perro_perdido = PerroPerdido.objects.get(id=perdido_id)
+                send_mail(
+                    "Hola.",
+                    f"{request.user.nombre} se quiere contactarse con usted por {perro_perdido.nombre}.\n Esta es su información de contacto:\n *Numero: {request.user.numero}\n *Email: {request.user.email} \n Mensaje: {mensaje}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", perro_perdido.dueño.email]
+                )
+                messages.success(request, '¡Su mensaje ha sido enviado!')    
+                return redirect("mostrar_perros_perdidos")
+
+        return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form, 'info_autocompletada': user})
+    else:
+        form = ContartarsePerroPerdidoNoLogueadoForm()
+        if request.method == 'POST':
+            form = ContartarsePerroPerdidoNoLogueadoForm(request.POST)
+            if form.is_valid():
+                nombre= form.cleaned_data['nombre']
+                numero_telefono= form.cleaned_data['numero']
+                email= form.cleaned_data['email']
+                mensaje=form.cleaned_data['mensaje']
+                perro_perdido = PerroPerdido.objects.get(id=perdido_id)
+                send_mail(
+                    "Hola.",
+                    f"{nombre} se quiere contactarse con usted por {perro_perdido.nombre}.\n Esta es su información de contacto:\n *Numero: {numero_telefono}\n *Email: {email} \n Mensaje: {mensaje}",
+                    "ohmydog.veterinariacanina@gmail.com",
+                    ["ohmydog.veterinariacanina@gmail.com", perro_perdido.dueño.email]
+                )
+                messages.success(request, '¡Su mensaje ha sido enviado!')    
+                return redirect("mostrar_perros_perdidos")
+
+               
+        return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form})
+    

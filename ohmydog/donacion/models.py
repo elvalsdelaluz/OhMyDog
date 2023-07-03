@@ -34,3 +34,10 @@ class DonanteNoRegistrado(models.Model):
     fecha=models.DateField(auto_now_add=True)
 
 
+class Tarjeta(models.Model):
+    numero = models.CharField(max_length=16)
+    nombre_dueño= models.CharField(max_length=50)
+    saldo = models.IntegerField(default=None)
+    codigo_seguridad = models.CharField(max_length=3)
+    mes_vencimiento = models.CharField(max_length=2)
+    año_vencimiento = models.CharField(max_length=2)

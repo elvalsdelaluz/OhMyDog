@@ -2,8 +2,9 @@ from django.shortcuts import render, HttpResponse, redirect
 import stripe
 from mascotas.models import Mascota
 from .models import Donante, donacion, DonanteNoRegistrado
-from .forms import FormularioDonacion
+from .forms import FormularioDonacion,FormularioDonar
 from datetime import date
+from donacion.models import Tarjeta
 stripe.api_key = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh1CCt15p6ubERTxZWur6JBYpKH8sclckfVzW00c3ehlY9Z'
 
 
@@ -78,9 +79,64 @@ def ver_registro(request, donacion_id):
     return render (request, "donacion/registro_donaciones.html",{"donacion":donacion_ver, "donantes_clientes":donantes_clientes, "donantes_noclientes":donantes_noclientes})
 
 
+def vista_donar2 (request, donacion_id):
+    formulario = FormularioDonar()
+    dona = donacion.objects.get(id=donacion_id)
+    if request.method == 'POST':
+        
+        formulario = FormularioDonar(request.POST)
+        if formulario.is_valid():
+            numero = formulario.cleaned_data['numero']
+            try:
+                tarjeta = Tarjeta.objects.get(numero=numero)
+            except Exception as e:
+                #no existe tarjeta
+                return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "El número de tarjeta es inválido"})
+            else:
+            #caso que la tarjeta exista
+                mensaje_error = ""
+                if (formulario.cleaned_data['nombre_dueño'] != tarjeta.nombre_dueño):
+                    mensaje_error += "El nombre ingresado no condice con el de la tarjeta. \n"
+                if (formulario.cleaned_data['codigo_seguridad'] != tarjeta.codigo_seguridad):
+                    mensaje_error += "El código de seguridad es incorrecto. \n"
+                if (formulario.cleaned_data['mes_vencimiento'] != tarjeta.mes_vencimiento or formulario.cleaned_data['año_vencimiento'] != tarjeta.año_vencimiento):
+                    mensaje_error += "La fecha es incorrecta. (CAMBIAR EN PIVOTAL)\n"
+                ##VERIFICAR FECHA
 
+
+                if mensaje_error != "":
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": mensaje_error})  
+
+                if (formulario.cleaned_data['monto'] > tarjeta.saldo):
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": 'El saldo de la tarjeta es insuficiente'})  
+                else:
+                    tarjeta.saldo -= formulario.cleaned_data['monto']
+                    tarjeta.save()
+
+                if request.user.is_authenticated:
+                    donante = request.user
+                    donante.es_donante= True
+                    donante.descuento_acumulado= donante.descuento_acumulado + (formulario.cleaned_data['monto']*20/100)
+                    donante.save()
+                    nuevo_donante = Donante()
+                    nuevo_donante.campania_donacion= dona
+                    nuevo_donante.dueño = request.user
+                    nuevo_donante.monto = formulario.cleaned_data['monto']
+                    nuevo_donante.save()
+                else:
+                    no_registrado = DonanteNoRegistrado()
+                    no_registrado.campania_donacion= dona
+                    no_registrado.nombre = formulario.cleaned_data['nombre_dueño']
+                    no_registrado.monto = formulario.cleaned_data['monto']
+                    no_registrado.save()
+                #return redirect("pay_success/")
+                return redirect("pago_realizado")              
+    return render(request, "donacion/donar2.html", {'formulario':formulario,"donacion_motivo": dona.motivo})
+
+
+'''
 def vista_donar (request, donacion_id):
-    '''se procesa la info de la plantilla donar.html'''
+    #se procesa la info de la plantilla donar.html
     dona = donacion.objects.get(id=donacion_id)
     if request.method == "POST":
         amount = int(request.POST["amount"]) 
@@ -164,6 +220,7 @@ def vista_donar (request, donacion_id):
         return redirect("pago_realizado")
     
     return render(request, "donacion/donar.html", {"donacion_motivo": dona.motivo})
+'''
 
 
 

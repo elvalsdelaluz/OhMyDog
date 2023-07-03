@@ -1,0 +1,28 @@
+<html>
+
+    {% extends "ohmydogapp/base.html" %}
+  
+    {% load static %}
+    
+    
+    {% block content %}
+
+    <body>
+   
+        <div class="contenedorFormulario">
+
+            <form action="" method="POST" style="text-align: center;">{% csrf_token %}
+
+                <table style="color:white; margin: 20px auto;">
+                    {{formulario.as_table}}
+                <table>
+                <input type="submit" value="Enviar" style="width: 150px;"></input>
+
+            </form>   
+        </div>
+        
+    </body>
+    
+    
+    {% endblock %}
+</html>

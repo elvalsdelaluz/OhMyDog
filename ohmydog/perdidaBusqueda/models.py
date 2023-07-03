@@ -34,15 +34,15 @@ class PerroPerdido(models.Model):
         ('3','Gigante: más de 50 kilos'),
     )
     Estado=(
-        ('0','Buscando dueño'),
-        ('1','Buscando perro'),
-        ('2','Reunidos'),
+        ('0','Extraviado'),
+        ('1','Encontrado'),
+        ('2','Localizado'),
     )
     dueño=models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True) #info del dueño de la publicacion
-    nombre = models.CharField('Nombre', max_length=30)
+    nombre = models.CharField('Nombre', max_length=30, blank=True, null=True)
     foto=models.ImageField(upload_to=user_directory_path, blank=True, null=True, max_length=256)
     fecha_perdido=models.DateField(default=date.today, editable=True) #hay que chequear que no se pierda mañana
-    fecha_nacimiento=models.DateField(default=date.today, editable=True) #para sacar la edad 
+    fecha_nacimiento=models.DateField(default=None, null=True) #para sacar la edad 
     estado=models.CharField('Estado', max_length=1, choices=Estado)
     tamaño=models.CharField('Tamaño', max_length=1, choices=Tamaño)
     #raza=models.ForeignKey(Raza, on_delete=models.CASCADE)
@@ -51,6 +51,8 @@ class PerroPerdido(models.Model):
     #zona=models.ForeignKey(Zona, on_delete=models.CASCADE) #creo que no es necesario, preguntar
     zona=models.CharField(max_length=50, null=True, blank=True)
     comentario=models.CharField(max_length=50, null=True, blank=True)
+
+    id = models.AutoField(primary_key=True)
    
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)

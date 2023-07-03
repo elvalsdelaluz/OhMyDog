@@ -1,6 +1,7 @@
 from django import forms
 from .models import donacion
 from datetime import date
+from donacion.models import Tarjeta
 
 
 def present_or_future_date(value):
@@ -19,3 +20,18 @@ class FormularioDonacion(forms.Form):
     #imagen = forms.ImageField(required=True)
     finalizacion = forms.DateField(required=True, label='Fecha de finalizacion', widget=forms.TextInput(attrs={'type': 'date'}),
                             validators=[present_or_future_date])
+
+class FormularioDonar(forms.Form):
+    numero = forms.CharField(max_length=16)
+    nombre_dueño= forms.CharField(max_length=50)
+    monto = forms.IntegerField()
+    codigo_seguridad = forms.CharField(max_length=3)
+    mes_vencimiento = forms.CharField(max_length=2)
+    año_vencimiento =forms.CharField(max_length=2)
+
+   
+
+
+
+
+

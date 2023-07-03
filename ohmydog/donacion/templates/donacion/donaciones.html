@@ -29,7 +29,7 @@
         </div>
         {% if not request.user.is_staff %}
         <div class="card-footer text-center">
-            <a href="{% url 'donar' refugios.id %}" class="btn btn-primary"
+            <a href="{% url 'donar2' refugios.id %}" class="btn btn-primary"
             style="margin-bottom: 10px">Donar a esta campaña</a>
         </div>
         {% endif %}
@@ -63,7 +63,7 @@
                             </div>
                             {% if not request.user.is_staff %}
                             <div class="card-footer text-center">
-                                <a href="{% url 'donar' donacion.id %}" class="btn btn-primary"
+                                <a href="{% url 'donar2' donacion.id %}" class="btn btn-primary"
                                 style="margin-bottom: 10px">Donar a esta campaña</a>
                             </div>
                             {% else %}
