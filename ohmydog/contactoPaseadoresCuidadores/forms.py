@@ -34,3 +34,7 @@ class formulario_fecha(forms.Form):
     fecha_baja=forms.DateField(label='Fecha límite de baja', widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     
+class Filtro(forms.Form):
+    zona=forms.ModelChoiceField(required=False,queryset=Zona.objects.all())
+    rol= forms.ChoiceField(required=False,choices=[('0','Paseador'),('1','Cuidador'),('2','----------'),],initial=('2','----------'))
+    

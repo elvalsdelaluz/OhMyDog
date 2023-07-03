@@ -15,6 +15,13 @@
       
     </div>
     </div>
+    <div style="margin-left: 10px; color:  white; align-items: center; justify-content: center; text-align: center;"><form method="POST"> {% csrf_token %}
+        {% for field in filtro %}
+                <td><strong>{{ field.label }}</strong> {{field}} </td>
+            {% endfor %}
+            <input type="submit" value="Aplicar filtro" class="btn btn-info"></input>
+            <a href="{% url 'contactoPaseadoresCuidadores' %}" class="btn btn-info">Reestablecer filtro</a>
+    </form></div>
 
     
     {% if 'valido' in request.GET %}

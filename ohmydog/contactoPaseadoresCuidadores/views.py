@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import formulario_proveedor, formulario_fecha
+from .forms import formulario_proveedor, formulario_fecha, Filtro
 from .models import Proveedor
 from datetime import date
 
@@ -7,6 +7,7 @@ from datetime import date
 
 def contactoPaseadoresCuidadores (request):
     proveedores = Proveedor.objects.all()
+    filtro= Filtro()
 
     if proveedores.filter(baja=True).exists():
         for prov in proveedores.filter(baja=True):
@@ -14,8 +15,17 @@ def contactoPaseadoresCuidadores (request):
                 prov.baja=False
                 prov.fecha_baja=None
                 prov.save()
+    if request.method == 'POST':
+        filtro=Filtro(data=request.POST)
+        if filtro.is_valid():
+            if filtro.cleaned_data['rol']!='2':
+                proveedores=proveedores.filter(rol=filtro.cleaned_data['rol']).all()
+            if filtro.cleaned_data['zona']:
+                proveedores=proveedores.filter(zona=filtro.cleaned_data['zona']).all()
+            
+
     
-    return render(request, "contactoPaseadoresCuidadores/contactoPaseadoresCuidadores.html",{'proveedores':proveedores})
+    return render(request, "contactoPaseadoresCuidadores/contactoPaseadoresCuidadores.html",{'proveedores':proveedores, 'filtro':filtro})
 
 def bajar_proveedor(request, proveedor_id):
 
