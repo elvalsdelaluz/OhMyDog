@@ -12,7 +12,7 @@
       {% if mensaje %}
       <div class="container" style="margin-top: 0.7%">
           <div class="alert alert-danger alert-dismissible fade show" style="text-align: center;">
-              {{mensaje}}
+              {{mensaje|safe}}
           </div>
       </div>
       {% endif %}        
