@@ -118,8 +118,7 @@
             <a class="nav-link text-uppercase text-expanded" href="{% url 'contactoPaseadoresCuidadores'%}">Paseadores y cuidadores</a>
           </li>
           <li class="nav-item {% if request.path == '/veterinariasDeTurno/' %}active{% endif %} px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="#">Veterinarias de turno</a>
-            <!--<a class="nav-link text-uppercase text-expanded" href="{% url 'veterinariasDeTurno'%}">Paseadores y cuidadores</a>-->
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'veterinariasDeTurno'%}"">Veterinarias de turno</a>
           </li>        
          
         </ul>
@@ -135,7 +134,7 @@
     {% endblock %}
 
    <!-- Footer -->
-   <footer class="footer text-faded text-center py-5">
+   <footer class="footer text-faded text-center py-5" style="margin-top: 20px;">
     <div class="container">
       <p class="m-0">
           <a href="#" class="link">

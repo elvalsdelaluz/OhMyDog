@@ -37,4 +37,3 @@ class formulario_fecha(forms.Form):
 class Filtro(forms.Form):
     zona=forms.ModelChoiceField(required=False,queryset=Zona.objects.all())
     rol= forms.ChoiceField(required=False,choices=[('0','Paseador'),('1','Cuidador'),('2','----------'),],initial=('2','----------'))
-    
