@@ -8,16 +8,41 @@ def borrar_archivo(request):
     open('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', 'w').close()
     return redirect ('/veterinariasDeTurno/?valido')
 
-def veterinariasDeTurno (request):
+def convertidor(value):
+    dict ={'Monday':'Lunes', 'Tuesday':'Martes', 'Wednesday':'Miercoles',
+           'Thursday':'Jueves','Friday':'Viernes','Saturday':'Sabado',
+           'Sunday':'Domingo'}
+    return dict[str(value)]
+def traductor_mes(value):
+    meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+    return meses[value]
 
-    formulario_archivo=Formulario_archivo()
-    data_html=[]
-    try:
-        data =pd.read_csv('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', delimiter=';')
-        data = pd.DataFrame(data)
-        
+def mejorar_guardado(data):
+        data = data.dropna(1, how='all')
         data = data.replace(np.nan,'-')
-        data_html=data.to_html(index=False, classes='table table-striped text-center', justify='center')
+        x = 2
+        for col in data.columns[2:]:
+            data = data.rename(columns={col:'Direccion '+str(x)})
+            x+=1
+        data.to_csv('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', index=False)
+    
+
+def veterinariasDeTurno (request):
+    formulario_archivo=Formulario_archivo()
+    data1_html=[]
+    data2_html=[]
+    mes=[]
+    try:
+        data =pd.read_csv('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv')
+        data = pd.DataFrame(data)
+        data["Dia"]  = pd.to_datetime(data["Dia"], format='%Y/%m/%d')
+        mes = traductor_mes(data.iloc[1]["Dia"].month-1) + ' ' + data.iloc[1]["Dia"].strftime("%Y")
+        data["Dia"] =  data['Dia'].apply(lambda x : convertidor(x.day_name())) + ' ' + data["Dia"].dt.strftime("%d")
+        data1=data.head(int(len(data)/2))
+        data2=data.tail(-int(len(data)/2))
+        data1_html=data1.to_html(index=False, classes='table table-striped text-center', justify='center')
+        data2_html=data2.to_html(index=False, classes='table table-striped text-center', justify='center')
+
     
     except pd.errors.EmptyDataError:
         pass
@@ -26,14 +51,28 @@ def veterinariasDeTurno (request):
         file_form=Formulario_archivo(request.POST, request.FILES)
 
         if file_form.is_valid():
-            csv_file=(request.FILES['archivo'])
-            with open('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', 'wb+') as destination:
-                for chunk in csv_file.chunks():
-                    destination.write(chunk)
+            try:
+                data =pd.read_csv(request.FILES['archivo'], encoding='unicode_escape',delimiter=';')
+            except UnicodeDecodeError:
+                formulario_archivo=Formulario_archivo()
+                error="Lo sentimos. Hubo un error de decodificacion del archivo. Por favor revise los caracteres especiales y envielo nuevamente"
+                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo,'data': data1_html, 'data1': data2_html, 'error':error})
+            data = pd.DataFrame(data)
+            if data.columns[0] !='Dia' or data.columns[1] !='Direccion':
+                error="La primera columna debe llamarse 'Dia' e incluir las fechas del mes. y la segunda 'Direccion'"
+                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1': data2_html, 'error':error})
+            try:
+                data = data.dropna(0, how='all')
+                data["Dia"]  = pd.to_datetime(data["Dia"], format='%d/%m/%Y')
+            except ValueError:
+                error="Por favor, chequea que todos los datos de la columna 'Dia' sean fechas validas con formato DD/MM/AAAA"
+                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'error':error})
+            mejorar_guardado(data)
 
             return redirect('veterinariasDeTurno')
-            """data = pd.read_csv(csv_file)
-            df =pd.DataFrame(data)
-            df.to_csv('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', mode='w')"""
+        else:
+            error="Solo puede subir archivos en formato CSV"
+            return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'error':error})
 
-    return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data_html})
+
+    return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'mes':mes})

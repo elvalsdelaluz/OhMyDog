@@ -1,9 +1,32 @@
-Dia;Direcciones;;;;;
-1/8/2023;112 y 23;113 y 14;;;;
-2/8/2023;56 y 7;45 y 2;;;;
-3/8/2023;7 y 10;54 y 6;;;;
-4/8/2023;122 y 56;;;;;
-5/8/2023;;;;;;
-6/8/2023;;;;;;
-7/8/2023;;;;;;
-8/8/2023;;;;;;
+Dia,Direccion,Direccion 2,Direccion 3
+2023-08-01,Calle 56 Nro 1.598,Av 1 Nro 2137,Calle 34 Nro 1.614
+2023-08-02,Calle 24 Nro 1.709,Av. 60 Nro 1.745,-
+2023-08-03,Calle 45 Nro 1.104,Calle 58 Nro 748,-
+2023-08-04,Diagonal 80 Nro 721,Calle 39 1512,Calle 64 Nro 1.122
+2023-08-05,Calle 12 Nro 1.463,-,-
+2023-08-06,Av. 32 Nro 1.180,-,-
+2023-08-07,Calle 24 Nro 398,Plaza Brandsen Nro 33 (25 y 60),-
+2023-08-08,Av. 44 Nro 1.247,Calle 49 Nro 317,-
+2023-08-09,Calle 63 Nro 1.752,-,-
+2023-08-10,Av 51 Nro 1.399,-,-
+2023-08-11,Calle 24 Nro 503,Diagonal 74 Nro 3.383,-
+2023-08-12,Calle 10 Nro 489,-,-
+2023-08-13,Av. 60 Nro 1.745,Calle 56 Nro 1.598,-
+2023-08-14,Calle 39 1512,-,-
+2023-08-15,Calle 64 Nro 1.122,-,-
+2023-08-16,Calle 45 Nro 1.104,Av. 60 Nro 1.745,-
+2023-08-17,Av 51 Nro 1.399,-,-
+2023-08-18,Calle 12 Nro 1.463,Av. 32 Nro 1.180,Calle 56 Nro 1.598
+2023-08-19,Calle 64 Nro 1.122,-,-
+2023-08-20,Calle 58 Nro 748,-,-
+2023-08-21,Av 1 Nro 2137,-,-
+2023-08-22,Calle 10 Nro 489,-,-
+2023-08-23,Calle 34 Nro 1.614,-,-
+2023-08-24,Calle 34 Nro 1.614,Calle 24 Nro 398,-
+2023-08-25,Plaza Brandsen Nro 33 (25 y 60),-,-
+2023-08-26,Diagonal 80 Nro 721,-,-
+2023-08-27,Av 51 Nro 1.399,Calle 39 1512,-
+2023-08-28,Calle 24 Nro 503,Diagonal 74 Nro 3.383,-
+2023-08-29,Calle 10 Nro 489,-,-
+2023-08-30,Calle 12 Nro 1.463,Calle 63 Nro 1.752,Calle 56 Nro 1.598
+2023-08-31,Av. 32 Nro 1.180,-,-

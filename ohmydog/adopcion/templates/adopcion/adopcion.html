@@ -19,7 +19,7 @@
   {% endif %}
 
   <div style="margin:auto; text-align: center">
-    <h2 style=" text-align: center; color: white; font-size: xx-large; margin-top: 5px;">Publicaciones de perros en adopción</h2>
+    <h1 style=" text-align: center; color: white; font-size: 40px; margin-top: 15px;">Publicaciones de perros en adopción</h1>
     {% if user.is_authenticated and  not user.is_staff %}
     <div style="text-align: center; display: inline-block;">
       <a href=" {% url 'solicitud' %}" class="btn btn-success">Publicar perro en adopción</a>

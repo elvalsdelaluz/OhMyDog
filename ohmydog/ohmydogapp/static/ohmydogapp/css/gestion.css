@@ -399,6 +399,11 @@ hr {
   color:rgb(255, 94, 0)
 } 
 
-help_text {
-  color: rgb(10, 10, 10)
+.help-text {
+  color: rgb(10, 10, 10);
+  background-color: white;
+}
+
+.invalid-feedback {
+  display: initial;
 }
