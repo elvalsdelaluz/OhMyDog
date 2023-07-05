@@ -28,41 +28,43 @@
 
 <div class="container my-3">
  <div class="row">
+  <div class="card-columns">
 {% for perdido in perros_perdidos %}
+      
       <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-          <div class="card rounded-lg mb-3 bg-custom ">
+          
+          <div class="card rounded-lg mb-3 bg-custom" style="width: 22rem;">
+            <div class="card-header mb-0 rounded-lg my-0">
+              <p style="color: white; "><strong> {{perdido.get_estado_display}}</strong> </p>
+            </div>
             {% if perdido.foto %}
                   <img src="{{perdido.foto.url}}" class="card-img-top">
               {% endif %}
               <div class="card-body rounded bg-custom">
-                <p class="card-title"style="color: white; "><strong> Estado:</strong> {{perdido.get_estado_display}}</p>
-
-                {% if perdido.get_estado_display == "Encontrado" %}
-                    <p class="card-text" style="color: white;"><strong> Lo encontramos el:</strong> {{perdido.fecha_perdido}}</p>
-                {% else %}
-                    {% if not perdido.get_estado_display == "Localizado" %}
-                        <p class="card-text" style="color: white;"><strong> Esta perdido desde:</strong> {{perdido.fecha_perdido}}</p>
-                    {% endif %}
-                {% endif %}
-                
-                {% if perdido.nombre %}
-                    <p class="card-title"style="color: white; "><strong> Nombre:</strong> {{perdido.nombre}}</p>
-                {% endif %}
-  
-                {% if perdido.fecha_nacimiento %}
-                    <p class="card-text" style="color: white;"><strong> Edad:</strong> {{perdido.fecha_nacimiento}}</p>
-                {% endif %}
-  
-                <p class="card-text"style="color: white;"><strong> Tamaño:</strong> {{perdido.get_tamaño_display}}</p>
-                <p class="card-text"style="color: white;"><strong> Sexo:</strong> {{perdido.get_sexo_display}}</p>
-                {% if perdido.get_estado_display == 'Extraviado' %}
-                  <p class="card-text"style="color: white;"><strong> Se perdio por:</strong> {{perdido.zona}}</p>
-                {% else %}
-                  <p class="card-text"style="color: white;"><strong> Se lo encontro por:</strong> {{perdido.zona}}</p>
-                {% endif %}
-                <p class="card-text"style="color: white;"><strong> Comentarios:</strong> {{perdido.comentario}}</p>
-               
-            
+ 
+                <p class="card-text"style="color: white;">
+                  ¡Hola!
+                  {% if perdido.nombre %}
+                    Me llamo {{perdido.nombre}}.
+                  {% endif %}
+                  {% if perdido.fecha_nacimiento %}
+                     Nací el <span style="text-transform: lowercase;">{{perdido.fecha_nacimiento}}</span>.
+                  {% endif %}
+                  
+                  {% if perdido.get_estado_display == "Encontrado" %}
+                     Me encontraron el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
+                     y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
+                  {% else %}
+                      {% if not perdido.get_estado_display == "Localizado" %}
+                        Me perdí el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
+                        y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
+                      {% else %}
+                        Fui localizado por mis dueños. Gracias a los que se contactaron.
+                      {% endif %}
+                  {% endif %}
+                  
+                              
+              </p>
               {% if perdido.get_estado_display == 'Extraviado' or perdido.get_estado_display == 'Encontrado' %}
                 {% if not request.user == perdido.dueño and not request.user.is_staff %} 
                   <div>
@@ -72,14 +74,15 @@
               {% endif %} 
               {% if request.user == perdido.dueño and not perdido.get_estado_display == "Localizado" %}
                 <div>
-                  <a href="{% url 'eliminar_publicacion' perdido.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Eliminar publicación</a>
                   <a href="{% url 'cambiar_a_localizado' perdido.id %}" class="btn btn-success" style="background-color: rgb(159, 0, 0); margin-bottom: 10px;">¡Fue localizado!</a>
+                  <a href="{% url 'eliminar_publicacion' perdido.id %}" class="btn btn-success" style="background-color: rgba(156, 27, 156, 0.863); margin-bottom: 10px;">Eliminar publicación</a>
                 </div>
               {% endif %}
               </div>
             </div>
       </div>
   {% endfor %}
+  </div>
 </div>
 </div>
 
