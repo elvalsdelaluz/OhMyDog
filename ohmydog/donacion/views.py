@@ -5,6 +5,8 @@ from .models import Donante, donacion, DonanteNoRegistrado
 from .forms import FormularioDonacion,FormularioDonar
 from datetime import date
 from donacion.models import Tarjeta
+from datetime import datetime
+
 stripe.api_key = 'sk_test_51NDyipASwHsRVYQPpkXqv817i0EKf3ojSo1HJJzrxEioHNaSRvADh1CCt15p6ubERTxZWur6JBYpKH8sclckfVzW00c3ehlY9Z'
 
 
@@ -94,17 +96,17 @@ def vista_donar2 (request, donacion_id):
                 return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "El número de tarjeta es inválido"})
             else:
             #caso que la tarjeta exista
-                
-                mensaje_error = ""
+                if ((int(datetime.now().year) == int(tarjeta.año_vencimiento) and int(tarjeta.mes_vencimiento) < int(datetime.now().month))):
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "La tarjeta está vencida"})
+
                 if (formulario.cleaned_data['nombre_dueño'] != tarjeta.nombre_dueño):
-                    mensaje_error += "El nombre ingresado no condice con el de la tarjeta.<br>"
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "El nombre ingresado no condice con el de la tarjeta."})
+
                 if (formulario.cleaned_data['codigo_seguridad'] != tarjeta.codigo_seguridad):
-                    mensaje_error += "El código de seguridad es incorrecto.<br>"
-                if (int(formulario.cleaned_data['mes_vencimiento']) != int(tarjeta.mes_vencimiento) or formulario.cleaned_data['año_vencimiento'] != tarjeta.año_vencimiento):
-                    mensaje_error += "La fecha es incorrecta. (CAMBIAR EN PIVOTAL)<br>"
-                print (mensaje_error)
-                if mensaje_error != "":
-                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": mensaje_error})  
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "El código de seguridad es incorrecto."})
+
+                if (int(formulario.cleaned_data['mes_vencimiento']) != int(tarjeta.mes_vencimiento) or int (formulario.cleaned_data['año_vencimiento']) != int(tarjeta.año_vencimiento)):
+                    return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": "La fecha de vencimiento es incorrecta."})
 
                 if (formulario.cleaned_data['monto'] > tarjeta.saldo):
                     return render(request,"donacion/donar2.html",{'formulario':formulario, "mensaje": 'El saldo de la tarjeta es insuficiente'})  

@@ -40,4 +40,4 @@ class Tarjeta(models.Model):
     saldo = models.IntegerField(default=None)
     codigo_seguridad = models.CharField(max_length=3)
     mes_vencimiento = models.CharField(max_length=2)
-    año_vencimiento = models.CharField(max_length=2)
+    año_vencimiento = models.CharField(max_length=4)
