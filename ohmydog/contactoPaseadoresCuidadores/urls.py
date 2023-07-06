@@ -8,4 +8,5 @@ urlpatterns = [
     path('alta_proveedor', views.alta_proveedor, name='alta_proveedor'),
     path('bajar_proveedor/<int:proveedor_id>/', views.bajar_proveedor, name="bajar_proveedor"),
     path('baja_temporal/<int:proveedor_id>/', views.baja_temporaria, name="baja_temporal"),
+    path('resubir_proveedor/<int:proveedor_id>/',views.resubir_proveedor, name='resubir_proveedor'),
 ]

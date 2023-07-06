@@ -3,10 +3,13 @@ from veterinariasDeTurno.models import VeterinariasDeTurno
 from .forms import Formulario_archivo
 import pandas as pd
 import numpy as np
+from django.contrib import messages
+
 
 def borrar_archivo(request):
     open('../ohmydog/veterinariasDeTurno/file/vetTurnos.csv', 'w').close()
-    return redirect ('/veterinariasDeTurno/?valido')
+    messages.add_message(request, messages.INFO, "El turnero se ha eliminado exitosamente")
+    return redirect ('/veterinariasDeTurno/')
 
 def convertidor(value):
     dict ={'Monday':'Lunes', 'Tuesday':'Martes', 'Wednesday':'Miercoles',
@@ -54,25 +57,25 @@ def veterinariasDeTurno (request):
             try:
                 data =pd.read_csv(request.FILES['archivo'], encoding='unicode_escape',delimiter=';')
             except UnicodeDecodeError:
-                formulario_archivo=Formulario_archivo()
-                error="Lo sentimos. Hubo un error de decodificacion del archivo. Por favor revise los caracteres especiales y envielo nuevamente"
-                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo,'data': data1_html, 'data1': data2_html, 'error':error})
+                messages.add_message(request, messages.ERROR, "Lo sentimos. Hubo un error de decodificacion del archivo. Por favor revise los caracteres especiales y envielo nuevamente")
+                return redirect ('/veterinariasDeTurno/')
             data = pd.DataFrame(data)
             if data.columns[0] !='Dia' or data.columns[1] !='Direccion':
-                error="La primera columna debe llamarse 'Dia' e incluir las fechas del mes. y la segunda 'Direccion'"
-                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1': data2_html, 'error':error})
+                messages.add_message(request, messages.ERROR, "La primera columna debe llamarse 'Dia' e incluir las fechas del mes. y la segunda 'Direccion'")
+                return redirect ('/veterinariasDeTurno/')
             try:
                 data = data.dropna(0, how='all')
                 data["Dia"]  = pd.to_datetime(data["Dia"], format='%d/%m/%Y')
             except ValueError:
-                error="Por favor, chequea que todos los datos de la columna 'Dia' sean fechas validas con formato DD/MM/AAAA"
-                return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'error':error})
+                messages.add_message(request, messages.ERROR, "Por favor, chequea que todos los datos de la columna 'Dia' sean fechas validas con formato DD/MM/AAAA")
+                return redirect ('/veterinariasDeTurno/')
             mejorar_guardado(data)
 
             return redirect('veterinariasDeTurno')
         else:
-            error="Solo puede subir archivos en formato CSV"
-            return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'error':error})
+            messages.add_message(request, messages.ERROR, "Solo puede subir archivos en formato CSV")
+            return redirect ('/veterinariasDeTurno/')
+
 
 
     return render(request, "veterinariasDeTurno/veterinariasDeTurno.html", {'form':formulario_archivo, 'data': data1_html, 'data1':data2_html, 'mes':mes})

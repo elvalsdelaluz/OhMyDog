@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .forms import formulario_proveedor, formulario_fecha, Filtro
 from .models import Proveedor
 from datetime import date
+from django.contrib import messages
 
 
 
@@ -27,13 +28,21 @@ def contactoPaseadoresCuidadores (request):
     
     return render(request, "contactoPaseadoresCuidadores/contactoPaseadoresCuidadores.html",{'proveedores':proveedores, 'filtro':filtro})
 
+def resubir_proveedor(request, proveedor_id):
+    proveedor=Proveedor.objects.get(id=proveedor_id)
+    proveedor.fecha_baja=None
+    proveedor.baja=False
+
+    proveedor.save()
+    messages.add_message(request, messages.INFO, "El proveedor de servicios ha sido resubido exitosamente")
+    return redirect('/contactoPaseadoresCuidadores/')
+
 def bajar_proveedor(request, proveedor_id):
 
-    
     posteo = Proveedor.objects.get(id=proveedor_id)
-
     posteo.delete()
-    return redirect('/contactoPaseadoresCuidadores/?elim')
+    messages.add_message(request, messages.INFO, "El proveedor de servicios se ha eliminado exitosamente")
+    return redirect('/contactoPaseadoresCuidadores/')
 
 def baja_temporaria(request, proveedor_id):
     fecha = formulario_fecha()
@@ -46,8 +55,8 @@ def baja_temporaria(request, proveedor_id):
             proveedor.baja=True
 
             proveedor.save()
-
-            return redirect('/contactoPaseadoresCuidadores/?temp')
+            messages.add_message(request, messages.INFO, "El proveedor de servicios se ha dado de baja temporalmente de manera exitosa")
+            return redirect('/contactoPaseadoresCuidadores/')
 
     return render(request, 'contactoPaseadoresCuidadores/baja_temporal.html', {'form':fecha})
 
@@ -71,9 +80,9 @@ def alta_proveedor (request):
 
 
             proveedor.save()
+            messages.add_message(request, messages.INFO, "El proveedor de servicios se ha agregado exitosamente")
 
-            return redirect('/contactoPaseadoresCuidadores/?valido')
-
+            return redirect('/contactoPaseadoresCuidadores/')
 
     return render(request, 'contactoPaseadoresCuidadores/alta_proveedor.html', {'form':formulario})
 

@@ -9,16 +9,14 @@
         <h1 style="font-size: 40px;">Veterinarias de turno</h1>
     </div>
 
-        {% if 'valido' in request.GET %}
-        <div class="alert alert-info" role="alert" style="text-align: center; margin: auto; margin-top: 10px; width: 40%;">
-            El turnero se ha eliminado exitosamente
-        </div>
-        {% endif %}
-        {% if error %}
-        <div class="alert alert-danger" role="alert" style="text-align: center; margin: auto; margin-top: 10px; width: 40%;">
-            {{error}}
-        </div>
-        {% endif %}
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            </div>
+        {% endfor %}
+    {% endif %}
 
     {% if data %}
     <div class="container" style="margin-top: 15px; margin: auto; background-color:  rgba(12, 159, 159); ">

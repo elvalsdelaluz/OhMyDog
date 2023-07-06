@@ -24,21 +24,16 @@
     </form></div>
 
     
-    {% if 'valido' in request.GET %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
             <div class="alert alert-success" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
-                El proveedor de servicios se ha agregado exitosamente
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             </div>
+        {% endfor %}
+    </ul>
     {% endif %}
-    {% if 'elim' in request.GET %}
-            <div class="alert alert-warning" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
-                El proveedor de servicios se ha eliminado exitosamente
-            </div>
-    {% endif %}
-    {% if 'temp' in request.GET %}
-            <div class="alert alert-success" role="alert" style="text-align: center; margin-left: 30%; margin-right: 30%;">
-                El proveedor de servicios se ha dado de baja temporalmente de manera exitosa
-            </div>
-    {% endif %}
+    
     {% if proveedores %}
     
         {% for proveedor in proveedores %}
@@ -96,6 +91,7 @@
                         {% endif %}
                             <div style="margin-bottom: 15px;">
                                 <a onclick="return window.confirm('Estas seguro?')" href="{% url 'bajar_proveedor' proveedor.id %}" class="btn btn-danger">Eliminar {{proveedor.get_rol_display}}</a>
+                                <a href="{% url 'resubir_proveedor' proveedor.id %}" class="btn btn-success">Resubir {{proveedor.get_rol_display}}</a>
                             </div>
                     </div>
                     </div>

@@ -23,11 +23,9 @@
       <h2 class="text-center" style="margin-top: 5px;"><strong>Publicar proveedor de servicios</strong></h2>
       <form action="" method="POST" enctype="multipart/form-data" style="width: 80%; margin: auto;">
         {% csrf_token %}
-        <form style="color: white;">
           <div>
-          {% crispy form %}
-        </div>
-        </form>
+          {{  form|crispy }}
+          </div>
         <div style="justify-items: center; text-align: center;">
         <input class="btn btn-success" type="submit" value="Confirmar" style="margin: auto; margin-bottom: 10px;">
         <a class="btn btn-danger" type="submit" href="{% url 'contactoPaseadoresCuidadores' %}" style="margin: auto;  margin-bottom: 10px">Volver</a>
