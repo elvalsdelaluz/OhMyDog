@@ -27,7 +27,7 @@ class FormularioDonar(forms.Form):
     monto = forms.IntegerField()
     codigo_seguridad = forms.CharField(max_length=3)
     mes_vencimiento = forms.CharField(max_length=2)
-    año_vencimiento =forms.CharField(max_length=2)
+    año_vencimiento =forms.CharField(max_length=4)
 
    
 
