@@ -28,7 +28,8 @@ class PerroForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     nombre=forms.CharField(label="Nombre", required=False)
-    fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False)
+    fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False, widget=forms.TextInput(     
+        attrs={'type': 'date'} ))
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
 
     def __init__(self, mis_perros=None, *args, **kwargs):
@@ -41,19 +42,28 @@ class PerroPerdidoForm(forms.Form):
         ('0','Extraviado'),
         ('1','Encontrado'),
     )
-    estado=forms.ChoiceField(label="Estado", choices=Estado)
+    perro = forms.ModelChoiceField(
+        queryset=Mascota.objects.all(),
+        required=False,
+        empty_label='Perro no registrado',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     nombre=forms.CharField(label='Nombre', required=False)
-    foto=forms.ImageField(label="Foto", required=False)
-    fecha_perdido=forms.DateField(label='Fecha perdido o encontrado', widget=forms.TextInput(     
-        attrs={'type': 'date'} ), validators=[present_or_future_date])
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False, widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
-    tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
+    estado=forms.ChoiceField(label="Estado", choices=Estado)
+    foto=forms.ImageField(label="Foto", required=False)
+    tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
+    fecha_perdido=forms.DateField(label='Fecha perdido o encontrado', widget=forms.TextInput(     
+        attrs={'type': 'date'} ), validators=[present_or_future_date])
     zona=forms.ModelChoiceField(label='Zona', required=True, queryset=Zona.objects.all()) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
 
-    comentario=forms.CharField(label='Comentarios', widget=forms.Textarea,validators=[no_solo_numeros])
+    def __init__(self, mis_perros=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['perro'].queryset = mis_perros
+
 
 class ContartarsePerroPerdidoLogueadoForm(forms.Form):  
     mensaje=forms.CharField(label='Mensaje', widget=forms.Textarea(attrs={'resize': 'none'}), required=False)

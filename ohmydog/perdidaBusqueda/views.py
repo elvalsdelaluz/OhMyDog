@@ -45,17 +45,38 @@ def ya_esta_publicado(user, nombre_mascota):
     return existe_publicacion
 
 
+from django.http import JsonResponse
+    
+def perro(request, perro_id):
+    print("Se selecciono un perro")
+    try:
+        perro = Mascota.objects.get(id=perro_id)
+        data = {
+            'nombre': perro.nombre,
+            'fecha_nacimiento': perro.fecha_nacimiento,
+            'sexo': perro.sexo,
+            'raza': perro.raza,
+            'dueño': perro.dueño.id,
+        }
+        return JsonResponse(data)
+    except Mascota.DoesNotExist:
+        return JsonResponse({'error': 'Perro not found'}, status=404)
+
+
 def publicar_perro_perdido(request):
-    formulario_perro_perdido = PerroPerdidoForm()
+    # Obtener el objeto deseado para sobrescribir el campo ModelChoiceField
+    mis_perros = Mascota.objects.filter(dueño=request.user)
+    # Crear una instancia del formulario
+    formulario_perro_perdido = PerroPerdidoForm(mis_perros=mis_perros)
 
     if request.method=='POST':
-        formulario_perro_perdido=PerroPerdidoForm(request.POST, request.FILES)
+        formulario_perro_perdido=PerroPerdidoForm(mis_perros, request.POST, request.FILES)
        
         if formulario_perro_perdido.is_valid():
             if ya_esta_publicado(request.user, formulario_perro_perdido.cleaned_data['nombre']):
                 #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
                 error_ya_publicado="¡Ya tiene publicada una mascota perdida con ese nombre!"
-                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html', {'formulario_perro_perdido':formulario_perro_perdido, "mensaje2":error_ya_publicado})
+                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html', {'form':formulario_perro_perdido, "mensaje2":error_ya_publicado})
             else:
                 #Queda cambiarle el nombre a la foto... 
                 publicacion_perro_perdido=PerroPerdido()
@@ -83,18 +104,18 @@ def publicar_perro_perdido(request):
                 publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
                 publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
-                publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
+                #publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
 
                 publicacion_perro_perdido.save()
 
                 publicacion_perro_perdido.foto=foto_file
                 publicacion_perro_perdido.save()
 
-                formulario_perro_perdido=PerroPerdidoForm()
+                formulario_perro_perdido=PerroPerdidoForm(mis_perros=mis_perros)
 
-                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'formulario_perro_perdido':formulario_perro_perdido, "mensaje":"ok"})
+                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'form':formulario_perro_perdido, "mensaje":"ok"})
 
-    return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"formulario_perro_perdido":formulario_perro_perdido})
+    return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"form":formulario_perro_perdido})
 
 
 def cambiar_a_localizado(request, perdido_id): #mas adelante hacer que le pregunte al usuario si quiere o no realizar la operacion (paso intermedio)
@@ -162,8 +183,6 @@ def comunicarse_por_perro_perdido(request, perdido_id):
 def publicar_perro(request):
     # Obtener el objeto deseado para sobrescribir el campo ModelChoiceField
     mis_perros = Mascota.objects.filter(dueño=request.user)
-    for perro in mis_perros:
-        print (perro)
     # Crear una instancia del formulario
     formulario_perro_perdido = PerroForm(mis_perros=mis_perros)
     # Sobrescribir el campo ModelChoiceField con el objeto deseado
@@ -185,7 +204,7 @@ def publicar_perro(request):
 
 from django.http import JsonResponse
     
-def perro(request, perro_id):
+def perro1(request, perro_id):
     print("Se selecciono un perro")
     try:
         perro = Mascota.objects.get(id=perro_id)
@@ -194,6 +213,7 @@ def perro(request, perro_id):
             'fecha_nacimiento': perro.fecha_nacimiento,
             'observaciones': perro.observaciones,
             'sexo': perro.sexo,
+            'raza': perro.raza,
             'dueño': perro.dueño.id,
         }
         return JsonResponse(data)

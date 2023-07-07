@@ -12,27 +12,14 @@
 
 <form method="post">
     {% csrf_token %} 
-    {% for field in form %}
-    <div class="form-group">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }} {% if field.errors %}
-      <ul class="errorlist">
-        {% for error in field.errors %}
-            <li>{{ error }}</li>
-           {% endfor %}
-      </ul>
-      {% endif %}
-    </div>
-    {% endfor %}
+    {{form|crispy}}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-       alert("Hola soy un mensaje externo");
       // Function to update form field values when perro field changes
       function updateFormFields() {
         var perroId = $("#id_perro").val(); // Get the selected perro's ID
-        alert("Hola soy un mensaje externo");
         if (perroId) {
           // Send an AJAX request to fetch the perro details
           $.ajax({
@@ -56,7 +43,6 @@
       // Event listener for perro field change
       $("#id_perro").change(function () {
         updateFormFields();
-        alert("Hola soy un mensaje externo");
       });
   
       // Call the function on page load (if perro is already selected)
