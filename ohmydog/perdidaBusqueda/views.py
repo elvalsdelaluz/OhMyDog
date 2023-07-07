@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
-from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm, PerroForm
+from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm
 from django.core.mail import send_mail
 
 

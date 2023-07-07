@@ -4,6 +4,8 @@ from mascotas.models import Raza, Mascota
 from django.contrib.auth.models import User
 from datetime import date
 import re
+
+
 def present_or_future_date(value):
     if value > date.today():
         raise forms.ValidationError("No pueden publicarse perros que se pierden en el futuro")
@@ -31,21 +33,38 @@ class PerroPerdidoForm(forms.Form):
         empty_label='Perro no registrado',
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
     nombre=forms.CharField(label='Nombre', required=False)
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False, widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
     estado=forms.ChoiceField(label="Estado", choices=Estado)
-    foto=forms.ImageField(label="Foto", required=False)
-    tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
     fecha_perdido=forms.DateField(label='Fecha perdido o encontrado', widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
+    foto=forms.ImageField(label="Foto", required=False)
+    tamaño=forms.ChoiceField(label='Tamaño', choices=PerroPerdido.Tamaño)
+   
     zona=forms.ModelChoiceField(label='Zona', required=True, queryset=Zona.objects.all()) #entiendo que esto es una direccion tipo 7 y 50 por eso creo que la validación de números no es necesaria
 
     def __init__(self, mis_perros=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['perro'].queryset = mis_perros
+    
+    
+    def clean(self):
+    #Chequeo que el usuario no pueda ingresar una fecha de nacimiento 
+    #mayor a la fecha de perdido ingresada, es decir,
+    #un perro que no nacio no puede perderse.
+        cleaned_data = super().clean()
+        fecha_nacimiento = cleaned_data.get('fecha_nacimiento')
+        fecha_perdido = cleaned_data.get('fecha_perdido')
+
+        if fecha_nacimiento and fecha_perdido:
+            if fecha_nacimiento > fecha_perdido:
+                self.add_error('fecha_nacimiento', 'No puede perderse un perro que aún no nació')
+
+        return cleaned_data
 
 
 class ContartarsePerroPerdidoLogueadoForm(forms.Form):  
