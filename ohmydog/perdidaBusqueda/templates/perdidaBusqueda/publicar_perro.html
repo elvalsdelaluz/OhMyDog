@@ -1,0 +1,71 @@
+{% extends "ohmydogapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="contenedorFormulario" style="justify-items: center;">
+    <div class="col-md-12">
+
+
+<form method="post">
+    {% csrf_token %} 
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }} {% if field.errors %}
+      <ul class="errorlist">
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+           {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+       alert("Hola soy un mensaje externo");
+      // Function to update form field values when perro field changes
+      function updateFormFields() {
+        var perroId = $("#id_perro").val(); // Get the selected perro's ID
+        alert("Hola soy un mensaje externo");
+        if (perroId) {
+          // Send an AJAX request to fetch the perro details
+          $.ajax({
+            url: "/perdidaBusqueda/perro/" + perroId + "/", // Replace with your actual API endpoint URL
+            type: "GET",
+            success: function (data) {
+              // Update form field values with perro details
+              $("#id_nombre").val(data.nombre);
+              $("#id_fecha_nacimiento").val(data.fecha_nacimiento);
+              $("#id_raza").val(data.raza);
+            },
+          });
+        } else {
+          // Clear form field values if no perro is selected
+          $("#id_nombre").val("jkhjk");
+          $("#id_fecha_nacimiento").val("");
+          $("#id_raza").val("");
+        }
+      }
+  
+      // Event listener for perro field change
+      $("#id_perro").change(function () {
+        updateFormFields();
+        alert("Hola soy un mensaje externo");
+      });
+  
+      // Call the function on page load (if perro is already selected)
+      updateFormFields();
+    </script>
+    <button type="submit" class="btn btn-primary">Crear Adopción</button>
+  </form>
+
+</div>
+</div>
+
+{% endblock %}

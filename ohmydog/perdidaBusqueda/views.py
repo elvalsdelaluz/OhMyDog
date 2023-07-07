@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import PerroPerdido
 from mascotas.models import Mascota
-from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm
+from .forms import PerroPerdidoForm, ContartarsePerroPerdidoNoLogueadoForm, ContartarsePerroPerdidoLogueadoForm, PerroForm
 from django.core.mail import send_mail
 
 
@@ -157,4 +157,45 @@ def comunicarse_por_perro_perdido(request, perdido_id):
 
                
         return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form})
+
+
+def publicar_perro(request):
+    # Obtener el objeto deseado para sobrescribir el campo ModelChoiceField
+    mis_perros = Mascota.objects.filter(dueño=request.user)
+    for perro in mis_perros:
+        print (perro)
+    # Crear una instancia del formulario
+    formulario_perro_perdido = PerroForm(mis_perros=mis_perros)
+    # Sobrescribir el campo ModelChoiceField con el objeto deseado
+    #formulario_perro_perdido.initial['perro'] = mis_perros
     
+
+    if request.method=='POST':
+        formulario_perro_perdido=PerroForm(request.POST, request.FILES)
+       
+        if formulario_perro_perdido.is_valid():
+        
+            return render (request, 'perdidaBusqueda/publicar_perro.html',{'form':formulario_perro_perdido})
+
+    return render(request, "perdidaBusqueda/publicar_perro.html", {"form":formulario_perro_perdido})
+
+
+    
+       
+
+from django.http import JsonResponse
+    
+def perro(request, perro_id):
+    print("Se selecciono un perro")
+    try:
+        perro = Mascota.objects.get(id=perro_id)
+        data = {
+            'nombre': perro.nombre,
+            'fecha_nacimiento': perro.fecha_nacimiento,
+            'observaciones': perro.observaciones,
+            'sexo': perro.sexo,
+            'dueño': perro.dueño.id,
+        }
+        return JsonResponse(data)
+    except Mascota.DoesNotExist:
+        return JsonResponse({'error': 'Perro not found'}, status=404)
