@@ -25,25 +25,6 @@ def mostrar_perros_perdidos(request):
     return render(request, "perdidaBusqueda/mostrar_perros_perdidos.html", {"perros_perdidos":perdidos})
 
 
-def ya_esta_publicado(user, nombre_mascota):  
-    """Si el usuario ya tiene una publicación con nombre, fecha y sexo 
-       la función devuelve true
-    """ 
-    existe_publicacion=False
-    publicaciones_del_usuario= PerroPerdido.objects.filter(dueño=user)
-
-    if publicaciones_del_usuario.exists(): #Si el querySet no esta vacio
-        #Verifico para cada publicacion el campo nombre
-        #En caso de encontrar una igual modifico el valor de existe_publicacion
-        for publicacion in publicaciones_del_usuario:
-            print(publicacion)#sacar
-            print(publicacion.nombre)#sacar
-            print(nombre_mascota)#sacar
-            if publicacion.nombre == nombre_mascota:
-                existe_publicacion=True
-                break
-    return existe_publicacion
-
 
 from django.http import JsonResponse
     
@@ -73,47 +54,42 @@ def publicar_perro_perdido(request):
         formulario_perro_perdido=PerroPerdidoForm(mis_perros, request.POST, request.FILES)
        
         if formulario_perro_perdido.is_valid():
-            if ya_esta_publicado(request.user, formulario_perro_perdido.cleaned_data['nombre']):
-                #Agregar un mensaje error en el formulario html, cambiar el contexto mensaje por el valor error
-                error_ya_publicado="¡Ya tiene publicada una mascota perdida con ese nombre!"
-                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html', {'form':formulario_perro_perdido, "mensaje2":error_ya_publicado})
-            else:
-                #Queda cambiarle el nombre a la foto... 
-                publicacion_perro_perdido=PerroPerdido()
-                publicacion_perro_perdido.dueño=request.user
-                publicacion_perro_perdido.nombre=formulario_perro_perdido.cleaned_data['nombre']
+            #Queda cambiarle el nombre a la foto... 
+            publicacion_perro_perdido=PerroPerdido()
+            publicacion_perro_perdido.dueño=request.user
+            publicacion_perro_perdido.nombre=formulario_perro_perdido.cleaned_data['nombre']
                 
-                if request.FILES:
-                    foto_file=request.FILES['foto']
-                else:
-                    foto_file=None
+            if request.FILES:
+                foto_file=request.FILES['foto']
+            else:
+               foto_file=None
 
 
-                publicacion_perro_perdido.fecha_perdido=formulario_perro_perdido.cleaned_data['fecha_perdido']
+            publicacion_perro_perdido.fecha_perdido=formulario_perro_perdido.cleaned_data['fecha_perdido']
 
-                if not formulario_perro_perdido.cleaned_data['fecha_nacimiento']:
-                    publicacion_perro_perdido.fecha_nacimiento=None
-                else:
-                    publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
+            if not formulario_perro_perdido.cleaned_data['fecha_nacimiento']:
+                publicacion_perro_perdido.fecha_nacimiento=None
+            else:
+                publicacion_perro_perdido.fecha_nacimiento=formulario_perro_perdido.cleaned_data['fecha_nacimiento']
                     
-                publicacion_perro_perdido.tamaño=formulario_perro_perdido.cleaned_data['tamaño']
-                publicacion_perro_perdido.sexo=formulario_perro_perdido.cleaned_data['sexo']
+            publicacion_perro_perdido.tamaño=formulario_perro_perdido.cleaned_data['tamaño']
+            publicacion_perro_perdido.sexo=formulario_perro_perdido.cleaned_data['sexo']
                 
                  
-                publicacion_perro_perdido.raza=formulario_perro_perdido.cleaned_data['raza']
-                publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
+            publicacion_perro_perdido.raza=formulario_perro_perdido.cleaned_data['raza']
+            publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
-                publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
-                #publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
+            publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
+            #publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
 
-                publicacion_perro_perdido.save()
+            publicacion_perro_perdido.save()
 
-                publicacion_perro_perdido.foto=foto_file
-                publicacion_perro_perdido.save()
+            publicacion_perro_perdido.foto=foto_file
+            publicacion_perro_perdido.save()
 
-                formulario_perro_perdido=PerroPerdidoForm(mis_perros=mis_perros)
+            formulario_perro_perdido=PerroPerdidoForm(mis_perros=mis_perros)
 
-                return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'form':formulario_perro_perdido, "mensaje":"ok"})
+            return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'form':formulario_perro_perdido, "mensaje":"ok"})
 
     return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"form":formulario_perro_perdido})
 
@@ -178,44 +154,3 @@ def comunicarse_por_perro_perdido(request, perdido_id):
 
                
         return render(request, "perdidaBusqueda/comunicarse_por_perro_perdido.html", {'formulario': form})
-
-
-def publicar_perro(request):
-    # Obtener el objeto deseado para sobrescribir el campo ModelChoiceField
-    mis_perros = Mascota.objects.filter(dueño=request.user)
-    # Crear una instancia del formulario
-    formulario_perro_perdido = PerroForm(mis_perros=mis_perros)
-    # Sobrescribir el campo ModelChoiceField con el objeto deseado
-    #formulario_perro_perdido.initial['perro'] = mis_perros
-    
-
-    if request.method=='POST':
-        formulario_perro_perdido=PerroForm(request.POST, request.FILES)
-       
-        if formulario_perro_perdido.is_valid():
-        
-            return render (request, 'perdidaBusqueda/publicar_perro.html',{'form':formulario_perro_perdido})
-
-    return render(request, "perdidaBusqueda/publicar_perro.html", {"form":formulario_perro_perdido})
-
-
-    
-       
-
-from django.http import JsonResponse
-    
-def perro1(request, perro_id):
-    print("Se selecciono un perro")
-    try:
-        perro = Mascota.objects.get(id=perro_id)
-        data = {
-            'nombre': perro.nombre,
-            'fecha_nacimiento': perro.fecha_nacimiento,
-            'observaciones': perro.observaciones,
-            'sexo': perro.sexo,
-            'raza': perro.raza,
-            'dueño': perro.dueño.id,
-        }
-        return JsonResponse(data)
-    except Mascota.DoesNotExist:
-        return JsonResponse({'error': 'Perro not found'}, status=404)

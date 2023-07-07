@@ -9,6 +9,5 @@ urlpatterns = [
     path('cambiar_a_localizado/<int:perdido_id>/', views.cambiar_a_localizado, name="cambiar_a_localizado"),
     path('eliminar_publicacion/<int:perdido_id>/', views.eliminar_publicacion, name="eliminar_publicacion"),
     path('comunicarse_por_perro_perdido/<int:perdido_id>/', views.comunicarse_por_perro_perdido, name="comunicarse_por_perro_perdido"),
-     path('publicar_perro', views.publicar_perro, name="publicar_perro"),
     path('perro/<int:perro_id>/', views.perro, name='perro'),
 ]

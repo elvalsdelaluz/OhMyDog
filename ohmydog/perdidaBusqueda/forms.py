@@ -20,23 +20,6 @@ def no_contiene_numeros(value):
         raise forms.ValidationError("El campo no puede contener números.")
 
 
-class PerroForm(forms.Form):
-    perro = forms.ModelChoiceField(
-        queryset=Mascota.objects.all(),
-        required=False,
-        empty_label='Perro no registrado',
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    nombre=forms.CharField(label="Nombre", required=False)
-    fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False, widget=forms.TextInput(     
-        attrs={'type': 'date'} ))
-    raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
-
-    def __init__(self, mis_perros=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['perro'].queryset = mis_perros
-
-
 class PerroPerdidoForm(forms.Form):
     Estado=(
         ('0','Extraviado'),
