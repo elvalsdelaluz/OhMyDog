@@ -49,6 +49,7 @@
           });
         } else {
           // Clear form field values if no perro is selected
+          alert("UMMMMMMMM")
           $("#id_nombre").val("");
           $("#id_fecha_nacimiento").val("");
           $("#id_raza").val("");
@@ -64,8 +65,7 @@
         updateFormFields();
       });
   
-      // Call the function on page load (if perro is already selected)
-      updateFormFields();
+
     </script>
         <div style="justify-items: center; text-align: center;">
         <input class="btn btn-success" type="submit" value="Confirmar" style="margin: auto; margin-bottom: 10px;">

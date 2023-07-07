@@ -90,6 +90,11 @@ def publicar_perro_perdido(request):
             formulario_perro_perdido=PerroPerdidoForm(mis_perros=mis_perros)
 
             return render (request, 'perdidaBusqueda/publicar_perro_perdido.html',{'form':formulario_perro_perdido, "mensaje":"ok"})
+        else:
+            formulario_perro_perdido = PerroPerdidoForm(mis_perros, request.POST, request.FILES)
+
+            return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"form":formulario_perro_perdido})
+
 
     return render(request, "perdidaBusqueda/publicar_perro_perdido.html", {"form":formulario_perro_perdido})
 

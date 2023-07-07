@@ -31,7 +31,8 @@ class PerroPerdidoForm(forms.Form):
         queryset=Mascota.objects.all(),
         required=False,
         empty_label='Perro no registrado',
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Mis perros"
     )
 
     nombre=forms.CharField(label='Nombre', required=False)
