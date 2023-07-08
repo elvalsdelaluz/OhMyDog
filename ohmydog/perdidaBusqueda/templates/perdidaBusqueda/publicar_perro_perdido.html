@@ -44,18 +44,19 @@
               $("#id_nombre").val(data.nombre);
               $("#id_fecha_nacimiento").val(data.fecha_nacimiento);
               $("#id_raza").val(data.raza);
-              $("#id_sexo").val(data.sexo)
+              $("#id_sexo").val(data.sexo);
+              $("#id_observaciones").val(data.observaciones)
             },
           });
         } else {
           // Clear form field values if no perro is selected
-          alert("UMMMMMMMM")
           $("#id_nombre").val("");
           $("#id_fecha_nacimiento").val("");
           $("#id_raza").val("");
-          $("#id_sexo").val("")
+          $("#id_sexo").val("");
           $("#id_tamaño").val("");
-          $("#id_estado").val("")
+          $("#id_estado").val("");
+          $("#id_observaciones").val("")
 
         }
       }

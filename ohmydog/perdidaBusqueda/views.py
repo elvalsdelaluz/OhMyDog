@@ -37,6 +37,7 @@ def perro(request, perro_id):
             'fecha_nacimiento': perro.fecha_nacimiento,
             'sexo': perro.sexo,
             'raza': perro.raza,
+            'observaciones': perro.observaciones,
             'dueño': perro.dueño.id,
         }
         return JsonResponse(data)
@@ -80,7 +81,7 @@ def publicar_perro_perdido(request):
             publicacion_perro_perdido.zona=formulario_perro_perdido.cleaned_data['zona']
              
             publicacion_perro_perdido.estado=formulario_perro_perdido.cleaned_data['estado']
-            #publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['comentario']
+            publicacion_perro_perdido.comentario=formulario_perro_perdido.cleaned_data['observaciones']
 
             publicacion_perro_perdido.save()
 

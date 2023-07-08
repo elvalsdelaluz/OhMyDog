@@ -105,8 +105,9 @@ p {
 }
 
 #mainNav .navbar-nav .nav-item.active .nav-link {
-  color: rgb(255, 94, 0);
+  color: rgb(192, 109, 14);
   text-decoration: underline;
+  padding: 5px;
 }
 
 @media (min-width: 992px) {
@@ -395,8 +396,8 @@ hr {
   border-style: inset;
   border-width: 0px;
   height: 3px;
-  background-color:  rgb(255, 94, 0) ;
-  color:rgb(255, 94, 0)
+  background-color: rgb(192, 109, 14);
+  color:rgb(192, 109, 14);
 } 
 
 .help-text {

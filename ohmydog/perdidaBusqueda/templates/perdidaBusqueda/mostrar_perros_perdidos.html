@@ -45,26 +45,31 @@
                 <p class="card-text"style="color: white;">
                   ¡Hola!
                   {% if perdido.nombre %}
-                    Me llamo {{perdido.nombre}}.
+                  Me llamo {{perdido.nombre}}.
                   {% endif %}
                   {% if perdido.fecha_nacimiento %}
-                     Nací el <span style="text-transform: lowercase;">{{perdido.fecha_nacimiento}}</span>.
+                  Nací el <span style="text-transform: lowercase;">{{perdido.fecha_nacimiento}}</span>.
                   {% endif %}
-                  
+                  Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
+                  y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
+                  <br>
                   {% if perdido.get_estado_display == "Encontrado" %}
-                     Me encontraron el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
-                     y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
+                     Me encontraron el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}, busco a mis dueños.
                   {% else %}
                       {% if not perdido.get_estado_display == "Localizado" %}
-                        Me perdí el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
-                        y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
+                        Me perdí el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. 
                       {% else %}
                         Fui localizado por mis dueños. Gracias a los que se contactaron.
                       {% endif %}
-                  {% endif %}
-                  
-                              
+                  {% endif %}             
               </p>
+              {% if perdido.comentario %}
+              <p class="card-text"style="color: white;">
+                 
+                Más sobre mí: <br>
+                <span><i>{{perdido.comentario}}</i></span>
+              </p>
+              {% endif %}
               {% if perdido.get_estado_display == 'Extraviado' or perdido.get_estado_display == 'Encontrado' %}
                 {% if not request.user == perdido.dueño and not request.user.is_staff %} 
                   <div>

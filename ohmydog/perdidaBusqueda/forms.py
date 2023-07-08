@@ -40,6 +40,7 @@ class PerroPerdidoForm(forms.Form):
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
+    observaciones=forms.CharField(label="Observaciones", required=False)
     estado=forms.ChoiceField(label="Estado", choices=Estado)
     fecha_perdido=forms.DateField(label='Fecha perdido o encontrado', widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
