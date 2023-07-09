@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import authenticate
 from autenticacion.models import Cuenta
 
@@ -30,7 +30,7 @@ class RegistrationForm(UserChangeForm):
     def clean_dni(self):
         dni = self.cleaned_data['dni']
         if len(dni) < 7 or len(dni) > 10:
-            raise forms.ValidationError(f'Dni invádlido')
+            raise forms.ValidationError(f'Dni inválido')
 
         if not dni.isdigit():
             raise forms.ValidationError('El DNI debe contener solo números')
@@ -45,4 +45,10 @@ class RegistrationForm(UserChangeForm):
             raise forms.ValidationError('Error en el formato del número de telefono. Ingrese solo el número')
         return numero
         
-    
+
+
+class FormularioCambiarContraseña (PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña actual'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña nueva'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Repita la contraseña nueva'}))
+

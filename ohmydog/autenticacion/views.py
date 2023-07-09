@@ -5,9 +5,11 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
-from autenticacion.forms import RegistrationForm
+from autenticacion.forms import RegistrationForm, FormularioCambiarContraseña
 import random
 import string
+from django.contrib.auth.decorators import login_required
+
 from django.core.mail import send_mail
 from django.urls import reverse
 from mascotas.models import Mascota
@@ -78,3 +80,15 @@ def vista_registro(request, *args, **kwargs):
         form = RegistrationForm()
         context['registration_form'] = form
     return render(request, 'autenticacion/register.html', context)
+
+
+@login_required
+def cambiar_contraseña(request):
+    if request.method == 'POST':
+        form = FormularioCambiarContraseña(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = FormularioCambiarContraseña(request.user)
+    return render(request, 'cuenta/cambiar_contraseña.html', {'form': form})
