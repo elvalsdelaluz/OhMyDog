@@ -41,27 +41,66 @@
                   <img src="{{perdido.foto.url}}" class="card-img-top">
               {% endif %}
               <div class="card-body rounded bg-custom">
- 
+
+              {% if not perdido.get_estado_display == "Localizado" %}
+
                 <p class="card-text"style="color: white;">
                   ¡Hola!
                   {% if perdido.nombre %}
-                  Me llamo {{perdido.nombre}}.
+                     Me llamo {{perdido.nombre}} y necesito tu ayuda para encontrar a mis dueños.
                   {% endif %}
-                  {% if perdido.fecha_nacimiento %}
-                  Nací el <span style="text-transform: lowercase;">{{perdido.fecha_nacimiento}}</span>.
-                  {% endif %}
-                  Soy <span style="text-transform: lowercase;">{{perdido.get_sexo_display}}</span> 
-                  y tengo contextura <span style="text-transform: lowercase;">{{perdido.get_tamaño_display}}</span>.
-                  <br>
+
                   {% if perdido.get_estado_display == "Encontrado" %}
-                     Me encontraron el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}, busco a mis dueños.
+                     Me encontraron el {{perdido.fecha_perdido}} en la zona de {{perdido.zona}}.
+                     <br>
+                     <br>
                   {% else %}
-                      {% if not perdido.get_estado_display == "Localizado" %}
-                        Me perdí el {{perdido.fecha_perdido}} por la zona de {{perdido.zona}}. 
+                    {% if not perdido.get_estado_display == "Localizado" %}
+                      Me perdí el {{perdido.fecha_perdido}} en la zona de {{perdido.zona}}. 
+                      <br>
+                      <br>
+                    {% endif %}
+                  {% endif %}  
+                   
+                  {% if perdido.get_sexo_display == "Hembra" %}
+                    Soy una hembra de contextura  
+                    {% if perdido.get_tamaño_display == "Chico: entre 3 y 10 kilos" %}
+                      pequeña, con un peso entre 3 y 10 kilos.
+                    {%else%}
+                      {% if perdido.get_tamaño_display == "Mediano: entre 10 y 25 kilos" %}
+                        mediana, con un peso entre 10 y 25 kilos.
                       {% else %}
-                        Fui localizado por mis dueños. Gracias a los que se contactaron.
+                        {% if perdido.get_tamaño_display == "Grande: entre 25 y 50 kilos" %}
+                          grande, con un peso entre 25 y 50 kilos.
+                        {% else %}
+                          muy grande, con un peso de más de 50 kilos.
+                        {%endif%}
                       {% endif %}
-                  {% endif %}             
+                    {% endif %}
+      
+                  {% endif %}
+
+                  {% if perdido.get_sexo_display == "Macho" %}
+                    Soy un perro macho de contextura 
+                    {% if perdido.get_tamaño_display == "Chico: entre 3 y 10 kilos" or perdidio.get_tamaño_display == "0" %}
+                      pequeña, con un peso entre 3 y 10 kilos.
+                    {%else%}
+                      {% if perdido.get_tamaño_display == "Mediano: entre 10 y 25 kilos" %}
+                        mediana, con un peso entre 10 y 25 kilos.
+                      {% else %}
+                        {% if perdido.get_tamaño_display == "Grande: entre 25 y 50 kilos" %}
+                          grande, con un peso entre 25 y 50 kilos.
+                        {% else %}
+                          muy grande, con un peso de más de 50 kilos.
+                        {%endif%}
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                  
+                  {% if perdido.fecha_nacimiento %}
+                    Nací el <span style="text-transform: lowercase;">{{perdido.fecha_nacimiento}}</span> y tengo un aspecto adorable.
+                  {% endif %}
+                  <br>
               </p>
               {% if perdido.comentario %}
               <p class="card-text"style="color: white;">
@@ -70,6 +109,21 @@
                 <span><i>{{perdido.comentario}}</i></span>
               </p>
               {% endif %}
+            {% else %}
+              <p class="card-text"style="color: white;">
+                ¡Hola!
+                {% if perdido.nombre %}
+                   Me llamo {{perdido.nombre}}  y quiero agradecer a todas las personas que se preocuparon por mí. 
+                {% endif %}
+                <br>
+                <br>
+                He sido localizado por mis dueños y estoy muy feliz de estar de regreso con ellos.
+                <br>
+                <br>
+                ¡Muchas gracias a todos los que se contactaron y ayudaron en mi búsqueda!
+               </p> 
+            {% endif %}
+
               {% if perdido.get_estado_display == 'Extraviado' or perdido.get_estado_display == 'Encontrado' %}
                 {% if not request.user == perdido.dueño and not request.user.is_staff %} 
                   <div>
