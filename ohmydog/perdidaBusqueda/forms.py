@@ -35,13 +35,13 @@ class PerroPerdidoForm(forms.Form):
         label="Mis perros"
     )
 
-    nombre=forms.CharField(label='Nombre', required=False)
+    nombre=forms.CharField(label='Nombre', required=False, validators=[no_contiene_numeros])
     fecha_nacimiento=forms.DateField(label='Fecha nacimiento', required=False, widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     sexo=forms.ChoiceField(label='Sexo', choices=PerroPerdido.Sexo)
     raza=forms.ChoiceField(label="Raza", required=False, choices=Mascota.razas_choices)
     observaciones=forms.CharField(label="Observaciones", required=False)
-    estado=forms.ChoiceField(label="Estado", choices=Estado)
+    estado=forms.ChoiceField(label="Estado", choices=Estado, initial='0')
     fecha_perdido=forms.DateField(label='Fecha perdido o encontrado', widget=forms.TextInput(     
         attrs={'type': 'date'} ), validators=[present_or_future_date])
     foto=forms.ImageField(label="Foto", required=False)
